@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import ReactFlow, {
-  MiniMap,
+  // MiniMap,
   Controls,
   Background,
   useNodesState,
@@ -8,30 +8,23 @@ import ReactFlow, {
   addEdge,
   SelectionMode,
 } from 'reactflow';
+
 import 'reactflow/dist/style.css';
 
 const initialNodes = [
   {
     id: '1',
-    type: 'input',
     data: { label: 'Start Node' },
     position: { x: 250, y: 0 },
+    sourcePosition: 'right',
+    targetPosition: 'left',
   },
   {
     id: '2',
-    data: { label: 'Middle Node' },
-    position: { x: 250, y: 100 },
-  },
-  {
-    id: '5',
-    data: { label: 'Middle Node' },
-    position: { x: 250, y: 100 },
-  },
-  {
-    id: '3',
-    type: 'output',
     data: { label: 'End Node' },
-    position: { x: 250, y: 200 },
+    position: { x: 250, y: 100 },
+    sourcePosition: 'right',
+    targetPosition: 'left',
   },
 ];
 
@@ -92,28 +85,47 @@ const MainApp = () => {
   }, [selectedEdges, selectedNodes, setEdges, setNodes]);
 
   return (
-    <div style={{ width: '100%', height: '100vh' }}>
-      <ReactFlow
-        nodes={nodes}
-        edges={edges}
-        onNodesChange={onNodesChange}
-        onEdgesChange={onEdgesChange}
-        onConnect={onConnect}
-        onSelectionChange={onSelectionChange}
-        selectionMode={SelectionMode.Full}
-        selectionOnDrag={true}
-        selectionKeyCode={null} // Allow selection without holding any modifier key
-        multiSelectionKeyCode="Shift" // Hold shift to add to selection
-        deleteKeyCode={null} // Disable default delete behavior
-        fitView
-        snapGrid={[gridSize, gridSize]}
-        snapToGrid={true}
-      >
-        <Controls />
-        <MiniMap />
-        <Background variant="dots" gap={gridSize} size={1} />
-      </ReactFlow>
-    </div>
+    <>
+
+      <div className='TopBar'>
+        <button>File</button>
+        <button>Settings</button>
+      </div>
+
+      <div className='SideBar'>
+        <button onClick={() => {
+          const newNode = {
+            id: (Math.random() * 1000).toString(),
+            data: { label: 'Item 1' },
+            position: { x: 100, y: 100 },
+          };
+          setNodes(nodes => [...nodes, newNode]);
+        }}>Add Item 1</button>
+      </div>
+
+      <div className='ReactFlowContainer'>
+        <ReactFlow
+          nodes={nodes}
+          edges={edges}
+          onNodesChange={onNodesChange}
+          onEdgesChange={onEdgesChange}
+          onConnect={onConnect}
+          onSelectionChange={onSelectionChange}
+          selectionMode={SelectionMode.Full}
+          selectionOnDrag={true}
+          selectionKeyCode={null}
+          multiSelectionKeyCode="Shift"
+          deleteKeyCode={null}
+          fitView
+          snapGrid={[gridSize, gridSize]}
+          snapToGrid={true}
+        >
+          <Controls />
+          {/* <MiniMap /> */}
+          <Background variant="dots" gap={gridSize} size={1} />
+        </ReactFlow>
+      </div>
+    </>
   );
 };
 

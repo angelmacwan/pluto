@@ -11,3 +11,30 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.TopBar {
+  background-color: rgb(38, 42, 66);
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 9;
+}
+
+.ReactFlowContainer {
+  background-color: rgb(38, 42, 66);
+  height: 100vh;
+  width: 100%;
+}
+
+.SideBar {
+  position: fixed;
+  left: 10px;
+  top: 50px;
+  display: grid;
+  z-index: 10;
+  background: rgba(255, 255, 255, 0.3);
+  padding: 1rem;
+  width: 15rem;
+  max-height: 85%;
+  overflow-y: auto;
+}
