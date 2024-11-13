@@ -1,3 +1,4 @@
+import { type } from '@testing-library/user-event/dist/type';
 import React, { useCallback, useEffect, useState } from 'react';
 import ReactFlow, {
   // MiniMap,
@@ -11,30 +12,10 @@ import ReactFlow, {
 
 import 'reactflow/dist/style.css';
 
-const initialNodes = [
-  {
-    id: '1',
-    data: { label: 'Start Node' },
-    position: { x: 250, y: 0 },
-    sourcePosition: 'right',
-    targetPosition: 'left',
-  },
-  {
-    id: '2',
-    data: { label: 'End Node' },
-    position: { x: 250, y: 100 },
-    sourcePosition: 'right',
-    targetPosition: 'left',
-  },
-];
-
-
-const initialEdges = []
-
 const MainApp = () => {
   const gridSize = 10;
-  const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
-  const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
+  const [nodes, setNodes, onNodesChange] = useNodesState([]);
+  const [edges, setEdges, onEdgesChange] = useEdgesState([]);
   const [selectedEdges, setSelectedEdges] = useState([]);
   const [selectedNodes, setSelectedNodes] = useState([]);
 
@@ -84,19 +65,28 @@ const MainApp = () => {
     };
   }, [selectedEdges, selectedNodes, setEdges, setNodes]);
 
+
+
+  const getFlowOrder = () => {
+    // TODO: Implement this
+  };
+
+
   return (
     <>
 
       <div className='TopBar'>
         <button>File</button>
         <button>Settings</button>
+        <button onClick={() => { console.log(getFlowOrder()) }}>Get Flow</button>
       </div>
 
       <div className='SideBar'>
         <button onClick={() => {
+          let id = (Math.random() * 1000).toString();
           const newNode = {
-            id: (Math.random() * 1000).toString(),
-            data: { label: 'Item 1' },
+            id: id,
+            data: { label: id },
             position: { x: 100, y: 100 },
           };
           setNodes(nodes => [...nodes, newNode]);
