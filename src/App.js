@@ -1,4 +1,3 @@
-import { type } from '@testing-library/user-event/dist/type';
 import React, { useCallback, useEffect, useState } from 'react';
 import ReactFlow, {
   // MiniMap,
@@ -11,6 +10,18 @@ import ReactFlow, {
 } from 'reactflow';
 
 import 'reactflow/dist/style.css';
+
+import CustomNode from './CustomNode';
+import Variable from './Variable';
+import PrintNode from './PrintNode';
+
+
+const nodeTypes = {
+  testNode: CustomNode,
+  variableNode: Variable,
+  printNode: PrintNode,
+};
+
 
 const MainApp = () => {
   const gridSize = 10;
@@ -71,6 +82,38 @@ const MainApp = () => {
     // TODO: Implement this
   };
 
+  const addRandomNode = () => {
+    let id = (Math.random() * 1000).toString();
+    const newNode = {
+      id: id,
+      type: 'testNode',
+      data: { label: 'Test Node' },
+      position: { x: 100, y: 100 },
+    };
+    setNodes(nodes => [...nodes, newNode]);
+  }
+
+  const addVariableNode = () => {
+    let id = (Math.random() * 1000).toString();
+    const newNode = {
+      id: id,
+      type: 'variableNode',
+      data: { label: 'Variable Node', varName: 'a', value: parseInt(id) },
+      position: { x: 100, y: 100 },
+    };
+    setNodes(nodes => [...nodes, newNode]);
+  }
+
+  const addPrintNode = () => {
+    let id = (Math.random() * 1000).toString();
+    const newNode = {
+      id: id,
+      type: 'printNode',
+      data: {},
+      position: { x: 100, y: 100 },
+    };
+    setNodes(nodes => [...nodes, newNode]);
+  }
 
   return (
     <>
@@ -82,19 +125,14 @@ const MainApp = () => {
       </div>
 
       <div className='SideBar'>
-        <button onClick={() => {
-          let id = (Math.random() * 1000).toString();
-          const newNode = {
-            id: id,
-            data: { label: id },
-            position: { x: 100, y: 100 },
-          };
-          setNodes(nodes => [...nodes, newNode]);
-        }}>Add Item 1</button>
+        <button onClick={addRandomNode}>Add Item 1</button>
+        <button onClick={addVariableNode}>Value</button>
+        <button onClick={addPrintNode}>Print</button>
       </div>
 
       <div className='ReactFlowContainer'>
         <ReactFlow
+          nodeTypes={nodeTypes}
           nodes={nodes}
           edges={edges}
           onNodesChange={onNodesChange}
