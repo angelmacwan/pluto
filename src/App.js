@@ -11,15 +11,11 @@ import ReactFlow, {
 
 import 'reactflow/dist/style.css';
 
-import CustomNode from './CustomNode';
-import Variable from './Variable';
-import PrintNode from './PrintNode';
 
+import DataInput from './nodes/DataInput';
 
 const nodeTypes = {
-  testNode: CustomNode,
-  variableNode: Variable,
-  printNode: PrintNode,
+  dataNode: DataInput,
 };
 
 
@@ -78,37 +74,18 @@ const MainApp = () => {
 
 
 
+  // get all nodes in connected order using BFS
   const getFlowOrder = () => {
-    // TODO: Implement this
+    // TODO: Impliment this
+    console.log("NOT IMPLIMENTED")
   };
 
-  const addRandomNode = () => {
-    let id = (Math.random() * 1000).toString();
-    const newNode = {
-      id: id,
-      type: 'testNode',
-      data: { label: 'Test Node' },
-      position: { x: 100, y: 100 },
-    };
-    setNodes(nodes => [...nodes, newNode]);
-  }
 
-  const addVariableNode = () => {
+  const addNewNode = (nodeType) => {
     let id = (Math.random() * 1000).toString();
     const newNode = {
       id: id,
-      type: 'variableNode',
-      data: { label: 'Variable Node', varName: 'a', value: parseInt(id) },
-      position: { x: 100, y: 100 },
-    };
-    setNodes(nodes => [...nodes, newNode]);
-  }
-
-  const addPrintNode = () => {
-    let id = (Math.random() * 1000).toString();
-    const newNode = {
-      id: id,
-      type: 'printNode',
+      type: nodeType,
       data: {},
       position: { x: 100, y: 100 },
     };
@@ -121,13 +98,20 @@ const MainApp = () => {
       <div className='TopBar'>
         <button>File</button>
         <button>Settings</button>
-        <button onClick={() => { console.log(getFlowOrder()) }}>Get Flow</button>
+        <button onClick={getFlowOrder}>Get Flow</button>
       </div>
 
       <div className='SideBar'>
-        <button onClick={addRandomNode}>Add Item 1</button>
-        <button onClick={addVariableNode}>Value</button>
-        <button onClick={addPrintNode}>Print</button>
+
+        {Object.keys(nodeTypes).map((nodeType) => (
+          <button
+            key={nodeType}
+            onClick={() => addNewNode(nodeType)}
+          >
+            {nodeType}
+          </button>
+        ))}
+
       </div>
 
       <div className='ReactFlowContainer'>

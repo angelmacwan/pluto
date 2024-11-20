@@ -1,3 +1,11 @@
+# TODO
+
+-   Create a new readme
+-   Nodes should have more than one inputs
+-   Make custom nodes
+-   figure out how to get Flow
+-   Map nodes with python functions and code
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
