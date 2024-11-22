@@ -20,7 +20,9 @@ export default memo(({ data }) => {
 
     return (
         <div className='customNode variable'>
-            <div style={{ margin: '10px 0', textAlign: 'center' }}>
+            <div className='node-header'>Data Input</div>
+
+            <div className='node-body'>
                 {/* Dropdown for File Type */}
                 <label htmlFor="fileType">File Type</label>
                 <select

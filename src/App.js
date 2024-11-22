@@ -11,13 +11,13 @@ import ReactFlow, {
 
 import 'reactflow/dist/style.css';
 
-
 import DataInput from './nodes/DataInput';
+import TrainTestSplit from './nodes/TrainTestSplit';
 
 const nodeTypes = {
   dataNode: DataInput,
+  TrainTestSplit: TrainTestSplit
 };
-
 
 const MainApp = () => {
   const gridSize = 10;
@@ -62,11 +62,8 @@ const MainApp = () => {
         }
       }
     };
-
-    // Add event listener
     document.addEventListener('keydown', handleKeyDown);
 
-    // Cleanup
     return () => {
       document.removeEventListener('keydown', handleKeyDown);
     };
@@ -74,10 +71,10 @@ const MainApp = () => {
 
 
 
-  // get all nodes in connected order using BFS
   const getFlowOrder = () => {
     // TODO: Impliment this
     console.log("NOT IMPLIMENTED")
+    console.log(nodes)
   };
 
 
