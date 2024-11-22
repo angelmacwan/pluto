@@ -6,10 +6,11 @@ import ReactFlow, {
   useEdgesState,
   addEdge,
   SelectionMode,
-  StraightEdge,
 } from 'reactflow';
 
 import 'reactflow/dist/style.css';
+
+import CodeOutput from './CodeOutput';
 
 import DataInput from './nodes/DataInput';
 import TrainTestSplit from './nodes/TrainTestSplit';
@@ -97,20 +98,7 @@ const MainApp = () => {
   }, [selectedEdges, selectedNodes, setEdges, setNodes]);
 
   const getFlowOrder = () => {
-    // Now includes node states in the flow data
-    const flowData = {
-      nodes: nodes.map(node => ({
-        ...node,
-        state: nodeStates[node.id]
-      })),
-      edges,
-    };
-    for (let i = 0; i < flowData.nodes.length; i++) {
-      const node = flowData.nodes[i];
-      console.log(node.type);
-      console.log(node.state);
-    }
-    return flowData;
+    return "THIS NEEDS TO CHANGE"
   };
 
   const addNewNode = (nodeType) => {
@@ -151,6 +139,8 @@ const MainApp = () => {
           </button>
         ))}
       </div>
+
+      <CodeOutput data={getFlowOrder()} />
 
       <div className="ReactFlowContainer">
         <ReactFlow

@@ -1,0 +1,11 @@
+.code-block-output {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 500px;
+    height: 100vh;
+    overflow: auto;
+    background-color: rgba(27, 29, 56, 0.7);
+    color: aliceblue;
+    z-index: 9;
+}
