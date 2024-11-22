@@ -40,6 +40,7 @@ const MainApp = () => {
     [setEdges]
   );
 
+
   // Handle node state updates
   const updateNodeState = useCallback((nodeId, newData) => {
     setNodeStates(prev => ({
@@ -98,7 +99,53 @@ const MainApp = () => {
   }, [selectedEdges, selectedNodes, setEdges, setNodes]);
 
   const getFlowOrder = () => {
-    return "THIS NEEDS TO CHANGE"
+    const graph = new Map();
+    const inDegree = new Map();
+
+    // Initialize the graph and in-degrees
+    nodes.forEach((node) => {
+      graph.set(node.id, []);
+      inDegree.set(node.id, 0);
+    });
+
+    // Populate the graph and in-degrees from edges
+    edges.forEach((edge) => {
+      if (graph.has(edge.source)) {
+        graph.get(edge.source).push(edge.target);
+        inDegree.set(edge.target, (inDegree.get(edge.target) || 0) + 1);
+      }
+    });
+
+    // Find all nodes with no incoming edges
+    const queue = [];
+    inDegree.forEach((degree, nodeId) => {
+      if (degree === 0) queue.push(nodeId);
+    });
+
+    const sortedOrder = [];
+    while (queue.length > 0) {
+      const current = queue.shift();
+      sortedOrder.push(current);
+
+      // Decrease the in-degree of neighbors
+      graph.get(current).forEach((neighbor) => {
+        inDegree.set(neighbor, inDegree.get(neighbor) - 1);
+        if (inDegree.get(neighbor) === 0) queue.push(neighbor);
+      });
+    }
+
+    // Check for cycles
+    if (sortedOrder.length !== nodes.length) {
+      console.error('The graph has a cycle or is not a DAG.');
+      return 'The graph has a cycle or is not a DAG.';
+    }
+
+    const to_return = sortedOrder.map((nodeId) =>
+      nodes.find((node) => node.id === nodeId)
+    );
+
+    return to_return.map((node) => [node.id, node.type]);
+
   };
 
   const addNewNode = (nodeType) => {
@@ -120,6 +167,7 @@ const MainApp = () => {
       [id]: initialState[nodeType]
     }));
   };
+
 
   return (
     <>

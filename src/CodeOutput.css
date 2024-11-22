@@ -9,3 +9,7 @@
     color: aliceblue;
     z-index: 9;
 }
+
+.code-body {
+    padding: 1rem;
+}

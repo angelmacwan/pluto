@@ -53,7 +53,7 @@ export default memo(({ data }) => {
     };
 
     return (
-        <div className='customNode variable'>
+        <div className='customNode node-type-data-loader'>
             <div className='node-header'>Data Input</div>
 
             <div className='node-body'>

@@ -1,7 +1,8 @@
+@import '../variables.css';
+
 .customNode {
     background: gray;
     border-radius: 6px;
-    border: 2px;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.3);
 }
 
@@ -10,20 +11,33 @@
 }
 
 .node-header {
-    background-color: aqua;
     border-radius: 6px 6px 0 0;
-    padding: 6px;
-    border-bottom: 1px solid rgb(1, 116, 116);
+    padding: 6px 24px;
 }
 
 .node-body {
     border-radius: 0 0 6px 6px;
-    padding: 6px;
+    padding: 6px 24px;
+}
+
+.node-type-data-loader>.node-header {
+    background-color: var(--node-data-color);
+}
+
+.node-type-data-processor>.node-header {
+    background-color: var(--node-processor-color);
 }
 
 .react-flow__handle {
-    background-color: teal;
-    width: 12px;
-    height: 12px;
-    border-radius: 6px;
+    background-color: var(--node-handle-color);
+    width: 16px;
+    height: 16px;
+    border: 2px solid var(--node-handle-stroke);
+    border-radius: 12px;
+}
+
+.react-flow__edge-path {
+    stroke: var(--node-handle-stroke);
+    stroke-width: 2;
+    fill: none;
 }

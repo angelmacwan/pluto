@@ -50,7 +50,7 @@ export default memo(({ data }) => {
     };
 
     return (
-        <div className='customNode'>
+        <div className='customNode node-type-data-processor'>
             <Handle
                 type="target"
                 position={Position.Left}
