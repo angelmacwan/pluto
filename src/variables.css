@@ -3,9 +3,9 @@
     --node-data-color: #61fa82;
     --node-processor-color: #4a91fc;
     --node-model-color: rgb(231, 90, 113);
-    --node-output-color: #fff;
     --node-generic-color: #fff;
-    --node-handle-color: teal;
-    --node-handle-stroke: rgb(231, 90, 113);
+    --node-handle-color: rgb(231, 204, 164);
+    --node-handle-stroke: white;
+    --node-connection-stroke: white;
     --node-output-color: pink;
 }

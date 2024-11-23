@@ -6,7 +6,7 @@ export default memo(({ data }) => {
 
     const {
         fileType = 'CSV',
-        delimiter = ',',
+        seperator = ',',
         fileName = '',
         updateNodeState = () => { }
     } = data;
@@ -22,14 +22,14 @@ export default memo(({ data }) => {
         const newFileType = e.target.value;
         updateState({
             fileType: newFileType,
-            delimiter: newFileType === 'CSV' ? ',' :
+            seperator: newFileType === 'CSV' ? ',' :
                 newFileType === 'TSV' ? '\t' :
                     undefined
         });
     };
 
-    const handleDelimiterChange = (e) => {
-        updateState({ delimiter: e.target.value });
+    const handleseperatorChange = (e) => {
+        updateState({ seperator: e.target.value });
     };
 
     const handleFileChange = (event) => {
@@ -43,7 +43,7 @@ export default memo(({ data }) => {
                     fileName: file.name,
                     fileContent: e.target.result,
                     fileType,
-                    delimiter
+                    seperator
                 });
             };
 
@@ -73,14 +73,14 @@ export default memo(({ data }) => {
 
                 <br />
 
-                {/* Dropdown for Delimiter */}
+                {/* Dropdown for seperator */}
                 {(fileType === 'CSV' || fileType === 'TSV') && (
                     <>
-                        <label htmlFor="delimiter">Delimiter</label>
+                        <label htmlFor="seperator">seperator</label>
                         <select
-                            id="delimiter"
-                            value={delimiter}
-                            onChange={handleDelimiterChange}
+                            id="seperator"
+                            value={seperator}
+                            onChange={handleseperatorChange}
                         >
                             <option value=",">Comma (,)</option>
                             <option value="\t">Tab (\t)</option>

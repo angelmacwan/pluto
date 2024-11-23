@@ -30,7 +30,6 @@ const nodeTypes = {
   ClassificationReport: ClassificationReport
 };
 const initialState = {
-  // Default state values based on node type
   dataNode: { input: null, type: 'file' },
   TrainTestSplit: { splitRatio: 0.8, randomState: 42, stratify: false, shuffle: true }
 };
@@ -41,6 +40,8 @@ const MainApp = () => {
   const [edges, setEdges, onEdgesChange] = useEdgesState([]);
   const [selectedEdges, setSelectedEdges] = useState([]);
   const [selectedNodes, setSelectedNodes] = useState([]);
+
+
 
   // Add a state object to track all node data
   const [nodeStates, setNodeStates] = useState({});
@@ -135,17 +136,20 @@ const MainApp = () => {
       if (visited.has(startNodeId)) return [];
       visited.add(startNodeId);
 
+      const currentNode = nodes.find(node => node.id === startNodeId);
+      if (!currentNode) return [];
+
       const neighbors = graph.get(startNodeId);
-      if (neighbors.length === 0) return [startNodeId];
+      if (neighbors.length === 0) return [currentNode];
 
       // For single path, return flat array
       if (neighbors.length === 1) {
         const nextPath = getPathToLeaf(neighbors[0], visited);
-        return [startNodeId, ...nextPath];
+        return [currentNode, ...nextPath];
       }
 
       // For multiple paths, return just this node
-      return [startNodeId];
+      return [currentNode];
     };
 
     // Find root nodes (nodes with no incoming edges)
@@ -169,24 +173,23 @@ const MainApp = () => {
           const children = graph.get(current);
           const parallelBranches = children.map(childId => {
             const branchPath = getPathToLeaf(childId, new Set());
-            branchPath.forEach(id => processed.add(id));
-            return branchPath.map(id =>
-              nodes.find(node => node.id === id)?.type
-            );
+            branchPath.forEach(node => processed.add(node.id));
+            return branchPath;
           });
 
           // Add the path leading to the split
-          result.push(...path.map(id =>
-            nodes.find(node => node.id === id)?.type
-          ));
+          result.push(...path);
 
           // Add the parallel branches as an array of arrays
           result.push(parallelBranches);
 
           break;
         } else {
-          // Add nodes in the current path
-          result.push(nodes.find(node => node.id === current)?.type);
+          // Add the current node
+          const currentNode = nodes.find(node => node.id === current);
+          if (currentNode) {
+            result.push(currentNode);
+          }
           const neighbors = graph.get(current);
           current = neighbors.length > 0 ? neighbors[0] : null;
         }
@@ -198,15 +201,23 @@ const MainApp = () => {
 
   const addNewNode = (nodeType) => {
     const id = (Math.random() * 1000).toString();
+    let newNodePosition = { x: 200, y: 200 }
+
+    if (nodes.length > 0) {
+      newNodePosition = {
+        x: nodes[nodes.length - 1].position.x + 200,
+        y: nodes[nodes.length - 1].position.y
+      }
+    }
+
     const newNode = {
       id,
       type: nodeType,
       data: {
         ...initialState[nodeType],
-        // Pass the update function to the node
         updateNodeState: (newData) => updateNodeState(id, newData)
       },
-      position: { x: 100, y: 100 },
+      position: newNodePosition,
     };
 
     setNodes(nodes => [...nodes, newNode]);

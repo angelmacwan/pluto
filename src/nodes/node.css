@@ -45,7 +45,7 @@
 }
 
 .react-flow__edge-path {
-    stroke: var(--node-handle-stroke);
+    stroke: var(--node-connection-stroke);
     stroke-width: 2;
     fill: none;
 }
