@@ -21,7 +21,7 @@ import DecisionTree from './nodes/DecisionTree';
 import ClassificationReport from './nodes/ClassificationReport';
 
 const nodeTypes = {
-  dataNode: DataInput,
+  DataInput: DataInput,
   TrainTestSplit: TrainTestSplit,
   StandardScaler: StandardScaler,
   RobustScaler: RobustScaler,
@@ -233,7 +233,6 @@ const MainApp = () => {
       <div className="TopBar">
         <button>File</button>
         <button>Settings</button>
-        <button onClick={getFlowOrder}>Get Flow</button>
       </div>
 
       <div className="SideBar">
