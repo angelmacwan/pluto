@@ -24,8 +24,16 @@
     background-color: var(--node-data-color);
 }
 
+.node-type-model>.node-header {
+    background-color: var(--node-model-color);
+}
+
 .node-type-data-processor>.node-header {
     background-color: var(--node-processor-color);
+}
+
+.node-type-output>.node-header {
+    background-color: var(--node-output-color);
 }
 
 .react-flow__handle {

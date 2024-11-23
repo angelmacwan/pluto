@@ -2,10 +2,10 @@
     --canvas-color: #192a51;
     --node-data-color: #61fa82;
     --node-processor-color: #4a91fc;
-    --node-model-color: #fff;
+    --node-model-color: rgb(231, 90, 113);
     --node-output-color: #fff;
     --node-generic-color: #fff;
     --node-handle-color: teal;
     --node-handle-stroke: rgb(231, 90, 113);
-
+    --node-output-color: pink;
 }

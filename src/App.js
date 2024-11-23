@@ -16,12 +16,18 @@ import DataInput from './nodes/DataInput';
 import TrainTestSplit from './nodes/TrainTestSplit';
 import StandardScaler from './nodes/StandardScaler';
 import RobustScaler from './nodes/RobustScaler';
+import KnnClassifier from './nodes/KnnClassifier';
+import DecisionTree from './nodes/DecisionTree';
+import ClassificationReport from './nodes/ClassificationReport';
 
 const nodeTypes = {
   dataNode: DataInput,
   TrainTestSplit: TrainTestSplit,
   StandardScaler: StandardScaler,
-  RobustScaler: RobustScaler
+  RobustScaler: RobustScaler,
+  KnnClassifier: KnnClassifier,
+  DecisionTree: DecisionTree,
+  ClassificationReport: ClassificationReport
 };
 const initialState = {
   // Default state values based on node type
@@ -102,55 +108,92 @@ const MainApp = () => {
     return () => document.removeEventListener('keydown', handleKeyDown);
   }, [selectedEdges, selectedNodes, setEdges, setNodes]);
 
+
   const getFlowOrder = () => {
     const graph = new Map();
     const inDegree = new Map();
+    const outDegree = new Map();
 
-    // Initialize the graph and in-degrees
+    // Initialize the graph and degrees
     nodes.forEach((node) => {
       graph.set(node.id, []);
       inDegree.set(node.id, 0);
+      outDegree.set(node.id, 0);
     });
 
-    // Populate the graph and in-degrees from edges
+    // Populate the graph and degrees from edges
     edges.forEach((edge) => {
       if (graph.has(edge.source)) {
         graph.get(edge.source).push(edge.target);
         inDegree.set(edge.target, (inDegree.get(edge.target) || 0) + 1);
+        outDegree.set(edge.source, (outDegree.get(edge.source) || 0) + 1);
       }
     });
 
-    // Find all nodes with no incoming edges
-    const queue = [];
+    // Helper function to get complete path from node to leaf
+    const getPathToLeaf = (startNodeId, visited = new Set()) => {
+      if (visited.has(startNodeId)) return [];
+      visited.add(startNodeId);
+
+      const neighbors = graph.get(startNodeId);
+      if (neighbors.length === 0) return [startNodeId];
+
+      // For single path, return flat array
+      if (neighbors.length === 1) {
+        const nextPath = getPathToLeaf(neighbors[0], visited);
+        return [startNodeId, ...nextPath];
+      }
+
+      // For multiple paths, return just this node
+      return [startNodeId];
+    };
+
+    // Find root nodes (nodes with no incoming edges)
+    const rootNodes = [];
     inDegree.forEach((degree, nodeId) => {
-      if (degree === 0) queue.push(nodeId);
+      if (degree === 0) rootNodes.push(nodeId);
     });
 
-    const sortedOrder = [];
-    while (queue.length > 0) {
-      const current = queue.shift();
-      sortedOrder.push(current);
+    const result = [];
+    const processed = new Set();
 
-      // Decrease the in-degree of neighbors
-      graph.get(current).forEach((neighbor) => {
-        inDegree.set(neighbor, inDegree.get(neighbor) - 1);
-        if (inDegree.get(neighbor) === 0) queue.push(neighbor);
-      });
+    // Process each root node
+    for (const rootId of rootNodes) {
+      let current = rootId;
+      while (current && !processed.has(current)) {
+        const path = getPathToLeaf(current, new Set());
+        processed.add(current);
+
+        // If this node has multiple children, process parallel branches
+        if (outDegree.get(current) >= 2) {
+          const children = graph.get(current);
+          const parallelBranches = children.map(childId => {
+            const branchPath = getPathToLeaf(childId, new Set());
+            branchPath.forEach(id => processed.add(id));
+            return branchPath.map(id =>
+              nodes.find(node => node.id === id)?.type
+            );
+          });
+
+          // Add the path leading to the split
+          result.push(...path.map(id =>
+            nodes.find(node => node.id === id)?.type
+          ));
+
+          // Add the parallel branches as an array of arrays
+          result.push(parallelBranches);
+
+          break;
+        } else {
+          // Add nodes in the current path
+          result.push(nodes.find(node => node.id === current)?.type);
+          const neighbors = graph.get(current);
+          current = neighbors.length > 0 ? neighbors[0] : null;
+        }
+      }
     }
 
-    // Check for cycles
-    if (sortedOrder.length !== nodes.length) {
-      console.error('The graph has a cycle or is not a DAG.');
-      return 'The graph has a cycle or is not a DAG.';
-    }
-
-    const to_return = sortedOrder.map((nodeId) =>
-      nodes.find((node) => node.id === nodeId)
-    );
-
-    return to_return;
-    // return to_return.map((node) => [node.id, node.type]);
-
+    return result;
   };
 
   const addNewNode = (nodeType) => {
