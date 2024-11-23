@@ -14,10 +14,14 @@ import CodeOutput from './CodeOutput';
 
 import DataInput from './nodes/DataInput';
 import TrainTestSplit from './nodes/TrainTestSplit';
+import StandardScaler from './nodes/StandardScaler';
+import RobustScaler from './nodes/RobustScaler';
 
 const nodeTypes = {
   dataNode: DataInput,
-  TrainTestSplit: TrainTestSplit
+  TrainTestSplit: TrainTestSplit,
+  StandardScaler: StandardScaler,
+  RobustScaler: RobustScaler
 };
 const initialState = {
   // Default state values based on node type
@@ -144,7 +148,8 @@ const MainApp = () => {
       nodes.find((node) => node.id === nodeId)
     );
 
-    return to_return.map((node) => [node.id, node.type]);
+    return to_return;
+    // return to_return.map((node) => [node.id, node.type]);
 
   };
 
