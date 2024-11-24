@@ -70,6 +70,7 @@ export default memo(({ data }) => {
             reader.onload = (e) => {
                 updateState({
                     fileName: file.name,
+                    filePath: event.target.value,
                     fileContent: e.target.result,
                     fileType,
                     seperator,
@@ -80,6 +81,7 @@ export default memo(({ data }) => {
             reader.readAsText(file);
         }
     };
+
 
     const handleTargetColumnChange = (e) => {
         updateState({ targetColumn: e.target.value });

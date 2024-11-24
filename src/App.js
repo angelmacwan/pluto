@@ -231,8 +231,9 @@ const MainApp = () => {
   return (
     <>
       <div className="TopBar">
-        <button>File</button>
-        <button>Settings</button>
+        <button>Save File</button>
+        <button>Load File</button>
+        <button>AI Generator</button>
       </div>
 
       <div className="SideBar">

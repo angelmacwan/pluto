@@ -9,7 +9,8 @@ export const generateCode = (data) => {
 df = pd.read_csv("${data.data.fileName}", sep="${data.data.seperator}")
 
 X = df.drop(columns=[target_column])
-y = df['target_column']`
+y = df['target_column']
+`
             break;
 
         case 'TrainTestSplit':
@@ -27,6 +28,7 @@ y = df['target_column']`
 X_train = scaler.fit_transform(X_train)
 X_test = scaler.transform(X_test)`
             break;
+
         case 'RobustScaler':
             imports = "from sklearn.preprocessing import RobustScaler"
             code = `scaler = RobustScaler(with_centering = ${data.data.withCentering ? "True" : "False"},
@@ -36,13 +38,33 @@ X_test = scaler.transform(X_test)`
 X_train = scaler.fit_transform(X_train)
 X_test = scaler.transform(X_test)`
             break;
+
         case 'KnnClassifier':
+            imports = "from sklearn.neighbors import KNeighborsClassifier"
+            code = `model = KNeighborsClassifier(n_neighbors = ${data.data.n_neighbors},
+            algorithm = '${data.data.algorithm}',
+            leaf_size = ${data.data.leaf_size},
+            metric = '${data.data.metric}')
+
+model.fit(X_train, y_train)
+y_pred = model.predict(X_test)`
             break;
+
         case 'DecisionTree':
-            code = ""
+            imports = "from sklearn.tree import DecisionTreeClassifier"
+            code = `model = DecisionTreeClassifier(criterion = '${data.data.criterion}',
+            splitter = '${data.data.splitter}',
+            max_depth = ${data.data.max_depth},
+            min_samples_split = ${data.data.min_samples_split},
+            min_samples_leaf = ${data.data.min_samples_leaf})
+
+model.fit(X_train, y_train)
+y_pred = model.predict(X_test)`
             break;
+
         case 'ClassificationReport':
-            code = ""
+            imports = "from sklearn.metrics import classification_report"
+            code = `print(classification_report(y_test, y_pred))`
             break;
         default:
             imports = "//"
