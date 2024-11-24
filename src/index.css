@@ -15,11 +15,31 @@ code {
 }
 
 .TopBar {
-  background-color: rgb(38, 42, 66);
+  background: none;
+  width: 100%;
   position: fixed;
   top: 0;
   left: 0;
   z-index: 9;
+  display: flex;
+  justify-content: center;
+  padding: 8px;
+}
+
+.TopBar>button {
+  margin: 0 4px;
+  border: none;
+  cursor: pointer;
+  background-color: rgba(0, 0, 0, 0.6);
+  padding: 8px;
+  color: white;
+  border-radius: 8px;
+  transition: .4s;
+}
+
+.TopBar>button:hover {
+  background-color: var(--node-processor-color);
+  padding: 8px 20px;
 }
 
 .ReactFlowContainer {
@@ -34,11 +54,44 @@ code {
   top: 50px;
   display: grid;
   z-index: 10;
+  background: none;
   background: rgba(255, 255, 255, 0.3);
-  padding: 1rem;
-  width: 15rem;
+  padding: 8px;
+  width: 12rem;
   max-height: 85%;
   overflow-y: auto;
+  border-radius: 8px;
+}
+
+.SideBar>button {
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 8px;
+  margin: 4px;
+  font-size: 1rem;
+  border: 2px solid rgba(0, 0, 0, 0);
+  transition: .2s;
+  animation-timing-function: linear;
+}
+
+.SideBar>button:hover {
+  border: 2px solid white;
+}
+
+.SideBar>.node-type-input {
+  background-color: var(--node-data-color);
+}
+
+.SideBar>.node-type-processor {
+  background-color: var(--node-processor-color);
+}
+
+.SideBar>.node-type-model {
+  background-color: var(--node-model-color);
+}
+
+.SideBar>.node-type-output {
+  background-color: var(--node-output-color);
 }
 
 .floating-button-container {

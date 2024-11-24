@@ -1,18 +1,26 @@
 @import '../variables.css';
 
 .customNode {
-    background: lightgray;
+    background-color: lightgray;
     border-radius: 6px;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.3);
 }
 
+input[type="number"],
+select {
+    border: none;
+    background: white;
+    width: 100%;
+}
+
 .input-range-number {
-    max-width: 2rem;
+    /* width: 2rem; */
 }
 
 .node-header {
     border-radius: 6px 6px 0 0;
     padding: 6px 24px;
+    border-bottom: 1px solid gray;
 }
 
 .node-body {
@@ -48,4 +56,12 @@
     stroke: var(--node-connection-stroke);
     stroke-width: 2;
     fill: none;
+}
+
+.react-flow__handle-right {
+    right: -8px;
+}
+
+.react-flow__handle-left {
+    left: -8px;
 }

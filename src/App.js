@@ -20,6 +20,7 @@ import KnnClassifier from './nodes/KnnClassifier';
 import DecisionTree from './nodes/DecisionTree';
 import ClassificationReport from './nodes/ClassificationReport';
 
+// list of node types
 const nodeTypes = {
   DataInput: DataInput,
   TrainTestSplit: TrainTestSplit,
@@ -29,6 +30,20 @@ const nodeTypes = {
   DecisionTree: DecisionTree,
   ClassificationReport: ClassificationReport
 };
+
+// Mappint of node type to its css class
+const nodeTypeClass = {
+  DataInput: 'node-type-input',
+  TrainTestSplit: 'node-type-processor',
+  StandardScaler: 'node-type-processor',
+  RobustScaler: 'node-type-processor',
+  KnnClassifier: 'node-type-model',
+  DecisionTree: 'node-type-model',
+  ClassificationReport: 'node-type-output'
+}
+
+
+// initialState will be removed at some point
 const initialState = {
   dataNode: { input: null, type: 'file' },
   TrainTestSplit: { splitRatio: 0.8, randomState: 42, stratify: false, shuffle: true }
@@ -42,11 +57,13 @@ const MainApp = () => {
   const [selectedNodes, setSelectedNodes] = useState([]);
   const [codeOutputVisible, setCodeOutputVisible] = useState(false);
 
+  const iconSize = 20
+
   // Add a state object to track all node data
   const [nodeStates, setNodeStates] = useState({});
 
   const onConnect = useCallback(
-    (params) => setEdges((eds) => addEdge(params, eds)),
+    (params) => setEdges((eds) => addEdge({ ...params, animated: false, markerEnd: { type: 'arrow' } }, eds)),
     [setEdges]
   );
 
@@ -230,14 +247,31 @@ const MainApp = () => {
   return (
     <>
       <div className="TopBar">
-        <button>Save File</button>
-        <button>Load File</button>
-        <button>AI Generator</button>
+        <button>
+          <svg xmlns="http://www.w3.org/2000/svg" width={iconSize} height={iconSize} fill="currentColor" className="bi bi-floppy" viewBox="0 0 16 16">
+            <path d="M11 2H9v3h2z" />
+            <path d="M1.5 0h11.586a1.5 1.5 0 0 1 1.06.44l1.415 1.414A1.5 1.5 0 0 1 16 2.914V14.5a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 0 14.5v-13A1.5 1.5 0 0 1 1.5 0M1 1.5v13a.5.5 0 0 0 .5.5H2v-4.5A1.5 1.5 0 0 1 3.5 9h9a1.5 1.5 0 0 1 1.5 1.5V15h.5a.5.5 0 0 0 .5-.5V2.914a.5.5 0 0 0-.146-.353l-1.415-1.415A.5.5 0 0 0 13.086 1H13v4.5A1.5 1.5 0 0 1 11.5 7h-7A1.5 1.5 0 0 1 3 5.5V1H1.5a.5.5 0 0 0-.5.5m3 4a.5.5 0 0 0 .5.5h7a.5.5 0 0 0 .5-.5V1H4zM3 15h10v-4.5a.5.5 0 0 0-.5-.5h-9a.5.5 0 0 0-.5.5z" />
+          </svg></button>
+        <button>
+          <svg width={iconSize} height={iconSize} fill="currentColor" className="bi bi-file-earmark-arrow-up" viewBox="0 0 16 16">
+            <path d="M8.5 11.5a.5.5 0 0 1-1 0V7.707L6.354 8.854a.5.5 0 1 1-.708-.708l2-2a.5.5 0 0 1 .708 0l2 2a.5.5 0 0 1-.708.708L8.5 7.707z" />
+            <path d="M14 14V4.5L9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2M9.5 3A1.5 1.5 0 0 0 11 4.5h2V14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h5.5z" />
+          </svg>
+        </button>
+        <button>
+          <svg xmlns="http://www.w3.org/2000/svg" width={iconSize} height={iconSize} fill="currentColor" className="bi bi-robot" viewBox="0 0 16 16">
+            <path d="M6 12.5a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 0 1h-3a.5.5 0 0 1-.5-.5M3 8.062C3 6.76 4.235 5.765 5.53 5.886a26.6 26.6 0 0 0 4.94 0C11.765 5.765 13 6.76 13 8.062v1.157a.93.93 0 0 1-.765.935c-.845.147-2.34.346-4.235.346s-3.39-.2-4.235-.346A.93.93 0 0 1 3 9.219zm4.542-.827a.25.25 0 0 0-.217.068l-.92.9a25 25 0 0 1-1.871-.183.25.25 0 0 0-.068.495c.55.076 1.232.149 2.02.193a.25.25 0 0 0 .189-.071l.754-.736.847 1.71a.25.25 0 0 0 .404.062l.932-.97a25 25 0 0 0 1.922-.188.25.25 0 0 0-.068-.495c-.538.074-1.207.145-1.98.189a.25.25 0 0 0-.166.076l-.754.785-.842-1.7a.25.25 0 0 0-.182-.135" />
+            <path d="M8.5 1.866a1 1 0 1 0-1 0V3h-2A4.5 4.5 0 0 0 1 7.5V8a1 1 0 0 0-1 1v2a1 1 0 0 0 1 1v1a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-1a1 1 0 0 0 1-1V9a1 1 0 0 0-1-1v-.5A4.5 4.5 0 0 0 10.5 3h-2zM14 7.5V13a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V7.5A3.5 3.5 0 0 1 5.5 4h5A3.5 3.5 0 0 1 14 7.5" />
+          </svg>
+        </button>
       </div>
 
-      <div className="SideBar">
+
+      {/* LIST OF ALL NODES AS BUTTONS */}
+      <div className="SideBar btn-list">
         {Object.keys(nodeTypes).map((nodeType) => (
           <button
+            className={nodeTypeClass[nodeType]}
             key={nodeType}
             onClick={() => addNewNode(nodeType)}
           >
@@ -250,10 +284,10 @@ const MainApp = () => {
         <div className='floating-button-container'>
 
           <button className='floating-button' onClick={() => setCodeOutputVisible(!codeOutputVisible)}>
-            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor"
-              class="bi bi-arrow-bar-left"
+            <svg xmlns="http://www.w3.org/2000/svg" width={iconSize} height={iconSize} fill="currentColor"
+              className="bi bi-arrow-bar-left"
               viewBox="0 0 16 16">
-              <path fill-rule="evenodd" d="M12.5 15a.5.5 0 0 1-.5-.5v-13a.5.5 0 0 1 1 0v13a.5.5 0 0 1-.5.5M10 8a.5.5 0 0 1-.5.5H3.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L3.707 7.5H9.5a.5.5 0 0 1 .5.5" />
+              <path fillRule="evenodd" d="M12.5 15a.5.5 0 0 1-.5-.5v-13a.5.5 0 0 1 1 0v13a.5.5 0 0 1-.5.5M10 8a.5.5 0 0 1-.5.5H3.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L3.707 7.5H9.5a.5.5 0 0 1 .5.5" />
             </svg>
           </button>
         </div>
