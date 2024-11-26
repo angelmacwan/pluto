@@ -17,7 +17,9 @@ y = df['target_column']
             imports = "from sklearn.model_selection import train_test_split"
             code = `X_train, X_test, y_train, y_test = train_test_split(X, y,
                             test_size = ${data.data.splitRatio} ,
-                            random_state = ${data.data.randomSeed} )`
+                            random_state = ${data.data.randomSeed},
+                            shuffle = ${data.data.shuffle ? "True" : "False"},
+                            stratify = ${data.data.stratify ? "y" : "None"} )`
 
             break;
 

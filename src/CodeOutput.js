@@ -7,7 +7,7 @@ import "prismjs/themes/prism-tomorrow.css";
 
 import { generateCode } from './CodeGenerator';
 
-export default memo(({ data }) => {
+export default memo(({ data, useAi }) => {
 
     const handleCopy = async () => {
         try {
@@ -36,8 +36,13 @@ export default memo(({ data }) => {
     importsOutput = importsOutput.trim();
     codeOutpus = codeOutpus.trim();
 
-    const finalCode = `${importsOutput}\n${codeOutpus}`
+    const finalCode = useAi ?
+        `//THIS CODE IS AI GENERATED\n${importsOutput}\n\n${codeOutpus}` :
+        `${importsOutput}\n\n${codeOutpus}`;
 
+    const generateAiCode = () => {
+        console.log("generating AI CODE")
+    }
 
     return (
         <div className="code-block-output">
@@ -46,7 +51,12 @@ export default memo(({ data }) => {
                     {finalCode}
                 </SyntaxHighlighter>
             </div>
-            <button onClick={() => handleCopy()}>COPY</button>
-        </div>
+            <button className='code-block-btn' onClick={() => handleCopy()}>COPY</button>
+
+            {(useAi) && (
+                <button className='code-block-btn' onClick={() => generateAiCode()}>Generate AI Code</button>
+            )}
+
+        </div >
     );
 });

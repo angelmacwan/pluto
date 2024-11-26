@@ -34,7 +34,7 @@ code {
   padding: 8px;
   color: white;
   border-radius: 8px;
-  transition: .4s;
+  transition: .2s;
 }
 
 .TopBar>button:hover {
@@ -48,6 +48,8 @@ code {
   width: 100%;
 }
 
+
+/* the one on the left */
 .SideBar {
   position: fixed;
   left: 10px;
@@ -70,7 +72,7 @@ code {
   margin: 4px;
   font-size: 1rem;
   border: 2px solid rgba(0, 0, 0, 0);
-  transition: .2s;
+  transition: .12s;
   animation-timing-function: linear;
 }
 
@@ -94,38 +96,35 @@ code {
   background-color: var(--node-output-color);
 }
 
-.floating-button-container {
-  position: absolute;
-  right: 0;
-  height: 100vh;
-  z-index: 9;
+/* CODE BLOCK */
+.code-output-container {
   display: flex;
-}
-
-.floating-button {
-  margin: 30px 0;
-  outline: none;
-  border: none;
-  cursor: pointer;
-  background: rgba(0, 0, 0, 0.3);
-  border-radius: 8px;
-  color: white;
-  transition: 0.4s;
-}
-
-.floating-button:hover {
-  margin-right: 6px;
-  background: rgba(0, 0, 0, 0.6);
-}
-
-.code-output-display-block {
+  z-index: 3;
   position: fixed;
+  height: 100vh;
   transition: 0.4s;
-  animation-timing-function: linear;
-  z-index: 1;
 }
 
-.code-output-container {}
+/* DISPLAY CODE BTN */
+.floating-button-container {
+  padding: 20px 5px;
+}
+
+.floating-button-container>.floating-button {
+  height: 100%;
+  border: none;
+  outline: none;
+  background: rgba(0, 0, 0, 0.3);
+  color: white;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.floating-button-container>.floating-button:hover {
+  background: rgba(0, 0, 0, 0.5);
+  padding: 0 12px;
+}
 
 /* Chrome, Safari, Edge, Opera */
 input::-webkit-outer-spin-button,

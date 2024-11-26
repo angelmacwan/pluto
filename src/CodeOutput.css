@@ -1,15 +1,24 @@
 .code-block-output {
-    position: absolute;
-    top: 0;
-    right: 0;
-    width: 800px;
-    overflow: auto;
-    background-color: rgba(27, 29, 56, 0.7);
-    color: aliceblue;
-    z-index: 9;
+    height: 90vh;
 }
 
 .code-block {
-    max-height: 90vh;
+    max-height: 92vh;
     overflow: auto;
+    margin: 0;
+}
+
+.code-block-btn {
+    border: none;
+    cursor: pointer;
+    margin: 4px;
+    padding: 8px;
+    border-radius: 8px;
+    background-color: rgba(0, 0, 0, 0.6);
+    color: white;
+    transition: .2s;
+}
+
+.code-block-btn:hover {
+    background-color: var(--node-processor-color);
 }
