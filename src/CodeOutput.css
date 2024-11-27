@@ -1,9 +1,10 @@
 .code-block-output {
-    height: 90vh;
+    height: 100vh;
+    background-color: rgb(40, 44, 52);
 }
 
 .code-block {
-    max-height: 92vh;
+    height: 94vh;
     overflow: auto;
     margin: 0;
 }
@@ -21,4 +22,39 @@
 
 .code-block-btn:hover {
     background-color: var(--node-processor-color);
+}
+
+.code-block-btn-disabled {
+    border: none;
+    margin: 4px;
+    padding: 8px;
+    border-radius: 8px;
+    background-color: gray;
+    color: white;
+}
+
+.code-loader {
+    position: absolute;
+    background: url(thinking.png);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: 30%;
+    height: 100vh;
+    width: 100%;
+    z-index: 9;
+    animation: blink_fade 2s linear 0s infinite;
+}
+
+@keyframes blink_fade {
+    from {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.3;
+    }
+
+    to {
+        opacity: 1;
+    }
 }

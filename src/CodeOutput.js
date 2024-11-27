@@ -10,6 +10,7 @@ import { generateAiCode } from './AiCodeGenerator';
 
 const CodeOutput = memo(({ data, useAi }) => {
     const [finalCode, setFinalCode] = useState("");
+    const [buttonIsDisabled, setbuttonIsDisabled] = useState(false);
 
     useEffect(() => {
         const generateNormalCode = () => {
@@ -37,18 +38,25 @@ const CodeOutput = memo(({ data, useAi }) => {
         }
     };
 
-    const getAiCode = async () => {
+    const getAiCode = async (data) => {
+        setbuttonIsDisabled(true)
         try {
             const generatedCode = await generateAiCode(data);
             setFinalCode('// AI Generated Code\n' + generatedCode.replaceAll("```", "").replace("python", ""));
+            setbuttonIsDisabled(false)
         } catch (err) {
             console.error('Failed to generate AI code:', err);
+            setbuttonIsDisabled(false)
         }
     };
 
     return (
         <div className="code-block-output">
             <div className="code-body">
+                {buttonIsDisabled && (
+                    <div class="code-loader"></div>
+                )}
+
                 <SyntaxHighlighter
                     className="code-block"
                     language="python"
@@ -63,7 +71,10 @@ const CodeOutput = memo(({ data, useAi }) => {
             </button>
 
             {useAi && (
-                <button className='code-block-btn' onClick={getAiCode}>
+                <button
+                    disabled={buttonIsDisabled}
+                    className={buttonIsDisabled ? 'code-block-btn-disabled' : 'code-block-btn'}
+                    onClick={() => getAiCode(data)}>
                     Generate AI Code
                 </button>
             )}

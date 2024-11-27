@@ -31,9 +31,9 @@ code {
   border: none;
   cursor: pointer;
   background-color: rgba(0, 0, 0, 0.6);
-  padding: 8px;
+  padding: 10px;
   color: white;
-  border-radius: 8px;
+  border-radius: 6px;
   transition: .2s;
 }
 
@@ -62,18 +62,18 @@ code {
   width: 12rem;
   max-height: 85%;
   overflow-y: auto;
-  border-radius: 8px;
+  border-radius: 6px;
 }
 
 .SideBar>button {
   cursor: pointer;
-  padding: 8px;
-  border-radius: 8px;
-  margin: 4px;
+  padding: 4px 8px;
+  border-radius: 6px;
+  margin: 2px;
   font-size: 1rem;
-  border: 2px solid rgba(0, 0, 0, 0);
   transition: .12s;
   animation-timing-function: linear;
+  border: 2px solid rgba(0, 0, 0, 0);
 }
 
 .SideBar>button:hover {
@@ -81,19 +81,19 @@ code {
 }
 
 .SideBar>.node-type-input {
-  background-color: var(--node-data-color);
+  background: var(--node-data-color);
 }
 
 .SideBar>.node-type-processor {
-  background-color: var(--node-processor-color);
+  background: var(--node-processor-color);
 }
 
 .SideBar>.node-type-model {
-  background-color: var(--node-model-color);
+  background: var(--node-model-color);
 }
 
 .SideBar>.node-type-output {
-  background-color: var(--node-output-color);
+  background: var(--node-output-color);
 }
 
 /* CODE BLOCK */
@@ -107,7 +107,7 @@ code {
 
 /* DISPLAY CODE BTN */
 .floating-button-container {
-  padding: 20px 5px;
+  padding: 20px 4px;
 }
 
 .floating-button-container>.floating-button {
@@ -116,16 +116,19 @@ code {
   outline: none;
   background: rgba(0, 0, 0, 0.3);
   color: white;
-  border-radius: 8px;
+  border-radius: 6px;
   cursor: pointer;
   transition: 0.2s;
+  padding: 4px;
 }
 
 .floating-button-container>.floating-button:hover {
   background: rgba(0, 0, 0, 0.5);
-  padding: 0 12px;
+  padding: 0 8px;
 }
 
+
+/* OTHER THINGS */
 /* Chrome, Safari, Edge, Opera */
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
@@ -136,4 +139,22 @@ input::-webkit-inner-spin-button {
 /* Firefox */
 input[type=number] {
   -moz-appearance: textfield;
+}
+
+/* Width of the scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+/* Track of the scrollbar */
+::-webkit-scrollbar-track {
+  background: #f1f1f122;
+  border-radius: 12px;
+  width: 10px;
+}
+
+/* Handle of the scrollbar */
+::-webkit-scrollbar-thumb {
+  background: var(--primary);
+  border-radius: 12px;
 }

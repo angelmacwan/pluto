@@ -64,7 +64,7 @@ const MainApp = () => {
   const [nodeStates, setNodeStates] = useState({});
 
   const onConnect = useCallback(
-    (params) => setEdges((eds) => addEdge({ ...params, animated: false, markerEnd: { type: 'arrow' } }, eds)),
+    (params) => setEdges((eds) => addEdge({ ...params, animated: false, markerEnd: { type: 'none' } }, eds)),
     [setEdges]
   );
 
@@ -286,7 +286,7 @@ const MainApp = () => {
 
       <div className='code-output-container' style={{ right: codeOutputVisible ? '0' : '-600px' }}>
         <div className='floating-button-container'>
-          <button className='floating-button' onClick={() => setCodeOutputVisible(!codeOutputVisible)}>
+          <button className='floating-button' style={{ transform: codeOutputVisible ? 'scaleX(-1)' : 'scaleX(1)' }} onClick={() => setCodeOutputVisible(!codeOutputVisible)}>
             <svg width={iconSize} height={iconSize} fill="currentColor"
               className="bi bi-arrow-bar-left"
               viewBox="0 0 16 16">
@@ -296,8 +296,7 @@ const MainApp = () => {
         </div>
 
         <div className='code-output-display-block' style={{ width: '600px' }} >
-          {!useAi && (<CodeOutput useAi={useAi} data={getFlowOrder()} />)}
-          {useAi && (<CodeOutput useAi={useAi} />)}
+          <CodeOutput useAi={useAi} data={getFlowOrder()} />
         </div>
       </div>
 

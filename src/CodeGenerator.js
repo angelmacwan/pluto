@@ -9,7 +9,7 @@ export const generateCode = (data) => {
 df = pd.read_csv("${data.data.fileName}", sep="${data.data.seperator}")
 
 X = df.drop(columns=[target_column])
-y = df['target_column']
+y = df[target_column]
 `
             break;
 

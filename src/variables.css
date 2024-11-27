@@ -1,5 +1,5 @@
 :root {
-    --canvas-color: #192a51;
+    --canvas-color: #292D3F;
     --node-data-color: #61fa82;
     --node-processor-color: #4a91fc;
     --node-model-color: rgb(231, 90, 113);
@@ -8,4 +8,6 @@
     --node-handle-stroke: white;
     --node-connection-stroke: white;
     --node-output-color: pink;
+
+    --primary: #4a91fc;
 }

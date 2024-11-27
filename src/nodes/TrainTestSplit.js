@@ -6,11 +6,11 @@ export default memo(({ data }) => {
 
     // Destructure values from data with defaults
     const {
-        splitRatio = 0.8,
-        randomSeed = 42,
+        splitRatio = undefined,
+        randomSeed = undefined,
         stratify = false,
         shuffle = true,
-        updateNodeState = () => { } // Default empty function if not provided
+        updateNodeState = () => { }
     } = data;
 
     const updateState = (updates) => {
