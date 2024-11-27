@@ -1,4 +1,4 @@
-import React, { memo } from 'react';
+import React, { memo, useEffect, useState } from 'react';
 import SyntaxHighlighter from 'react-syntax-highlighter';
 import { atomOneDark } from 'react-syntax-highlighter/dist/esm/styles/hljs';
 
@@ -6,8 +6,28 @@ import './CodeOutput.css';
 import "prismjs/themes/prism-tomorrow.css";
 
 import { generateCode } from './CodeGenerator';
+import { generateAiCode } from './AiCodeGenerator';
 
-export default memo(({ data, useAi }) => {
+const CodeOutput = memo(({ data, useAi }) => {
+    const [finalCode, setFinalCode] = useState("");
+
+    useEffect(() => {
+        const generateNormalCode = () => {
+            const flatData = data.flat(Infinity);
+            const code = flatData.map(node => generateCode(node));
+
+            const importsOutput = code.map(c => c.imports).join('\n');
+            const codeOutput = code.map(c => c.code).join('\n');
+
+            return `${importsOutput.trim()}\n\n${codeOutput.trim()}`;
+        };
+
+        if (!useAi) {
+            setFinalCode(generateNormalCode());
+        } else {
+            setFinalCode('// AI Generated Code\n');
+        }
+    }, [data, useAi]);
 
     const handleCopy = async () => {
         try {
@@ -17,46 +37,38 @@ export default memo(({ data, useAi }) => {
         }
     };
 
-    data = data.flat(Infinity);
-    let code = [];
-
-    for (let i = 0; i < data.length; i++) {
-        const node = data[i];
-        const nodeCode = generateCode(node);
-        code.push(nodeCode);
-    }
-
-    let importsOutput = ""
-    let codeOutpus = ""
-    for (let i = 0; i < code.length; i++) {
-        importsOutput += code[i].imports + "\n";
-        codeOutpus += code[i].code + "\n";
-    }
-
-    importsOutput = importsOutput.trim();
-    codeOutpus = codeOutpus.trim();
-
-    const finalCode = useAi ?
-        `//THIS CODE IS AI GENERATED\n${importsOutput}\n\n${codeOutpus}` :
-        `${importsOutput}\n\n${codeOutpus}`;
-
-    const generateAiCode = () => {
-        console.log("generating AI CODE")
-    }
+    const getAiCode = async () => {
+        try {
+            const generatedCode = await generateAiCode(data);
+            setFinalCode('// AI Generated Code\n' + generatedCode.replaceAll("```", "").replace("python", ""));
+        } catch (err) {
+            console.error('Failed to generate AI code:', err);
+        }
+    };
 
     return (
         <div className="code-block-output">
             <div className="code-body">
-                <SyntaxHighlighter className="code-block" language="python" style={atomOneDark} showLineNumbers={true}>
+                <SyntaxHighlighter
+                    className="code-block"
+                    language="python"
+                    style={atomOneDark}
+                    showLineNumbers={true}
+                >
                     {finalCode}
                 </SyntaxHighlighter>
             </div>
-            <button className='code-block-btn' onClick={() => handleCopy()}>COPY</button>
+            <button className='code-block-btn' onClick={handleCopy}>
+                COPY
+            </button>
 
-            {(useAi) && (
-                <button className='code-block-btn' onClick={() => generateAiCode()}>Generate AI Code</button>
+            {useAi && (
+                <button className='code-block-btn' onClick={getAiCode}>
+                    Generate AI Code
+                </button>
             )}
-
-        </div >
+        </div>
     );
 });
+
+export default CodeOutput;
