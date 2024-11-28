@@ -28,7 +28,7 @@ const CodeOutput = memo(({ data, useAi }) => {
         if (!useAi) {
             setFinalCode(generateNormalCode());
         } else {
-            setFinalCode('// AI Generated Code\n');
+            setFinalCode('# AI Generated Code\n');
         }
     }, [data, useAi]);
 
@@ -44,7 +44,7 @@ const CodeOutput = memo(({ data, useAi }) => {
         setbuttonIsDisabled(true)
         try {
             const generatedCode = await generateAiCode(data);
-            setFinalCode('// AI Generated Code\n' + generatedCode.replaceAll("```", "").replace("python", ""));
+            setFinalCode('# AI Generated Code\n' + generatedCode.replaceAll("```", "").replace("python", ""));
             setbuttonIsDisabled(false)
         } catch (err) {
             console.error('Failed to generate AI code:', err);
