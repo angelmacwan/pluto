@@ -322,7 +322,6 @@ const MainApp = () => {
     input.click();
   }
 
-
   return (
     <>
       <div className="TopBar">

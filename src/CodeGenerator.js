@@ -60,8 +60,7 @@ X_test = scaler.transform(X_test)`
             code = `model = KNeighborsClassifier(n_neighbors = ${data.data.n_neighbors},
             algorithm = '${data.data.algorithm}',
             leaf_size = ${data.data.leaf_size},
-            metric = '${data.data.metric}',
-            random_state = RANDOM_SEED)
+            metric = '${data.data.metric}')
 
 model.fit(X_train, y_train)
 y_pred = model.predict(X_test)`

@@ -10,7 +10,9 @@ import { generateAiCode } from './AiCodeGenerator';
 
 const CodeOutput = memo(({ data, useAi }) => {
     const [finalCode, setFinalCode] = useState("");
+    const [codeOutput, setcodeOutput] = useState("");
     const [buttonIsDisabled, setbuttonIsDisabled] = useState(false);
+    const [viewOutput, setViewOutput] = useState(false);
 
     useEffect(() => {
         const generateNormalCode = () => {
@@ -50,6 +52,31 @@ const CodeOutput = memo(({ data, useAi }) => {
         }
     };
 
+
+    const runCode = async () => {
+        try {
+            const res = await fetch('http://127.0.0.1:5000/run_code', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ data: finalCode }),
+            });
+
+            const response = await res.json();
+
+            if (response.error) {
+                setcodeOutput(response.error);
+                return;
+            }
+
+            setcodeOutput(response.output);
+        } catch (error) {
+            console.error(error);
+            setcodeOutput("SOMETHING WENT WRONG");
+        }
+    }
+
     return (
         <div className="code-block-output">
             <div className="code-body">
@@ -57,17 +84,43 @@ const CodeOutput = memo(({ data, useAi }) => {
                     <div className="code-loader"></div>
                 )}
 
-                <SyntaxHighlighter
-                    className="code-block"
-                    language="python"
-                    style={atomOneDark}
-                    showLineNumbers={true}
-                >
-                    {finalCode}
-                </SyntaxHighlighter>
+                {!viewOutput && (
+                    <SyntaxHighlighter
+                        className="code-block"
+                        language="python"
+                        style={atomOneDark}
+                        showLineNumbers={true}
+                    >
+                        {finalCode}
+                    </SyntaxHighlighter>
+                )}
+                {viewOutput && (
+                    <div className="code-block">
+                        <SyntaxHighlighter
+                            className="code-block"
+                            language="bash"
+                            style={atomOneDark}
+                            showLineNumbers={true}
+                        >
+                            {codeOutput}
+                        </SyntaxHighlighter>
+                    </div>
+                )}
+
             </div>
+
+            {/* BUTTONS */}
+
             <button className='code-block-btn' onClick={handleCopy}>
-                COPY
+                Copy
+            </button>
+
+            <button className='code-block-btn' onClick={() => setViewOutput(!viewOutput)}>
+                View Output
+            </button>
+
+            <button className='code-block-btn' onClick={runCode}>
+                Run
             </button>
 
             {useAi && (
