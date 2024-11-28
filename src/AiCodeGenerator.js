@@ -22,6 +22,7 @@ export const generateAiCode = async (data) => {
 
     if (!API_KEY) {
         localStorage.setItem('PLUTO_GEMINI_KEY', prompt("ENTER GEMINI API KEY"));
+        return "API KEY FOUND, PLEASE TRY AGAIN"
     }
 
     // GET API RESPONSE

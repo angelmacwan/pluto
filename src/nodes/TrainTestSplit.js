@@ -6,8 +6,7 @@ export default memo(({ data }) => {
 
     // Destructure values from data with defaults
     const {
-        splitRatio = undefined,
-        randomSeed = undefined,
+        splitRatio = 0,
         stratify = false,
         shuffle = true,
         updateNodeState = () => { }
@@ -31,13 +30,6 @@ export default memo(({ data }) => {
         // Handle percentage input (e.g., 80)
         else if (value > 1 && value <= 100) {
             updateState({ splitRatio: value / 100 });
-        }
-    };
-
-    const handleRandomSeedChange = (e) => {
-        const value = parseInt(e.target.value);
-        if (!isNaN(value)) {
-            updateState({ randomSeed: value });
         }
     };
 
@@ -72,16 +64,6 @@ export default memo(({ data }) => {
                     <small className="helper-text">
                         {`Training set: ${(splitRatio * 100).toFixed(1)}% | Test set: ${((1 - splitRatio) * 100).toFixed(1)}%`}
                     </small>
-                </div>
-
-                <div>
-                    <label>Random Seed</label>
-                    <input
-                        type="number"
-                        value={randomSeed}
-                        onChange={handleRandomSeedChange}
-                        className='input-range-number'
-                    />
                 </div>
 
                 <div>

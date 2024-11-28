@@ -54,7 +54,7 @@ const CodeOutput = memo(({ data, useAi }) => {
         <div className="code-block-output">
             <div className="code-body">
                 {buttonIsDisabled && (
-                    <div class="code-loader"></div>
+                    <div className="code-loader"></div>
                 )}
 
                 <SyntaxHighlighter

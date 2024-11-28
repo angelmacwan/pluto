@@ -19,16 +19,26 @@ import RobustScaler from './nodes/RobustScaler';
 import KnnClassifier from './nodes/KnnClassifier';
 import DecisionTree from './nodes/DecisionTree';
 import ClassificationReport from './nodes/ClassificationReport';
+import DropColumn from './nodes/DropColumn';
+import RandomForest from './nodes/RandomForest';
+import RandomSeed from './nodes/RandomSeed';
+
+import CustomCode from './nodes/CustomCode';
+
 
 // list of node types
 const nodeTypes = {
   DataInput: DataInput,
+  RandomSeed: RandomSeed,
+  DropColumn: DropColumn,
   TrainTestSplit: TrainTestSplit,
   StandardScaler: StandardScaler,
   RobustScaler: RobustScaler,
   KnnClassifier: KnnClassifier,
   DecisionTree: DecisionTree,
-  ClassificationReport: ClassificationReport
+  RandomForest: RandomForest,
+  ClassificationReport: ClassificationReport,
+  CustomCode: CustomCode
 };
 
 // Mappint of node type to its css class
@@ -39,8 +49,12 @@ const nodeTypeClass = {
   RobustScaler: 'node-type-processor',
   KnnClassifier: 'node-type-model',
   DecisionTree: 'node-type-model',
-  ClassificationReport: 'node-type-output'
-}
+  ClassificationReport: 'node-type-output',
+  DropColumn: 'node-type-processor',
+  RandomForest: 'node-type-model',
+  RandomSeed: 'node-type-processor',
+  CustomCode: 'node-type-custom'
+};
 
 
 // initialState will be removed at some point
@@ -245,20 +259,90 @@ const MainApp = () => {
   };
 
 
+  const handleSave = () => {
+    const flowOrder = getFlowOrder();
+
+    // save position and data of all nodes as json
+    const nodesData = nodes.map(node => ({
+      id: node.id,
+      type: node.type,
+      position: node.position,
+      data: node.data
+    }));
+
+    // save position and data of all edges as json
+    const edgesData = edges.map(edge => ({
+      id: edge.id,
+      source: edge.source,
+      target: edge.target,
+      type: edge.type,
+      data: edge.data
+    }))
+
+    const data = {
+      nodes: nodesData,
+      edges: edgesData,
+      flowOrder
+    };
+
+    const jsonData = JSON.stringify(data, null, 2);
+    const blob = new Blob([jsonData], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = 'flow.json';
+    link.click();
+
+    alert('Flow saved successfully!');
+  }
+
+
+  const handleLoad = () => {
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = '.json';
+    input.onchange = (e) => {
+      const file = e.target.files[0];
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const contents = e.target.result;
+        const data = JSON.parse(contents);
+        setNodes(data.nodes.map(node => ({
+          ...node,
+          position: node.position,
+          data: node.data
+        })))
+        setEdges(data.edges.map(edge => ({
+          ...edge,
+          data: edge.data
+        })))
+      }
+      reader.readAsText(file);
+    }
+    input.click();
+  }
+
+
   return (
     <>
       <div className="TopBar">
-        <button>
+        {/* SAVE BTN */}
+        <button onClick={handleSave}>
           <svg xmlns="http://www.w3.org/2000/svg" width={iconSize} height={iconSize} fill="currentColor" className="bi bi-floppy" viewBox="0 0 16 16">
             <path d="M11 2H9v3h2z" />
             <path d="M1.5 0h11.586a1.5 1.5 0 0 1 1.06.44l1.415 1.414A1.5 1.5 0 0 1 16 2.914V14.5a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 0 14.5v-13A1.5 1.5 0 0 1 1.5 0M1 1.5v13a.5.5 0 0 0 .5.5H2v-4.5A1.5 1.5 0 0 1 3.5 9h9a1.5 1.5 0 0 1 1.5 1.5V15h.5a.5.5 0 0 0 .5-.5V2.914a.5.5 0 0 0-.146-.353l-1.415-1.415A.5.5 0 0 0 13.086 1H13v4.5A1.5 1.5 0 0 1 11.5 7h-7A1.5 1.5 0 0 1 3 5.5V1H1.5a.5.5 0 0 0-.5.5m3 4a.5.5 0 0 0 .5.5h7a.5.5 0 0 0 .5-.5V1H4zM3 15h10v-4.5a.5.5 0 0 0-.5-.5h-9a.5.5 0 0 0-.5.5z" />
-          </svg></button>
-        <button>
+          </svg>
+        </button>
+
+        {/* LOAD BTN */}
+        <button onClick={handleLoad}>
           <svg width={iconSize} height={iconSize} fill="currentColor" className="bi bi-file-earmark-arrow-up" viewBox="0 0 16 16">
             <path d="M8.5 11.5a.5.5 0 0 1-1 0V7.707L6.354 8.854a.5.5 0 1 1-.708-.708l2-2a.5.5 0 0 1 .708 0l2 2a.5.5 0 0 1-.708.708L8.5 7.707z" />
             <path d="M14 14V4.5L9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2M9.5 3A1.5 1.5 0 0 0 11 4.5h2V14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h5.5z" />
           </svg>
         </button>
+
+        {/* AI BTN */}
         <button
           onClick={() => { setuseAi(!useAi) }}
           style={{ background: useAi ? 'var(--node-processor-color)' : 'rgba(0,0,0,0.6)' }}

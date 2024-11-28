@@ -3,6 +3,11 @@ export const generateCode = (data) => {
     let code = "";
 
     switch (data.type) {
+        case 'RandomSeed':
+            imports = ""
+            code = `RANDOM_SEED = ${data.data.seed}`
+            break;
+
         case 'DataInput':
             imports = "import pandas as pd"
             code = `target_column = '${data.data.targetColumn}'
@@ -17,10 +22,19 @@ y = df[target_column]
             imports = "from sklearn.model_selection import train_test_split"
             code = `X_train, X_test, y_train, y_test = train_test_split(X, y,
                             test_size = ${data.data.splitRatio} ,
-                            random_state = ${data.data.randomSeed},
+                            random_state = RANDOM_SEED,
                             shuffle = ${data.data.shuffle ? "True" : "False"},
                             stratify = ${data.data.stratify ? "y" : "None"} )`
 
+            break;
+
+        case 'DropColumn':
+            imports = ""
+            if (data.data.columnName) {
+                let dropCols = data.data.columnName.split(",");
+                dropCols = dropCols.map(col => `"${col.trim()}"`).join(", ");
+                code = `X.drop(columns=[${dropCols}], inplace=True)`
+            }
             break;
 
         case 'StandardScaler':
@@ -46,7 +60,8 @@ X_test = scaler.transform(X_test)`
             code = `model = KNeighborsClassifier(n_neighbors = ${data.data.n_neighbors},
             algorithm = '${data.data.algorithm}',
             leaf_size = ${data.data.leaf_size},
-            metric = '${data.data.metric}')
+            metric = '${data.data.metric}',
+            random_state = RANDOM_SEED)
 
 model.fit(X_train, y_train)
 y_pred = model.predict(X_test)`
@@ -58,7 +73,8 @@ y_pred = model.predict(X_test)`
             splitter = '${data.data.splitter}',
             max_depth = ${data.data.max_depth},
             min_samples_split = ${data.data.min_samples_split},
-            min_samples_leaf = ${data.data.min_samples_leaf})
+            min_samples_leaf = ${data.data.min_samples_leaf},
+            random_state = RANDOM_SEED)
 
 model.fit(X_train, y_train)
 y_pred = model.predict(X_test)`
@@ -68,6 +84,28 @@ y_pred = model.predict(X_test)`
             imports = "from sklearn.metrics import classification_report"
             code = `print(classification_report(y_test, y_pred))`
             break;
+
+
+        case 'RandomForest':
+            imports = "from sklearn.ensemble import RandomForestClassifier"
+            code = `model = RandomForestClassifier(n_estimators = ${data.data.n_estimators},
+            criterion = '${data.data.criterion}',
+            max_depth = ${data.data.max_depth},
+            min_samples_split = ${data.data.min_samples_split},
+            min_samples_leaf = ${data.data.min_samples_leaf},
+            bootstrap = ${data.data.bootstrap},
+            random_state = RANDOM_SEED)
+
+model.fit(X_train, y_train)
+y_pred = model.predict(X_test)`
+            break;
+
+
+        case 'CustomCode':
+            imports = ""
+            code = data.data.code;
+            break;
+
         default:
             imports = "//"
             code = "UNIDENTIFIED NODE";
