@@ -10,6 +10,7 @@ import ReactFlow, {
 
 import 'reactflow/dist/style.css';
 
+import Info from './Info';
 import CodeOutput from './CodeOutput';
 
 import DataInput from './nodes/DataInput';
@@ -71,6 +72,7 @@ const MainApp = () => {
   const [selectedNodes, setSelectedNodes] = useState([]);
   const [codeOutputVisible, setCodeOutputVisible] = useState(false);
   const [useAi, setuseAi] = useState(false)
+  const [displayInfo, setDisplayInfo] = useState(true);
 
   const iconSize = 20
 
@@ -325,6 +327,16 @@ const MainApp = () => {
   return (
     <>
       <div className="TopBar">
+        {/* INFO BTN */}
+        <button onClick={() => {
+          setDisplayInfo(!displayInfo)
+        }}>
+          <svg width={iconSize} height={iconSize} fill="currentColor" className="bi bi-info-circle" viewBox="0 0 16 16">
+            <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16" />
+            <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0" />
+          </svg>
+        </button>
+
         {/* SAVE BTN */}
         <button onClick={handleSave}>
           <svg xmlns="http://www.w3.org/2000/svg" width={iconSize} height={iconSize} fill="currentColor" className="bi bi-floppy" viewBox="0 0 16 16">
@@ -367,6 +379,15 @@ const MainApp = () => {
         ))}
       </div>
 
+      {/* INFO */}
+      {displayInfo && (
+        <div onClick={() => {
+          setDisplayInfo(false);
+        }}>
+          <Info />
+        </div>
+      )}
+
       <div className='code-output-container' style={{ right: codeOutputVisible ? '0' : '-600px' }}>
         <div className='floating-button-container'>
           <button className='floating-button' style={{ transform: codeOutputVisible ? 'scaleX(-1)' : 'scaleX(1)' }} onClick={() => setCodeOutputVisible(!codeOutputVisible)}>
@@ -382,6 +403,7 @@ const MainApp = () => {
           <CodeOutput useAi={useAi} data={getFlowOrder()} />
         </div>
       </div>
+
 
       <div className="ReactFlowContainer">
         <ReactFlow

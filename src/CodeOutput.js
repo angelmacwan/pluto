@@ -52,8 +52,12 @@ const CodeOutput = memo(({ data, useAi }) => {
         }
     };
 
-
     const runCode = async () => {
+        const current_url = window.location.href;
+        if (current_url.includes("angelmacwan.github.io")) {
+            alert("THIS FEATURE IS ONLY AVAILABLE ON LOCAL INSTALLATION");
+            return;
+        }
         try {
             const res = await fetch('http://127.0.0.1:5000/run_code', {
                 method: 'POST',
