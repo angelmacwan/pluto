@@ -1,0 +1,386 @@
+{
+  "nodes": [
+    {
+      "id": "698.0916373233234",
+      "type": "DataInput",
+      "position": {
+        "x": 0,
+        "y": 200
+      },
+      "data": {
+        "fileName": "iris.csv",
+        "filePath": "C:\\fakepath\\iris.csv",
+        "fileContent": "sepal.length,sepal.width,petal.length,petal.width,variety\r\n5.1,3.5,1.4,.2,Setosa\r\n4.9,3,1.4,.2,Setosa\r\n4.7,3.2,1.3,.2,Setosa\r\n4.6,3.1,1.5,.2,Setosa\r\n5,3.6,1.4,.2,Setosa\r\n5.4,3.9,1.7,.4,Setosa\r\n4.6,3.4,1.4,.3,Setosa\r\n5,3.4,1.5,.2,Setosa\r\n4.4,2.9,1.4,.2,Setosa\r\n4.9,3.1,1.5,.1,Setosa\r\n5.4,3.7,1.5,.2,Setosa\r\n4.8,3.4,1.6,.2,Setosa\r\n4.8,3,1.4,.1,Setosa\r\n4.3,3,1.1,.1,Setosa\r\n5.8,4,1.2,.2,Setosa\r\n5.7,4.4,1.5,.4,Setosa\r\n5.4,3.9,1.3,.4,Setosa\r\n5.1,3.5,1.4,.3,Setosa\r\n5.7,3.8,1.7,.3,Setosa\r\n5.1,3.8,1.5,.3,Setosa\r\n5.4,3.4,1.7,.2,Setosa\r\n5.1,3.7,1.5,.4,Setosa\r\n4.6,3.6,1,.2,Setosa\r\n5.1,3.3,1.7,.5,Setosa\r\n4.8,3.4,1.9,.2,Setosa\r\n5,3,1.6,.2,Setosa\r\n5,3.4,1.6,.4,Setosa\r\n5.2,3.5,1.5,.2,Setosa\r\n5.2,3.4,1.4,.2,Setosa\r\n4.7,3.2,1.6,.2,Setosa\r\n4.8,3.1,1.6,.2,Setosa\r\n5.4,3.4,1.5,.4,Setosa\r\n5.2,4.1,1.5,.1,Setosa\r\n5.5,4.2,1.4,.2,Setosa\r\n4.9,3.1,1.5,.2,Setosa\r\n5,3.2,1.2,.2,Setosa\r\n5.5,3.5,1.3,.2,Setosa\r\n4.9,3.6,1.4,.1,Setosa\r\n4.4,3,1.3,.2,Setosa\r\n5.1,3.4,1.5,.2,Setosa\r\n5,3.5,1.3,.3,Setosa\r\n4.5,2.3,1.3,.3,Setosa\r\n4.4,3.2,1.3,.2,Setosa\r\n5,3.5,1.6,.6,Setosa\r\n5.1,3.8,1.9,.4,Setosa\r\n4.8,3,1.4,.3,Setosa\r\n5.1,3.8,1.6,.2,Setosa\r\n4.6,3.2,1.4,.2,Setosa\r\n5.3,3.7,1.5,.2,Setosa\r\n5,3.3,1.4,.2,Setosa\r\n7,3.2,4.7,1.4,Versicolor\r\n6.4,3.2,4.5,1.5,Versicolor\r\n6.9,3.1,4.9,1.5,Versicolor\r\n5.5,2.3,4,1.3,Versicolor\r\n6.5,2.8,4.6,1.5,Versicolor\r\n5.7,2.8,4.5,1.3,Versicolor\r\n6.3,3.3,4.7,1.6,Versicolor\r\n4.9,2.4,3.3,1,Versicolor\r\n6.6,2.9,4.6,1.3,Versicolor\r\n5.2,2.7,3.9,1.4,Versicolor\r\n5,2,3.5,1,Versicolor\r\n5.9,3,4.2,1.5,Versicolor\r\n6,2.2,4,1,Versicolor\r\n6.1,2.9,4.7,1.4,Versicolor\r\n5.6,2.9,3.6,1.3,Versicolor\r\n6.7,3.1,4.4,1.4,Versicolor\r\n5.6,3,4.5,1.5,Versicolor\r\n5.8,2.7,4.1,1,Versicolor\r\n6.2,2.2,4.5,1.5,Versicolor\r\n5.6,2.5,3.9,1.1,Versicolor\r\n5.9,3.2,4.8,1.8,Versicolor\r\n6.1,2.8,4,1.3,Versicolor\r\n6.3,2.5,4.9,1.5,Versicolor\r\n6.1,2.8,4.7,1.2,Versicolor\r\n6.4,2.9,4.3,1.3,Versicolor\r\n6.6,3,4.4,1.4,Versicolor\r\n6.8,2.8,4.8,1.4,Versicolor\r\n6.7,3,5,1.7,Versicolor\r\n6,2.9,4.5,1.5,Versicolor\r\n5.7,2.6,3.5,1,Versicolor\r\n5.5,2.4,3.8,1.1,Versicolor\r\n5.5,2.4,3.7,1,Versicolor\r\n5.8,2.7,3.9,1.2,Versicolor\r\n6,2.7,5.1,1.6,Versicolor\r\n5.4,3,4.5,1.5,Versicolor\r\n6,3.4,4.5,1.6,Versicolor\r\n6.7,3.1,4.7,1.5,Versicolor\r\n6.3,2.3,4.4,1.3,Versicolor\r\n5.6,3,4.1,1.3,Versicolor\r\n5.5,2.5,4,1.3,Versicolor\r\n5.5,2.6,4.4,1.2,Versicolor\r\n6.1,3,4.6,1.4,Versicolor\r\n5.8,2.6,4,1.2,Versicolor\r\n5,2.3,3.3,1,Versicolor\r\n5.6,2.7,4.2,1.3,Versicolor\r\n5.7,3,4.2,1.2,Versicolor\r\n5.7,2.9,4.2,1.3,Versicolor\r\n6.2,2.9,4.3,1.3,Versicolor\r\n5.1,2.5,3,1.1,Versicolor\r\n5.7,2.8,4.1,1.3,Versicolor\r\n6.3,3.3,6,2.5,Virginica\r\n5.8,2.7,5.1,1.9,Virginica\r\n7.1,3,5.9,2.1,Virginica\r\n6.3,2.9,5.6,1.8,Virginica\r\n6.5,3,5.8,2.2,Virginica\r\n7.6,3,6.6,2.1,Virginica\r\n4.9,2.5,4.5,1.7,Virginica\r\n7.3,2.9,6.3,1.8,Virginica\r\n6.7,2.5,5.8,1.8,Virginica\r\n7.2,3.6,6.1,2.5,Virginica\r\n6.5,3.2,5.1,2,Virginica\r\n6.4,2.7,5.3,1.9,Virginica\r\n6.8,3,5.5,2.1,Virginica\r\n5.7,2.5,5,2,Virginica\r\n5.8,2.8,5.1,2.4,Virginica\r\n6.4,3.2,5.3,2.3,Virginica\r\n6.5,3,5.5,1.8,Virginica\r\n7.7,3.8,6.7,2.2,Virginica\r\n7.7,2.6,6.9,2.3,Virginica\r\n6,2.2,5,1.5,Virginica\r\n6.9,3.2,5.7,2.3,Virginica\r\n5.6,2.8,4.9,2,Virginica\r\n7.7,2.8,6.7,2,Virginica\r\n6.3,2.7,4.9,1.8,Virginica\r\n6.7,3.3,5.7,2.1,Virginica\r\n7.2,3.2,6,1.8,Virginica\r\n6.2,2.8,4.8,1.8,Virginica\r\n6.1,3,4.9,1.8,Virginica\r\n6.4,2.8,5.6,2.1,Virginica\r\n7.2,3,5.8,1.6,Virginica\r\n7.4,2.8,6.1,1.9,Virginica\r\n7.9,3.8,6.4,2,Virginica\r\n6.4,2.8,5.6,2.2,Virginica\r\n6.3,2.8,5.1,1.5,Virginica\r\n6.1,2.6,5.6,1.4,Virginica\r\n7.7,3,6.1,2.3,Virginica\r\n6.3,3.4,5.6,2.4,Virginica\r\n6.4,3.1,5.5,1.8,Virginica\r\n6,3,4.8,1.8,Virginica\r\n6.9,3.1,5.4,2.1,Virginica\r\n6.7,3.1,5.6,2.4,Virginica\r\n6.9,3.1,5.1,2.3,Virginica\r\n5.8,2.7,5.1,1.9,Virginica\r\n6.8,3.2,5.9,2.3,Virginica\r\n6.7,3.3,5.7,2.5,Virginica\r\n6.7,3,5.2,2.3,Virginica\r\n6.3,2.5,5,1.9,Virginica\r\n6.5,3,5.2,2,Virginica\r\n6.2,3.4,5.4,2.3,Virginica\r\n5.9,3,5.1,1.8,Virginica",
+        "fileType": "CSV",
+        "seperator": ",",
+        "targetColumn": "variety"
+      }
+    },
+    {
+      "id": "225.82424697648062",
+      "type": "RandomSeed",
+      "position": {
+        "x": 80,
+        "y": 460
+      },
+      "data": {
+        "seed": 12
+      }
+    },
+    {
+      "id": "150.38913557819146",
+      "type": "RemoveNa",
+      "position": {
+        "x": 180,
+        "y": 550
+      },
+      "data": {}
+    },
+    {
+      "id": "286.654751198983",
+      "type": "TrainTestSplit",
+      "position": {
+        "x": 380,
+        "y": 210
+      },
+      "data": {
+        "splitRatio": 0.8,
+        "randomState": 42,
+        "stratify": true,
+        "shuffle": true
+      }
+    },
+    {
+      "id": "629.3124919893363",
+      "type": "StandardScaler",
+      "position": {
+        "x": 740,
+        "y": 180
+      },
+      "data": {
+        "withMean": true,
+        "withStd": true
+      }
+    },
+    {
+      "id": "805.2556693399098",
+      "type": "RobustScaler",
+      "position": {
+        "x": 740,
+        "y": 310
+      },
+      "data": {
+        "withCentering": true,
+        "withScaling": true,
+        "quantileRange": [
+          25,
+          75
+        ],
+        "unitVariance": false
+      }
+    },
+    {
+      "id": "914.4378062833578",
+      "type": "RandomForest",
+      "position": {
+        "x": 1060,
+        "y": 80
+      },
+      "data": {
+        "n_estimators": 100,
+        "max_depth": 12,
+        "min_samples_split": 2,
+        "min_samples_leaf": 1,
+        "criterion": "gini",
+        "bootstrap": true
+      }
+    },
+    {
+      "id": "489.00902227953424",
+      "type": "DecisionTree",
+      "position": {
+        "x": 1060,
+        "y": 320
+      },
+      "data": {
+        "criterion": "gini",
+        "splitter": "best",
+        "max_depth": null,
+        "min_samples_split": 2,
+        "min_samples_leaf": 1
+      }
+    },
+    {
+      "id": "383.5556456030036",
+      "type": "ClassificationReport",
+      "position": {
+        "x": 1450,
+        "y": 250
+      },
+      "data": {}
+    }
+  ],
+  "edges": [
+    {
+      "id": "reactflow__edge-698.0916373233234-225.82424697648062",
+      "source": "698.0916373233234",
+      "target": "225.82424697648062"
+    },
+    {
+      "id": "reactflow__edge-225.82424697648062-150.38913557819146",
+      "source": "225.82424697648062",
+      "target": "150.38913557819146"
+    },
+    {
+      "id": "reactflow__edge-150.38913557819146-286.654751198983",
+      "source": "150.38913557819146",
+      "target": "286.654751198983"
+    },
+    {
+      "id": "reactflow__edge-286.654751198983-629.3124919893363",
+      "source": "286.654751198983",
+      "target": "629.3124919893363"
+    },
+    {
+      "id": "reactflow__edge-286.654751198983-805.2556693399098",
+      "source": "286.654751198983",
+      "target": "805.2556693399098"
+    },
+    {
+      "id": "reactflow__edge-629.3124919893363-914.4378062833578",
+      "source": "629.3124919893363",
+      "target": "914.4378062833578"
+    },
+    {
+      "id": "reactflow__edge-805.2556693399098-489.00902227953424",
+      "source": "805.2556693399098",
+      "target": "489.00902227953424"
+    },
+    {
+      "id": "reactflow__edge-914.4378062833578-383.5556456030036",
+      "source": "914.4378062833578",
+      "target": "383.5556456030036"
+    },
+    {
+      "id": "reactflow__edge-489.00902227953424-383.5556456030036",
+      "source": "489.00902227953424",
+      "target": "383.5556456030036"
+    }
+  ],
+  "flowOrder": [
+    {
+      "id": "698.0916373233234",
+      "type": "DataInput",
+      "data": {
+        "fileName": "iris.csv",
+        "filePath": "C:\\fakepath\\iris.csv",
+        "fileContent": "sepal.length,sepal.width,petal.length,petal.width,variety\r\n5.1,3.5,1.4,.2,Setosa\r\n4.9,3,1.4,.2,Setosa\r\n4.7,3.2,1.3,.2,Setosa\r\n4.6,3.1,1.5,.2,Setosa\r\n5,3.6,1.4,.2,Setosa\r\n5.4,3.9,1.7,.4,Setosa\r\n4.6,3.4,1.4,.3,Setosa\r\n5,3.4,1.5,.2,Setosa\r\n4.4,2.9,1.4,.2,Setosa\r\n4.9,3.1,1.5,.1,Setosa\r\n5.4,3.7,1.5,.2,Setosa\r\n4.8,3.4,1.6,.2,Setosa\r\n4.8,3,1.4,.1,Setosa\r\n4.3,3,1.1,.1,Setosa\r\n5.8,4,1.2,.2,Setosa\r\n5.7,4.4,1.5,.4,Setosa\r\n5.4,3.9,1.3,.4,Setosa\r\n5.1,3.5,1.4,.3,Setosa\r\n5.7,3.8,1.7,.3,Setosa\r\n5.1,3.8,1.5,.3,Setosa\r\n5.4,3.4,1.7,.2,Setosa\r\n5.1,3.7,1.5,.4,Setosa\r\n4.6,3.6,1,.2,Setosa\r\n5.1,3.3,1.7,.5,Setosa\r\n4.8,3.4,1.9,.2,Setosa\r\n5,3,1.6,.2,Setosa\r\n5,3.4,1.6,.4,Setosa\r\n5.2,3.5,1.5,.2,Setosa\r\n5.2,3.4,1.4,.2,Setosa\r\n4.7,3.2,1.6,.2,Setosa\r\n4.8,3.1,1.6,.2,Setosa\r\n5.4,3.4,1.5,.4,Setosa\r\n5.2,4.1,1.5,.1,Setosa\r\n5.5,4.2,1.4,.2,Setosa\r\n4.9,3.1,1.5,.2,Setosa\r\n5,3.2,1.2,.2,Setosa\r\n5.5,3.5,1.3,.2,Setosa\r\n4.9,3.6,1.4,.1,Setosa\r\n4.4,3,1.3,.2,Setosa\r\n5.1,3.4,1.5,.2,Setosa\r\n5,3.5,1.3,.3,Setosa\r\n4.5,2.3,1.3,.3,Setosa\r\n4.4,3.2,1.3,.2,Setosa\r\n5,3.5,1.6,.6,Setosa\r\n5.1,3.8,1.9,.4,Setosa\r\n4.8,3,1.4,.3,Setosa\r\n5.1,3.8,1.6,.2,Setosa\r\n4.6,3.2,1.4,.2,Setosa\r\n5.3,3.7,1.5,.2,Setosa\r\n5,3.3,1.4,.2,Setosa\r\n7,3.2,4.7,1.4,Versicolor\r\n6.4,3.2,4.5,1.5,Versicolor\r\n6.9,3.1,4.9,1.5,Versicolor\r\n5.5,2.3,4,1.3,Versicolor\r\n6.5,2.8,4.6,1.5,Versicolor\r\n5.7,2.8,4.5,1.3,Versicolor\r\n6.3,3.3,4.7,1.6,Versicolor\r\n4.9,2.4,3.3,1,Versicolor\r\n6.6,2.9,4.6,1.3,Versicolor\r\n5.2,2.7,3.9,1.4,Versicolor\r\n5,2,3.5,1,Versicolor\r\n5.9,3,4.2,1.5,Versicolor\r\n6,2.2,4,1,Versicolor\r\n6.1,2.9,4.7,1.4,Versicolor\r\n5.6,2.9,3.6,1.3,Versicolor\r\n6.7,3.1,4.4,1.4,Versicolor\r\n5.6,3,4.5,1.5,Versicolor\r\n5.8,2.7,4.1,1,Versicolor\r\n6.2,2.2,4.5,1.5,Versicolor\r\n5.6,2.5,3.9,1.1,Versicolor\r\n5.9,3.2,4.8,1.8,Versicolor\r\n6.1,2.8,4,1.3,Versicolor\r\n6.3,2.5,4.9,1.5,Versicolor\r\n6.1,2.8,4.7,1.2,Versicolor\r\n6.4,2.9,4.3,1.3,Versicolor\r\n6.6,3,4.4,1.4,Versicolor\r\n6.8,2.8,4.8,1.4,Versicolor\r\n6.7,3,5,1.7,Versicolor\r\n6,2.9,4.5,1.5,Versicolor\r\n5.7,2.6,3.5,1,Versicolor\r\n5.5,2.4,3.8,1.1,Versicolor\r\n5.5,2.4,3.7,1,Versicolor\r\n5.8,2.7,3.9,1.2,Versicolor\r\n6,2.7,5.1,1.6,Versicolor\r\n5.4,3,4.5,1.5,Versicolor\r\n6,3.4,4.5,1.6,Versicolor\r\n6.7,3.1,4.7,1.5,Versicolor\r\n6.3,2.3,4.4,1.3,Versicolor\r\n5.6,3,4.1,1.3,Versicolor\r\n5.5,2.5,4,1.3,Versicolor\r\n5.5,2.6,4.4,1.2,Versicolor\r\n6.1,3,4.6,1.4,Versicolor\r\n5.8,2.6,4,1.2,Versicolor\r\n5,2.3,3.3,1,Versicolor\r\n5.6,2.7,4.2,1.3,Versicolor\r\n5.7,3,4.2,1.2,Versicolor\r\n5.7,2.9,4.2,1.3,Versicolor\r\n6.2,2.9,4.3,1.3,Versicolor\r\n5.1,2.5,3,1.1,Versicolor\r\n5.7,2.8,4.1,1.3,Versicolor\r\n6.3,3.3,6,2.5,Virginica\r\n5.8,2.7,5.1,1.9,Virginica\r\n7.1,3,5.9,2.1,Virginica\r\n6.3,2.9,5.6,1.8,Virginica\r\n6.5,3,5.8,2.2,Virginica\r\n7.6,3,6.6,2.1,Virginica\r\n4.9,2.5,4.5,1.7,Virginica\r\n7.3,2.9,6.3,1.8,Virginica\r\n6.7,2.5,5.8,1.8,Virginica\r\n7.2,3.6,6.1,2.5,Virginica\r\n6.5,3.2,5.1,2,Virginica\r\n6.4,2.7,5.3,1.9,Virginica\r\n6.8,3,5.5,2.1,Virginica\r\n5.7,2.5,5,2,Virginica\r\n5.8,2.8,5.1,2.4,Virginica\r\n6.4,3.2,5.3,2.3,Virginica\r\n6.5,3,5.5,1.8,Virginica\r\n7.7,3.8,6.7,2.2,Virginica\r\n7.7,2.6,6.9,2.3,Virginica\r\n6,2.2,5,1.5,Virginica\r\n6.9,3.2,5.7,2.3,Virginica\r\n5.6,2.8,4.9,2,Virginica\r\n7.7,2.8,6.7,2,Virginica\r\n6.3,2.7,4.9,1.8,Virginica\r\n6.7,3.3,5.7,2.1,Virginica\r\n7.2,3.2,6,1.8,Virginica\r\n6.2,2.8,4.8,1.8,Virginica\r\n6.1,3,4.9,1.8,Virginica\r\n6.4,2.8,5.6,2.1,Virginica\r\n7.2,3,5.8,1.6,Virginica\r\n7.4,2.8,6.1,1.9,Virginica\r\n7.9,3.8,6.4,2,Virginica\r\n6.4,2.8,5.6,2.2,Virginica\r\n6.3,2.8,5.1,1.5,Virginica\r\n6.1,2.6,5.6,1.4,Virginica\r\n7.7,3,6.1,2.3,Virginica\r\n6.3,3.4,5.6,2.4,Virginica\r\n6.4,3.1,5.5,1.8,Virginica\r\n6,3,4.8,1.8,Virginica\r\n6.9,3.1,5.4,2.1,Virginica\r\n6.7,3.1,5.6,2.4,Virginica\r\n6.9,3.1,5.1,2.3,Virginica\r\n5.8,2.7,5.1,1.9,Virginica\r\n6.8,3.2,5.9,2.3,Virginica\r\n6.7,3.3,5.7,2.5,Virginica\r\n6.7,3,5.2,2.3,Virginica\r\n6.3,2.5,5,1.9,Virginica\r\n6.5,3,5.2,2,Virginica\r\n6.2,3.4,5.4,2.3,Virginica\r\n5.9,3,5.1,1.8,Virginica",
+        "fileType": "CSV",
+        "seperator": ",",
+        "targetColumn": "variety"
+      },
+      "position": {
+        "x": 0,
+        "y": 200
+      },
+      "width": 301,
+      "height": 248,
+      "selected": false,
+      "positionAbsolute": {
+        "x": 0,
+        "y": 200
+      },
+      "dragging": false
+    },
+    {
+      "id": "225.82424697648062",
+      "type": "RandomSeed",
+      "data": {
+        "seed": 12
+      },
+      "position": {
+        "x": 80,
+        "y": 460
+      },
+      "width": 221,
+      "height": 67,
+      "selected": false,
+      "positionAbsolute": {
+        "x": 80,
+        "y": 460
+      },
+      "dragging": false
+    },
+    {
+      "id": "150.38913557819146",
+      "type": "RemoveNa",
+      "data": {},
+      "position": {
+        "x": 180,
+        "y": 550
+      },
+      "width": 116,
+      "height": 46,
+      "selected": false,
+      "positionAbsolute": {
+        "x": 180,
+        "y": 550
+      },
+      "dragging": false
+    },
+    {
+      "id": "286.654751198983",
+      "type": "TrainTestSplit",
+      "data": {
+        "splitRatio": 0.8,
+        "randomState": 42,
+        "stratify": true,
+        "shuffle": true
+      },
+      "position": {
+        "x": 380,
+        "y": 210
+      },
+      "width": 264,
+      "height": 151,
+      "selected": false,
+      "positionAbsolute": {
+        "x": 380,
+        "y": 210
+      },
+      "dragging": false
+    },
+    [
+      [
+        {
+          "id": "629.3124919893363",
+          "type": "StandardScaler",
+          "data": {
+            "withMean": true,
+            "withStd": true
+          },
+          "position": {
+            "x": 740,
+            "y": 180
+          },
+          "width": 262,
+          "height": 88,
+          "selected": false,
+          "positionAbsolute": {
+            "x": 740,
+            "y": 180
+          },
+          "dragging": false
+        },
+        {
+          "id": "914.4378062833578",
+          "type": "RandomForest",
+          "data": {
+            "n_estimators": 100,
+            "max_depth": 12,
+            "min_samples_split": 2,
+            "min_samples_leaf": 1,
+            "criterion": "gini",
+            "bootstrap": true
+          },
+          "position": {
+            "x": 1060,
+            "y": 80
+          },
+          "width": 261,
+          "height": 193,
+          "selected": true,
+          "positionAbsolute": {
+            "x": 1060,
+            "y": 80
+          },
+          "dragging": false
+        },
+        {
+          "id": "383.5556456030036",
+          "type": "ClassificationReport",
+          "data": {},
+          "position": {
+            "x": 1450,
+            "y": 250
+          },
+          "width": 191,
+          "height": 46,
+          "selected": false,
+          "positionAbsolute": {
+            "x": 1450,
+            "y": 250
+          },
+          "dragging": false
+        }
+      ],
+      [
+        {
+          "id": "805.2556693399098",
+          "type": "RobustScaler",
+          "data": {
+            "withCentering": true,
+            "withScaling": true,
+            "quantileRange": [
+              25,
+              75
+            ],
+            "unitVariance": false
+          },
+          "position": {
+            "x": 740,
+            "y": 310
+          },
+          "width": 218,
+          "height": 151,
+          "selected": false,
+          "positionAbsolute": {
+            "x": 740,
+            "y": 310
+          },
+          "dragging": false
+        },
+        {
+          "id": "489.00902227953424",
+          "type": "DecisionTree",
+          "data": {
+            "criterion": "gini",
+            "splitter": "best",
+            "max_depth": null,
+            "min_samples_split": 2,
+            "min_samples_leaf": 1
+          },
+          "position": {
+            "x": 1060,
+            "y": 320
+          },
+          "width": 261,
+          "height": 193,
+          "selected": false,
+          "positionAbsolute": {
+            "x": 1060,
+            "y": 320
+          },
+          "dragging": false
+        },
+        {
+          "id": "383.5556456030036",
+          "type": "ClassificationReport",
+          "data": {},
+          "position": {
+            "x": 1450,
+            "y": 250
+          },
+          "width": 191,
+          "height": 46,
+          "selected": false,
+          "positionAbsolute": {
+            "x": 1450,
+            "y": 250
+          },
+          "dragging": false
+        }
+      ]
+    ]
+  ]
+}

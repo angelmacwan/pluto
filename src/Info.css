@@ -17,11 +17,13 @@
 .info-details {
     max-width: 500px;
     color: white;
-    background: rgba(0, 0, 0, 0.7);
+    background: rgba(0, 0, 0, 0.4);
     padding: 2rem;
     border-radius: 8px;
     backdrop-filter: blur(20px);
     animation: zoomInDown 0.8s ease-in-out;
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
+    border-left: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 .info-details>h1 {

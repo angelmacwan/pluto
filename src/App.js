@@ -97,6 +97,7 @@ const MainApp = () => {
   const [codeOutputVisible, setCodeOutputVisible] = useState(false);
   const [useAi, setuseAi] = useState(false)
   const [displayInfo, setDisplayInfo] = useState(true);
+  const [searchTerm, setSearchTerm] = useState('');
 
   const iconSize = 20
 
@@ -166,7 +167,6 @@ const MainApp = () => {
     return () => document.removeEventListener('keydown', handleKeyDown);
   }, [selectedEdges, selectedNodes, setEdges, setNodes]);
 
-
   const getFlowOrder = () => {
     const graph = new Map();
     const inDegree = new Map();
@@ -225,6 +225,12 @@ const MainApp = () => {
         const path = getPathToLeaf(current, new Set());
         processed.add(current);
 
+        // Skip nodes with no incoming and outgoing edges
+        const currentNode = nodes.find(node => node.id === current);
+        if (currentNode && inDegree.get(current) === 0 && outDegree.get(current) === 0) {
+          continue; // Skip this node
+        }
+
         // If this node has multiple children, process parallel branches
         if (outDegree.get(current) >= 2) {
           const children = graph.get(current);
@@ -243,7 +249,6 @@ const MainApp = () => {
           break;
         } else {
           // Add the current node
-          const currentNode = nodes.find(node => node.id === current);
           if (currentNode) {
             result.push(currentNode);
           }
@@ -253,8 +258,9 @@ const MainApp = () => {
       }
     }
 
-    return result;
+    return result
   };
+
 
   const addNewNode = (nodeType) => {
     const id = (Math.random() * 1000).toString();
@@ -387,20 +393,34 @@ const MainApp = () => {
             <path d="M8.5 1.866a1 1 0 1 0-1 0V3h-2A4.5 4.5 0 0 0 1 7.5V8a1 1 0 0 0-1 1v2a1 1 0 0 0 1 1v1a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-1a1 1 0 0 0 1-1V9a1 1 0 0 0-1-1v-.5A4.5 4.5 0 0 0 10.5 3h-2zM14 7.5V13a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V7.5A3.5 3.5 0 0 1 5.5 4h5A3.5 3.5 0 0 1 14 7.5" />
           </svg>
         </button>
+
       </div>
 
 
       {/* LIST OF ALL NODES AS BUTTONS */}
       <div className="SideBar btn-list">
-        {Object.keys(nodeTypes).map((nodeType) => (
-          <button
+
+        <div className="search-bar">
+          <input
+            type="search"
+            placeholder="search..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
+        </div>
+
+        {Object.keys(nodeTypes).map((nodeType) => {
+          if (searchTerm && !nodeType.toLowerCase().includes(searchTerm.toLowerCase())) {
+            return null;
+          }
+          return <button
             className={nodeTypeClass[nodeType]}
             key={nodeType}
             onClick={() => addNewNode(nodeType)}
           >
             {nodeType}
           </button>
-        ))}
+        })}
       </div>
 
       {/* INFO */}

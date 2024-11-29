@@ -50,12 +50,26 @@ code {
 
 
 /* the one on the left */
+/* SEARCH BAR */
+.search-bar {
+  padding: 6px 0;
+}
+
+.search-bar>input {
+  height: 100%;
+  width: 100%;
+  font-size: 1rem;
+  border: none;
+  border-radius: 6px;
+  outline: none;
+  padding: 8px 10px;
+}
+
 .SideBar {
   position: fixed;
   left: 10px;
   top: 50px;
   display: grid;
-  z-index: 5;
   background: none;
   background: rgba(255, 255, 255, 0.3);
   padding: 8px;
@@ -63,6 +77,7 @@ code {
   max-height: 85%;
   overflow-y: auto;
   border-radius: 6px;
+  z-index: 5;
 }
 
 .SideBar>button {
@@ -126,7 +141,6 @@ code {
   background: rgba(0, 0, 0, 0.5);
   padding: 0 8px;
 }
-
 
 /* OTHER THINGS */
 /* Chrome, Safari, Edge, Opera */

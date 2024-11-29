@@ -19,8 +19,8 @@ const CodeOutput = memo(({ data, useAi }) => {
             const flatData = data.flat(Infinity);
             const code = flatData.map(node => generateCode(node));
 
-            const importsOutput = code.map(c => c.imports).join('\n');
-            const codeOutput = code.map(c => c.code).join('\n');
+            const importsOutput = code.map(c => c.imports).filter(x => x !== '').join('\n');
+            const codeOutput = code.map(c => c.code).join('\n\n');
 
             return `${importsOutput.trim()}\n\n${codeOutput.trim()}`;
         };
@@ -28,7 +28,7 @@ const CodeOutput = memo(({ data, useAi }) => {
         if (!useAi) {
             setFinalCode(generateNormalCode());
         } else {
-            setFinalCode('# AI Generated Code\n');
+            setFinalCode('# AI Generated Code');
         }
     }, [data, useAi]);
 
