@@ -11,16 +11,14 @@ export const generateCode = (data) => {
         case 'DataInput':
             imports = "import pandas as pd"
             code = `target_column = '${data.data.targetColumn}'
-df = pd.read_csv("${data.data.fileName}", sep="${data.data.seperator}")
-
-X = df.drop(columns=[target_column])
-y = df[target_column]
-`
+df = pd.read_csv("${data.data.fileName}", sep="${data.data.seperator}")`
             break;
 
         case 'TrainTestSplit':
             imports = "from sklearn.model_selection import train_test_split"
-            code = `X_train, X_test, y_train, y_test = train_test_split(X, y,
+            code = `X = df.drop(columns=[target_column])
+y = df[target_column]
+X_train, X_test, y_train, y_test = train_test_split(X, y,
                             test_size = ${data.data.splitRatio} ,
                             random_state = RANDOM_SEED,
                             shuffle = ${data.data.shuffle ? "True" : "False"},
@@ -35,6 +33,11 @@ y = df[target_column]
                 dropCols = dropCols.map(col => `"${col.trim()}"`).join(", ");
                 code = `X.drop(columns=[${dropCols}], inplace=True)`
             }
+            break;
+
+        case 'RemoveNa':
+            imports = ""
+            code = 'df = df.dropna()'
             break;
 
         case 'StandardScaler':
@@ -53,6 +56,26 @@ X_test = scaler.transform(X_test)`
 
 X_train = scaler.fit_transform(X_train)
 X_test = scaler.transform(X_test)`
+            break;
+
+        case 'KNNImputer':
+            imports = "from sklearn.impute import KNNImputer"
+            code = `imputer = KNNImputer(n_neighbors = ${data.data.n_neighbors},
+            weights = '${data.data.weights}',
+            metric = '${data.data.metric}')
+
+X_train = imputer.fit_transform(X_train)
+X_test = imputer.transform(X_test)`
+            break;
+
+        case 'SimpleImputer':
+            imports = "from sklearn.impute import SimpleImputer"
+            code = `imputer = SimpleImputer(missing_values = ${data.data.missing_values},
+            strategy = '${data.data.strategy}')
+
+X_train = imputer.fit_transform(X_train)
+X_test = imputer.transform(X_test)`
+
             break;
 
         case 'KnnClassifier':
@@ -106,8 +129,9 @@ y_pred = model.predict(X_test)`
             break;
 
         default:
-            imports = "#"
-            code = "UNIDENTIFIED NODE";
+            imports = ""
+            code = "UNIDENTIFIED NODE \n" + data.type;
+            code += JSON.stringify(data.data, null, 2);
             break;
     }
 

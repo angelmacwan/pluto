@@ -23,23 +23,42 @@ import ClassificationReport from './nodes/ClassificationReport';
 import DropColumn from './nodes/DropColumn';
 import RandomForest from './nodes/RandomForest';
 import RandomSeed from './nodes/RandomSeed';
-
+import RemoveNa from './nodes/RemoveNa';
 import CustomCode from './nodes/CustomCode';
+import KNNImputer from './nodes/KNNImputer';
+import SimpleImputer from './nodes/SimpleImputer';
+import LinearSVC from './nodes/LinearSVC';
+import SVC from './nodes/SVC';
+
 
 
 // list of node types
 const nodeTypes = {
+  // DATA LOADERS
   DataInput: DataInput,
   RandomSeed: RandomSeed,
+
+  // DATA PROCESSORS
   DropColumn: DropColumn,
+  RemoveNa: RemoveNa,
+  KNNImputer: KNNImputer,
+  SimpleImputer: SimpleImputer,
   TrainTestSplit: TrainTestSplit,
   StandardScaler: StandardScaler,
   RobustScaler: RobustScaler,
+
+  // MODELS
   KnnClassifier: KnnClassifier,
   DecisionTree: DecisionTree,
   RandomForest: RandomForest,
+  LinearSVC: LinearSVC,
+  SVC: SVC,
+
+  // OUTPUT
   ClassificationReport: ClassificationReport,
-  CustomCode: CustomCode
+
+  // CUSTOM
+  CustomCode: CustomCode,
 };
 
 // Mappint of node type to its css class
@@ -53,8 +72,13 @@ const nodeTypeClass = {
   ClassificationReport: 'node-type-output',
   DropColumn: 'node-type-processor',
   RandomForest: 'node-type-model',
-  RandomSeed: 'node-type-processor',
-  CustomCode: 'node-type-custom'
+  RandomSeed: 'node-type-input',
+  CustomCode: 'node-type-custom',
+  RemoveNa: 'node-type-processor',
+  KNNImputer: 'node-type-processor',
+  SimpleImputer: 'node-type-processor',
+  LinearSVC: 'node-type-model',
+  SVC: 'node-type-model',
 };
 
 

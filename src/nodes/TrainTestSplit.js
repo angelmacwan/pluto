@@ -48,7 +48,7 @@ export default memo(({ data }) => {
                 position={Position.Left}
             />
 
-            <div className='node-header'>Split Data</div>
+            <div className='node-header'>Train Test Split</div>
 
             <div className='node-body'>
                 <div>
