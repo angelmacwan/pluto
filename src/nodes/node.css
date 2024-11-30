@@ -44,6 +44,10 @@ select {
     background-color: var(--node-output-color);
 }
 
+.node-type-cv>.node-header {
+    background-color: var(--node-cv-color);
+}
+
 .react-flow__handle {
     background-color: var(--node-handle-color);
     width: 16px;

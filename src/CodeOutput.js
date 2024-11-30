@@ -16,10 +16,15 @@ const CodeOutput = memo(({ data, useAi }) => {
 
     useEffect(() => {
         const generateNormalCode = () => {
+
+            function onlyUnique(value, index, self) {
+                return self.indexOf(value) === index;
+            }
+
             const flatData = data.flat(Infinity);
             const code = flatData.map(node => generateCode(node));
 
-            const importsOutput = code.map(c => c.imports).filter(x => x !== '').join('\n');
+            const importsOutput = code.map(c => c.imports).filter(x => x !== '').filter(onlyUnique).join('\n');
             const codeOutput = code.map(c => c.code).join('\n\n');
 
             return `${importsOutput.trim()}\n\n${codeOutput.trim()}`;

@@ -80,26 +80,33 @@ X_test = imputer.transform(X_test)`
 
         case 'KnnClassifier':
             imports = "from sklearn.neighbors import KNeighborsClassifier"
-            code = `model = KNeighborsClassifier(n_neighbors = ${data.data.n_neighbors},
-            algorithm = '${data.data.algorithm}',
-            leaf_size = ${data.data.leaf_size},
-            metric = '${data.data.metric}')
+            code = `
+def get_model():
+    m = KNeighborsClassifier(n_neighbors = ${data.data.n_neighbors},
+    algorithm = '${data.data.algorithm}',
+    leaf_size = ${data.data.leaf_size},
+    metric = '${data.data.metric}')
 
-model.fit(X_train, y_train)
-y_pred = model.predict(X_test)`
+    return m
+
+model = get_model()`
             break;
 
         case 'DecisionTree':
             imports = "from sklearn.tree import DecisionTreeClassifier"
-            code = `model = DecisionTreeClassifier(criterion = '${data.data.criterion}',
+            code = `
+def get_model():
+    m = DecisionTreeClassifier(criterion = '${data.data.criterion}',
             splitter = '${data.data.splitter}',
             max_depth = ${data.data.max_depth},
             min_samples_split = ${data.data.min_samples_split},
             min_samples_leaf = ${data.data.min_samples_leaf},
             random_state = RANDOM_SEED)
 
-model.fit(X_train, y_train)
-y_pred = model.predict(X_test)`
+    return m
+
+model = get_model()
+`
             break;
 
         case 'ClassificationReport':
@@ -107,21 +114,62 @@ y_pred = model.predict(X_test)`
             code = `print(classification_report(y_test, y_pred))`
             break;
 
-
-        case 'RandomForest':
-            imports = "from sklearn.ensemble import RandomForestClassifier"
-            code = `model = RandomForestClassifier(n_estimators = ${data.data.n_estimators},
-            criterion = '${data.data.criterion}',
-            max_depth = ${data.data.max_depth},
-            min_samples_split = ${data.data.min_samples_split},
-            min_samples_leaf = ${data.data.min_samples_leaf},
-            bootstrap = ${data.data.bootstrap},
-            random_state = RANDOM_SEED)
-
-model.fit(X_train, y_train)
+        case 'TrainModel':
+            imports = ""
+            code = `model.fit(X_train, y_train)
 y_pred = model.predict(X_test)`
             break;
 
+        case 'RandomForest':
+            imports = "from sklearn.ensemble import RandomForestClassifier"
+            code = `
+def get_model():
+    m = RandomForestClassifier(n_estimators = ${data.data.n_estimators},
+    criterion = '${data.data.criterion}',
+    max_depth = ${data.data.max_depth},
+    min_samples_split = ${data.data.min_samples_split},
+    min_samples_leaf = ${data.data.min_samples_leaf},
+    bootstrap = ${data.data.bootstrap},
+    random_state = RANDOM_SEED)
+
+    return m
+
+model = get_model()`;
+            break;
+
+
+        case 'KfoldCV':
+            if (data.data.stratify) {
+                imports = "from sklearn.model_selection import StratifiedKFold as kfold"
+            } else {
+                imports = "from sklearn.model_selection import KFold as kfold"
+            }
+            imports += "\nimport numpy as np"
+            imports += "\nfrom sklearn.metrics import accuracy_score"
+
+            code = `kf = kfold(n_splits = ${data.data.k},
+shuffle = ${data.data.shuffle ? "True" : "False"},
+random_state = RANDOM_SEED)
+
+X = np.array(X)
+y = np.array(y)
+fold_accuracies = []
+
+for fold, (train_index, test_index) in enumerate(kf.split(X)):
+    print(f"Fold {fold}")
+    X_train, X_test = X[train_index], X[test_index]
+    y_train, y_test = y[train_index], y[test_index]
+    model = get_model()
+    model.fit(X_train, y_train)
+    y_pred = model.predict(X_test)
+    accuracy = accuracy_score(y_test, y_pred)
+    fold_accuracies.append(accuracy)
+    print(classification_report(y_test, y_pred))
+
+print(f"Mean Accuracy: {np.mean(fold_accuracies):.4f}")
+print(f"Standard Deviation: {np.std(fold_accuracies):.4f}")`
+
+            break;
 
         case 'CustomCode':
             imports = ""

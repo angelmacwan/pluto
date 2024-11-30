@@ -8,6 +8,7 @@
     --node-handle-stroke: white;
     --node-connection-stroke: white;
     --node-output-color: pink;
+    --node-cv-color: #fcd24a;
 
     --primary: #4a91fc;
 }

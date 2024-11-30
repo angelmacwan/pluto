@@ -111,6 +111,10 @@ code {
   background: var(--node-output-color);
 }
 
+.SideBar>.node-type-cv {
+  background: var(--node-cv-color);
+}
+
 /* CODE BLOCK */
 .code-output-container {
   display: flex;
