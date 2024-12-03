@@ -140,22 +140,30 @@ model = get_model()`;
 
         case 'KfoldCV':
             if (data.data.stratify) {
-                imports = "from sklearn.model_selection import StratifiedKFold as kfold"
+                imports = "from sklearn.model_selection import StratifiedKFold"
+
+                code = `kf = StratifiedKFold(n_splits = ${data.data.k},
+        shuffle = ${data.data.shuffle ? "True" : "False"},
+        random_state = RANDOM_SEED)`
+
             } else {
-                imports = "from sklearn.model_selection import KFold as kfold"
+                imports = "from sklearn.model_selection import KFold"
+                code = `kf = KFold(n_splits = ${data.data.k},
+        shuffle = ${data.data.shuffle ? "True" : "False"},
+        random_state = RANDOM_SEED)`
             }
+
             imports += "\nimport numpy as np"
             imports += "\nfrom sklearn.metrics import accuracy_score"
+            imports += "\nfrom sklearn.metrics import classification_report"
 
-            code = `kf = kfold(n_splits = ${data.data.k},
-shuffle = ${data.data.shuffle ? "True" : "False"},
-random_state = RANDOM_SEED)
-
+            code += "\n"
+            code += `
 X = np.array(X)
 y = np.array(y)
 fold_accuracies = []
 
-for fold, (train_index, test_index) in enumerate(kf.split(X)):
+for fold, (train_index, test_index) in enumerate(kf.split(X,y)):
     print(f"Fold {fold}")
     X_train, X_test = X[train_index], X[test_index]
     y_train, y_test = y[train_index], y[test_index]
@@ -171,9 +179,38 @@ print(f"Standard Deviation: {np.std(fold_accuracies):.4f}")`
 
             break;
 
-        case 'CustomCode':
-            imports = ""
-            code = data.data.code;
+        case 'SVC':
+            imports = "from sklearn.svm import SVC"
+            code = `
+def get_model():
+    m = SVC(C = ${data.data.C},
+    kernel = '${data.data.kernel}',
+    degree = ${data.data.degree},
+    gamma = '${data.data.gamma}',
+    coef0 = ${data.data.coef0},
+    probability = ${data.data.probability},
+    tol = ${data.data.tol},
+    max_iter = ${data.data.max_iter})
+
+    return m
+
+model = get_model()`
+            break;
+
+        case 'LinearSVC':
+            imports = "from sklearn.svm import LinearSVC"
+            code = `
+def get_model():
+    m = LinearSVC(C = ${data.data.C},
+    max_iter = ${data.data.max_iter},
+    tol = ${data.data.tol},
+    dual = ${data.data.dual},
+    loss = '${data.data.loss}',
+    penalty = '${data.data.penalty}')
+
+    return m
+
+model = get_model()`
             break;
 
         default:
