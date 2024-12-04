@@ -188,7 +188,7 @@ def get_model():
     degree = ${data.data.degree},
     gamma = '${data.data.gamma}',
     coef0 = ${data.data.coef0},
-    probability = ${data.data.probability},
+    probability = ${data.data.probability ? "True" : "False"},
     tol = ${data.data.tol},
     max_iter = ${data.data.max_iter})
 
@@ -211,6 +211,10 @@ def get_model():
     return m
 
 model = get_model()`
+            break;
+
+        case 'CustomCode':
+            code = data.data.code
             break;
 
         default:
