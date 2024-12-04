@@ -13,7 +13,7 @@ export default memo(({ data }) => {
         if (data.updateNodeState && Object.keys(data).length <= 1) {
             data.updateNodeState(getInitialState());
         }
-    }, []);
+    }, [data]);
 
     // Destructure values from data, falling back to initial state values
     const {

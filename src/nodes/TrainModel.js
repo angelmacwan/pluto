@@ -2,7 +2,7 @@ import './node.css';
 import React, { memo } from 'react';
 import { Handle, Position } from 'reactflow';
 
-export default memo(({ data }) => {
+export default memo(() => {
 
     return (
         <div className='customNode node-type-model'>

@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState, useMemo } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import ReactFlow, {
   Controls,
   Background,
@@ -109,22 +109,14 @@ const MainApp = () => {
 
   const iconSize = 20
 
-  // Add a state object to track all node data
-  const [nodeStates, setNodeStates] = useState({});
-
   const onConnect = useCallback(
-    (params) => setEdges((eds) => addEdge({ ...params, animated: false, markerEnd: { type: 'none' } }, eds)),
+    (params) => setEdges((eds) => addEdge({ ...params, animated: false }, eds)),
     [setEdges]
   );
 
 
   // Handle node state updates
   const updateNodeState = useCallback((nodeId, newData) => {
-    setNodeStates(prev => ({
-      ...prev,
-      [nodeId]: newData
-    }));
-
     // Also update the node's data in the nodes array
     setNodes(nds =>
       nds.map(node => {
@@ -157,12 +149,6 @@ const MainApp = () => {
 
         if (selectedNodes.length > 0) {
           const selectedNodeIds = selectedNodes.map(node => node.id);
-          // Remove node states when deleting nodes
-          setNodeStates(prev => {
-            const newStates = { ...prev };
-            selectedNodeIds.forEach(id => delete newStates[id]);
-            return newStates;
-          });
           setNodes(nodes => nodes.filter(node => !selectedNodeIds.includes(node.id)));
           setEdges(edges => edges.filter(edge =>
             !selectedNodeIds.includes(edge.source) &&
@@ -175,100 +161,64 @@ const MainApp = () => {
     return () => document.removeEventListener('keydown', handleKeyDown);
   }, [selectedEdges, selectedNodes, setEdges, setNodes]);
 
+
   const getFlowOrder = () => {
+    // Data structures for graph representation
     const graph = new Map();
     const inDegree = new Map();
-    const outDegree = new Map();
 
-    // Initialize the graph and degrees
-    nodes.forEach((node) => {
+    // Initialize graph with empty adjacency lists and zero in-degrees
+    nodes.forEach(node => {
       graph.set(node.id, []);
       inDegree.set(node.id, 0);
-      outDegree.set(node.id, 0);
     });
 
-    // Populate the graph and degrees from edges
-    edges.forEach((edge) => {
-      if (graph.has(edge.source)) {
-        graph.get(edge.source).push(edge.target);
-        inDegree.set(edge.target, (inDegree.get(edge.target) || 0) + 1);
-        outDegree.set(edge.source, (outDegree.get(edge.source) || 0) + 1);
-      }
+    // Build graph and calculate in-degrees
+    edges.forEach(edge => {
+      graph.get(edge.source).push(edge.target);
+      inDegree.set(edge.target, (inDegree.get(edge.target) || 0) + 1);
     });
 
-    // Helper function to get complete path from node to leaf
-    const getPathToLeaf = (startNodeId, visited = new Set()) => {
-      if (visited.has(startNodeId)) return [];
-      visited.add(startNodeId);
+    // Find paths in the graph starting from a node
+    const findPaths = (nodeId, visited = new Set()) => {
+      if (visited.has(nodeId)) return null;
 
-      const currentNode = nodes.find(node => node.id === startNodeId);
-      if (!currentNode) return [];
+      const node = nodes.find(n => n.id === nodeId);
+      if (!node) return null;
 
-      const neighbors = graph.get(startNodeId);
-      if (neighbors.length === 0) return [currentNode];
+      visited.add(nodeId);
+      const children = graph.get(nodeId);
 
-      // For single path, return flat array
-      if (neighbors.length === 1) {
-        const nextPath = getPathToLeaf(neighbors[0], visited);
-        return [currentNode, ...nextPath];
+      // Leaf node
+      if (!children?.length) return node;
+
+      // Single child - continue path
+      if (children.length === 1) {
+        const childPath = findPaths(children[0], visited);
+        return childPath ? [node, childPath].flat() : [node];
       }
 
-      // For multiple paths, return just this node
-      return [currentNode];
+      // Multiple children - return parallel paths
+      const parallelPaths = children
+        .map(childId => findPaths(childId, new Set(visited)))
+        .filter(Boolean);
+
+      return parallelPaths.length ? [node, parallelPaths] : [node];
     };
 
-    // Find root nodes (nodes with no incoming edges)
-    const rootNodes = [];
-    inDegree.forEach((degree, nodeId) => {
-      if (degree === 0) rootNodes.push(nodeId);
-    });
+    // Find root nodes (no incoming edges)
+    const roots = Array.from(inDegree.entries())
+      .filter(([, degree]) => degree === 0)
+      .map(([id]) => id);
 
-    const result = [];
-    const processed = new Set();
+    // Process each root and combine results
+    const result = roots
+      .map(rootId => findPaths(rootId))
+      .filter(Boolean)
+      .flat();
 
-    // Process each root node
-    for (const rootId of rootNodes) {
-      let current = rootId;
-      while (current && !processed.has(current)) {
-        const path = getPathToLeaf(current, new Set());
-        processed.add(current);
-
-        // Skip nodes with no incoming and outgoing edges
-        const currentNode = nodes.find(node => node.id === current);
-        if (currentNode && inDegree.get(current) === 0 && outDegree.get(current) === 0) {
-          continue; // Skip this node
-        }
-
-        // If this node has multiple children, process parallel branches
-        if (outDegree.get(current) >= 2) {
-          const children = graph.get(current);
-          const parallelBranches = children.map(childId => {
-            const branchPath = getPathToLeaf(childId, new Set());
-            branchPath.forEach(node => processed.add(node.id));
-            return branchPath;
-          });
-
-          // Add the path leading to the split
-          result.push(...path);
-
-          // Add the parallel branches as an array of arrays
-          result.push(parallelBranches);
-
-          break;
-        } else {
-          // Add the current node
-          if (currentNode) {
-            result.push(currentNode);
-          }
-          const neighbors = graph.get(current);
-          current = neighbors.length > 0 ? neighbors[0] : null;
-        }
-      }
-    }
-
-    return result
+    return result;
   };
-
 
   const addNewNode = (nodeType) => {
     const id = (Math.random() * 1000).toString();
@@ -292,10 +242,6 @@ const MainApp = () => {
     };
 
     setNodes(nodes => [...nodes, newNode]);
-    setNodeStates(prev => ({
-      ...prev,
-      [id]: initialState[nodeType]
-    }));
   };
 
 
@@ -373,7 +319,7 @@ const MainApp = () => {
             <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16" />
             <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0" />
           </svg>
-          <span class="tooltiptext">info</span>
+          <span className="tooltiptext">info</span>
         </button>
 
         {/* SAVE BTN */}
@@ -382,7 +328,7 @@ const MainApp = () => {
             <path d="M11 2H9v3h2z" />
             <path d="M1.5 0h11.586a1.5 1.5 0 0 1 1.06.44l1.415 1.414A1.5 1.5 0 0 1 16 2.914V14.5a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 0 14.5v-13A1.5 1.5 0 0 1 1.5 0M1 1.5v13a.5.5 0 0 0 .5.5H2v-4.5A1.5 1.5 0 0 1 3.5 9h9a1.5 1.5 0 0 1 1.5 1.5V15h.5a.5.5 0 0 0 .5-.5V2.914a.5.5 0 0 0-.146-.353l-1.415-1.415A.5.5 0 0 0 13.086 1H13v4.5A1.5 1.5 0 0 1 11.5 7h-7A1.5 1.5 0 0 1 3 5.5V1H1.5a.5.5 0 0 0-.5.5m3 4a.5.5 0 0 0 .5.5h7a.5.5 0 0 0 .5-.5V1H4zM3 15h10v-4.5a.5.5 0 0 0-.5-.5h-9a.5.5 0 0 0-.5.5z" />
           </svg>
-          <span class="tooltiptext">Save</span>
+          <span className="tooltiptext">Save</span>
         </button>
 
         {/* LOAD BTN */}
@@ -391,7 +337,7 @@ const MainApp = () => {
             <path d="M8.5 11.5a.5.5 0 0 1-1 0V7.707L6.354 8.854a.5.5 0 1 1-.708-.708l2-2a.5.5 0 0 1 .708 0l2 2a.5.5 0 0 1-.708.708L8.5 7.707z" />
             <path d="M14 14V4.5L9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2M9.5 3A1.5 1.5 0 0 0 11 4.5h2V14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h5.5z" />
           </svg>
-          <span class="tooltiptext">Load File</span>
+          <span className="tooltiptext">Load File</span>
         </button>
 
         {/* AI BTN */}
@@ -404,7 +350,7 @@ const MainApp = () => {
             <path d="M6 12.5a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 0 1h-3a.5.5 0 0 1-.5-.5M3 8.062C3 6.76 4.235 5.765 5.53 5.886a26.6 26.6 0 0 0 4.94 0C11.765 5.765 13 6.76 13 8.062v1.157a.93.93 0 0 1-.765.935c-.845.147-2.34.346-4.235.346s-3.39-.2-4.235-.346A.93.93 0 0 1 3 9.219zm4.542-.827a.25.25 0 0 0-.217.068l-.92.9a25 25 0 0 1-1.871-.183.25.25 0 0 0-.068.495c.55.076 1.232.149 2.02.193a.25.25 0 0 0 .189-.071l.754-.736.847 1.71a.25.25 0 0 0 .404.062l.932-.97a25 25 0 0 0 1.922-.188.25.25 0 0 0-.068-.495c-.538.074-1.207.145-1.98.189a.25.25 0 0 0-.166.076l-.754.785-.842-1.7a.25.25 0 0 0-.182-.135" />
             <path d="M8.5 1.866a1 1 0 1 0-1 0V3h-2A4.5 4.5 0 0 0 1 7.5V8a1 1 0 0 0-1 1v2a1 1 0 0 0 1 1v1a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-1a1 1 0 0 0 1-1V9a1 1 0 0 0-1-1v-.5A4.5 4.5 0 0 0 10.5 3h-2zM14 7.5V13a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V7.5A3.5 3.5 0 0 1 5.5 4h5A3.5 3.5 0 0 1 14 7.5" />
           </svg>
-          <span class="tooltiptext">Use AI</span>
+          <span className="tooltiptext">Use AI</span>
         </button>
 
       </div>

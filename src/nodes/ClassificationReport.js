@@ -1,12 +1,12 @@
 import './node.css';
-import React, { memo, useEffect } from 'react';
+import React, { memo } from 'react';
 import { Handle, Position } from 'reactflow';
 
 const getInitialState = () => ({
 
 });
 
-export default memo(({ data }) => {
+export default memo(() => {
 
     return (
         <div className='customNode node-type-output'>
