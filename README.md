@@ -1,3 +1,6 @@
+Live Site:
+[pluto-eet.pages.dev](pluto-eet.pages.dev)
+
 ## start the react app in dev server
 
 ```
