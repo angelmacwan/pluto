@@ -38,7 +38,21 @@
     margin-right: 20px;
 }
 
-.info-details>button {
+.info-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.info-details>.info-footer>span {
+    font-size: 0.8rem;
+    color: rgb(107, 192, 241);
+}
+
+.info-details>.info-footer>button,
+.info-details>.info-footer>a {
+    text-decoration: none;
+    color: black;
     border: none;
     cursor: pointer;
     margin-top: 12px;

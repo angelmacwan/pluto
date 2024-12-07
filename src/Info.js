@@ -12,21 +12,33 @@ export default function Info() {
                 <h3>Simplify Your ML Workflows</h3>
 
                 <p>
-                    a little passion project I created for fun, blending my love for tech and creativity!
-                    This node-based app makes building machine learning workflows intuitive, playful, and rewarding.
-                    With its drag-and-drop interface, you can easily design pipelines and generate Python code
-                    using AI or custom in-built logic. Whether you're exploring ideas, experimenting,
-                    or solving real-world challenges, Pluto is here to help you turn your imagination into
-                    reality one node at a time!
+                    node-based app for building machine learning workflows.
+                    Design pipelines and generate Python code using AI.
+                    Perfect for exploring ideas, experimenting, or tackling challenges. Turn imagination
+                    into reality, one node at a time! 🚀
                 </p>
 
-                <br />
-                <small>click anywhere to continue</small>
-                <br />
 
-                <button onClick={() => {
-                    window.open("https://angelmacwan.github.io", "_blank");
-                }}>Find Me</button>
+
+                <div className='info-footer'>
+                    <a href="https://angelmacwan.github.io"
+                        rel='noreferrer'
+                        target='_blank'>
+                        Find Me
+                    </a>
+
+                    <a href="mailto:angel.macwan@proton.me"
+                        rel='noreferrer'
+                        target='_blank'>
+                        Feature Request
+                    </a>
+
+                    <span>
+                        Release: Alpha <br />
+                        Version 1
+                    </span>
+
+                </div>
             </div>
         </div>
     );
