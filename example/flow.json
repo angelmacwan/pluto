@@ -1,0 +1,743 @@
+{
+  "nodes": [
+    {
+      "id": "500.79633163082417",
+      "type": "DataInput",
+      "position": {
+        "x": -50,
+        "y": 100
+      },
+      "data": {}
+    },
+    {
+      "id": "570.9740733418179",
+      "type": "RandomSeed",
+      "position": {
+        "x": 310,
+        "y": 120
+      },
+      "data": {
+        "seed": 12
+      }
+    },
+    {
+      "id": "986.7557972945522",
+      "type": "KNNImputer",
+      "position": {
+        "x": 570,
+        "y": -20
+      },
+      "data": {
+        "n_neighbors": 5,
+        "weights": "uniform",
+        "metric": "nan_euclidean"
+      }
+    },
+    {
+      "id": "892.1456211439087",
+      "type": "StandardScaler",
+      "position": {
+        "x": 770,
+        "y": 150
+      },
+      "data": {
+        "withMean": true,
+        "withStd": true
+      }
+    },
+    {
+      "id": "623.1647168607824",
+      "type": "KnnClassifier",
+      "position": {
+        "x": 1140,
+        "y": -80
+      },
+      "data": {
+        "n_neighbors": 5,
+        "algorithm": "auto",
+        "leaf_size": 30,
+        "metric": "euclidean"
+      }
+    },
+    {
+      "id": "308.70535452313754",
+      "type": "DecisionTree",
+      "position": {
+        "x": 1150,
+        "y": 100
+      },
+      "data": {
+        "criterion": "gini",
+        "splitter": "best",
+        "max_depth": 12,
+        "min_samples_split": 2,
+        "min_samples_leaf": 1
+      }
+    },
+    {
+      "id": "705.2155006849856",
+      "type": "RandomForest",
+      "position": {
+        "x": 1150,
+        "y": 310
+      },
+      "data": {
+        "n_estimators": 100,
+        "max_depth": 12,
+        "min_samples_split": 2,
+        "min_samples_leaf": 1,
+        "criterion": "gini",
+        "bootstrap": true
+      }
+    },
+    {
+      "id": "425.35669701829005",
+      "type": "TrainModel",
+      "position": {
+        "x": 1550,
+        "y": 240
+      },
+      "data": {}
+    },
+    {
+      "id": "282.1382956307652",
+      "type": "KfoldCV",
+      "position": {
+        "x": 1550,
+        "y": 80
+      },
+      "data": {
+        "k": 5,
+        "shuffle": true,
+        "stratify": false
+      }
+    },
+    {
+      "id": "273.51980044372715",
+      "type": "ClassificationReport",
+      "position": {
+        "x": 1750,
+        "y": 180
+      },
+      "data": {}
+    }
+  ],
+  "edges": [
+    {
+      "id": "reactflow__edge-500.79633163082417-570.9740733418179",
+      "source": "500.79633163082417",
+      "target": "570.9740733418179"
+    },
+    {
+      "id": "reactflow__edge-570.9740733418179-986.7557972945522",
+      "source": "570.9740733418179",
+      "target": "986.7557972945522"
+    },
+    {
+      "id": "reactflow__edge-986.7557972945522-892.1456211439087",
+      "source": "986.7557972945522",
+      "target": "892.1456211439087"
+    },
+    {
+      "id": "reactflow__edge-570.9740733418179-892.1456211439087",
+      "source": "570.9740733418179",
+      "target": "892.1456211439087"
+    },
+    {
+      "id": "reactflow__edge-892.1456211439087-623.1647168607824",
+      "source": "892.1456211439087",
+      "target": "623.1647168607824"
+    },
+    {
+      "id": "reactflow__edge-892.1456211439087-308.70535452313754",
+      "source": "892.1456211439087",
+      "target": "308.70535452313754"
+    },
+    {
+      "id": "reactflow__edge-892.1456211439087-705.2155006849856",
+      "source": "892.1456211439087",
+      "target": "705.2155006849856"
+    },
+    {
+      "id": "reactflow__edge-623.1647168607824-425.35669701829005",
+      "source": "623.1647168607824",
+      "target": "425.35669701829005"
+    },
+    {
+      "id": "reactflow__edge-308.70535452313754-425.35669701829005",
+      "source": "308.70535452313754",
+      "target": "425.35669701829005"
+    },
+    {
+      "id": "reactflow__edge-705.2155006849856-425.35669701829005",
+      "source": "705.2155006849856",
+      "target": "425.35669701829005"
+    },
+    {
+      "id": "reactflow__edge-623.1647168607824-282.1382956307652",
+      "source": "623.1647168607824",
+      "target": "282.1382956307652"
+    },
+    {
+      "id": "reactflow__edge-282.1382956307652-273.51980044372715",
+      "source": "282.1382956307652",
+      "target": "273.51980044372715"
+    },
+    {
+      "id": "reactflow__edge-425.35669701829005-273.51980044372715",
+      "source": "425.35669701829005",
+      "target": "273.51980044372715"
+    }
+  ],
+  "flowOrder": [
+    {
+      "id": "500.79633163082417",
+      "type": "DataInput",
+      "data": {},
+      "position": {
+        "x": -50,
+        "y": 100
+      },
+      "width": 301,
+      "height": 144,
+      "selected": false,
+      "positionAbsolute": {
+        "x": -50,
+        "y": 100
+      },
+      "dragging": false
+    },
+    {
+      "id": "570.9740733418179",
+      "type": "RandomSeed",
+      "data": {
+        "seed": 12
+      },
+      "position": {
+        "x": 310,
+        "y": 120
+      },
+      "width": 229,
+      "height": 64,
+      "selected": false,
+      "positionAbsolute": {
+        "x": 310,
+        "y": 120
+      },
+      "dragging": false
+    },
+    [
+      [
+        {
+          "id": "986.7557972945522",
+          "type": "KNNImputer",
+          "data": {
+            "n_neighbors": 5,
+            "weights": "uniform",
+            "metric": "nan_euclidean"
+          },
+          "position": {
+            "x": 570,
+            "y": -20
+          },
+          "width": 291,
+          "height": 142,
+          "selected": false,
+          "positionAbsolute": {
+            "x": 570,
+            "y": -20
+          },
+          "dragging": false
+        },
+        {
+          "id": "892.1456211439087",
+          "type": "StandardScaler",
+          "data": {
+            "withMean": true,
+            "withStd": true
+          },
+          "position": {
+            "x": 770,
+            "y": 150
+          },
+          "width": 263,
+          "height": 82,
+          "selected": false,
+          "positionAbsolute": {
+            "x": 770,
+            "y": 150
+          },
+          "dragging": false
+        },
+        [
+          [
+            {
+              "id": "623.1647168607824",
+              "type": "KnnClassifier",
+              "data": {
+                "n_neighbors": 5,
+                "algorithm": "auto",
+                "leaf_size": 30,
+                "metric": "euclidean"
+              },
+              "position": {
+                "x": 1140,
+                "y": -80
+              },
+              "width": 291,
+              "height": 162,
+              "selected": false,
+              "positionAbsolute": {
+                "x": 1140,
+                "y": -80
+              },
+              "dragging": false
+            },
+            [
+              [
+                {
+                  "id": "425.35669701829005",
+                  "type": "TrainModel",
+                  "data": {},
+                  "position": {
+                    "x": 1550,
+                    "y": 240
+                  },
+                  "width": 133,
+                  "height": 44,
+                  "selected": false,
+                  "positionAbsolute": {
+                    "x": 1550,
+                    "y": 240
+                  },
+                  "dragging": false
+                },
+                {
+                  "id": "273.51980044372715",
+                  "type": "ClassificationReport",
+                  "data": {},
+                  "position": {
+                    "x": 1750,
+                    "y": 180
+                  },
+                  "width": 195,
+                  "height": 44,
+                  "selected": true,
+                  "positionAbsolute": {
+                    "x": 1750,
+                    "y": 180
+                  },
+                  "dragging": false
+                }
+              ],
+              [
+                {
+                  "id": "282.1382956307652",
+                  "type": "KfoldCV",
+                  "data": {
+                    "k": 5,
+                    "shuffle": true,
+                    "stratify": false
+                  },
+                  "position": {
+                    "x": 1550,
+                    "y": 80
+                  },
+                  "width": 146,
+                  "height": 102,
+                  "selected": false,
+                  "positionAbsolute": {
+                    "x": 1550,
+                    "y": 80
+                  },
+                  "dragging": false
+                },
+                {
+                  "id": "273.51980044372715",
+                  "type": "ClassificationReport",
+                  "data": {},
+                  "position": {
+                    "x": 1750,
+                    "y": 180
+                  },
+                  "width": 195,
+                  "height": 44,
+                  "selected": true,
+                  "positionAbsolute": {
+                    "x": 1750,
+                    "y": 180
+                  },
+                  "dragging": false
+                }
+              ]
+            ]
+          ],
+          [
+            {
+              "id": "308.70535452313754",
+              "type": "DecisionTree",
+              "data": {
+                "criterion": "gini",
+                "splitter": "best",
+                "max_depth": 12,
+                "min_samples_split": 2,
+                "min_samples_leaf": 1
+              },
+              "position": {
+                "x": 1150,
+                "y": 100
+              },
+              "width": 263,
+              "height": 182,
+              "selected": false,
+              "positionAbsolute": {
+                "x": 1150,
+                "y": 100
+              },
+              "dragging": false
+            },
+            {
+              "id": "425.35669701829005",
+              "type": "TrainModel",
+              "data": {},
+              "position": {
+                "x": 1550,
+                "y": 240
+              },
+              "width": 133,
+              "height": 44,
+              "selected": false,
+              "positionAbsolute": {
+                "x": 1550,
+                "y": 240
+              },
+              "dragging": false
+            },
+            {
+              "id": "273.51980044372715",
+              "type": "ClassificationReport",
+              "data": {},
+              "position": {
+                "x": 1750,
+                "y": 180
+              },
+              "width": 195,
+              "height": 44,
+              "selected": true,
+              "positionAbsolute": {
+                "x": 1750,
+                "y": 180
+              },
+              "dragging": false
+            }
+          ],
+          [
+            {
+              "id": "705.2155006849856",
+              "type": "RandomForest",
+              "data": {
+                "n_estimators": 100,
+                "max_depth": 12,
+                "min_samples_split": 2,
+                "min_samples_leaf": 1,
+                "criterion": "gini",
+                "bootstrap": true
+              },
+              "position": {
+                "x": 1150,
+                "y": 310
+              },
+              "width": 263,
+              "height": 182,
+              "selected": false,
+              "positionAbsolute": {
+                "x": 1150,
+                "y": 310
+              },
+              "dragging": false
+            },
+            {
+              "id": "425.35669701829005",
+              "type": "TrainModel",
+              "data": {},
+              "position": {
+                "x": 1550,
+                "y": 240
+              },
+              "width": 133,
+              "height": 44,
+              "selected": false,
+              "positionAbsolute": {
+                "x": 1550,
+                "y": 240
+              },
+              "dragging": false
+            },
+            {
+              "id": "273.51980044372715",
+              "type": "ClassificationReport",
+              "data": {},
+              "position": {
+                "x": 1750,
+                "y": 180
+              },
+              "width": 195,
+              "height": 44,
+              "selected": true,
+              "positionAbsolute": {
+                "x": 1750,
+                "y": 180
+              },
+              "dragging": false
+            }
+          ]
+        ]
+      ],
+      [
+        {
+          "id": "892.1456211439087",
+          "type": "StandardScaler",
+          "data": {
+            "withMean": true,
+            "withStd": true
+          },
+          "position": {
+            "x": 770,
+            "y": 150
+          },
+          "width": 263,
+          "height": 82,
+          "selected": false,
+          "positionAbsolute": {
+            "x": 770,
+            "y": 150
+          },
+          "dragging": false
+        },
+        [
+          [
+            {
+              "id": "623.1647168607824",
+              "type": "KnnClassifier",
+              "data": {
+                "n_neighbors": 5,
+                "algorithm": "auto",
+                "leaf_size": 30,
+                "metric": "euclidean"
+              },
+              "position": {
+                "x": 1140,
+                "y": -80
+              },
+              "width": 291,
+              "height": 162,
+              "selected": false,
+              "positionAbsolute": {
+                "x": 1140,
+                "y": -80
+              },
+              "dragging": false
+            },
+            [
+              [
+                {
+                  "id": "425.35669701829005",
+                  "type": "TrainModel",
+                  "data": {},
+                  "position": {
+                    "x": 1550,
+                    "y": 240
+                  },
+                  "width": 133,
+                  "height": 44,
+                  "selected": false,
+                  "positionAbsolute": {
+                    "x": 1550,
+                    "y": 240
+                  },
+                  "dragging": false
+                },
+                {
+                  "id": "273.51980044372715",
+                  "type": "ClassificationReport",
+                  "data": {},
+                  "position": {
+                    "x": 1750,
+                    "y": 180
+                  },
+                  "width": 195,
+                  "height": 44,
+                  "selected": true,
+                  "positionAbsolute": {
+                    "x": 1750,
+                    "y": 180
+                  },
+                  "dragging": false
+                }
+              ],
+              [
+                {
+                  "id": "282.1382956307652",
+                  "type": "KfoldCV",
+                  "data": {
+                    "k": 5,
+                    "shuffle": true,
+                    "stratify": false
+                  },
+                  "position": {
+                    "x": 1550,
+                    "y": 80
+                  },
+                  "width": 146,
+                  "height": 102,
+                  "selected": false,
+                  "positionAbsolute": {
+                    "x": 1550,
+                    "y": 80
+                  },
+                  "dragging": false
+                },
+                {
+                  "id": "273.51980044372715",
+                  "type": "ClassificationReport",
+                  "data": {},
+                  "position": {
+                    "x": 1750,
+                    "y": 180
+                  },
+                  "width": 195,
+                  "height": 44,
+                  "selected": true,
+                  "positionAbsolute": {
+                    "x": 1750,
+                    "y": 180
+                  },
+                  "dragging": false
+                }
+              ]
+            ]
+          ],
+          [
+            {
+              "id": "308.70535452313754",
+              "type": "DecisionTree",
+              "data": {
+                "criterion": "gini",
+                "splitter": "best",
+                "max_depth": 12,
+                "min_samples_split": 2,
+                "min_samples_leaf": 1
+              },
+              "position": {
+                "x": 1150,
+                "y": 100
+              },
+              "width": 263,
+              "height": 182,
+              "selected": false,
+              "positionAbsolute": {
+                "x": 1150,
+                "y": 100
+              },
+              "dragging": false
+            },
+            {
+              "id": "425.35669701829005",
+              "type": "TrainModel",
+              "data": {},
+              "position": {
+                "x": 1550,
+                "y": 240
+              },
+              "width": 133,
+              "height": 44,
+              "selected": false,
+              "positionAbsolute": {
+                "x": 1550,
+                "y": 240
+              },
+              "dragging": false
+            },
+            {
+              "id": "273.51980044372715",
+              "type": "ClassificationReport",
+              "data": {},
+              "position": {
+                "x": 1750,
+                "y": 180
+              },
+              "width": 195,
+              "height": 44,
+              "selected": true,
+              "positionAbsolute": {
+                "x": 1750,
+                "y": 180
+              },
+              "dragging": false
+            }
+          ],
+          [
+            {
+              "id": "705.2155006849856",
+              "type": "RandomForest",
+              "data": {
+                "n_estimators": 100,
+                "max_depth": 12,
+                "min_samples_split": 2,
+                "min_samples_leaf": 1,
+                "criterion": "gini",
+                "bootstrap": true
+              },
+              "position": {
+                "x": 1150,
+                "y": 310
+              },
+              "width": 263,
+              "height": 182,
+              "selected": false,
+              "positionAbsolute": {
+                "x": 1150,
+                "y": 310
+              },
+              "dragging": false
+            },
+            {
+              "id": "425.35669701829005",
+              "type": "TrainModel",
+              "data": {},
+              "position": {
+                "x": 1550,
+                "y": 240
+              },
+              "width": 133,
+              "height": 44,
+              "selected": false,
+              "positionAbsolute": {
+                "x": 1550,
+                "y": 240
+              },
+              "dragging": false
+            },
+            {
+              "id": "273.51980044372715",
+              "type": "ClassificationReport",
+              "data": {},
+              "position": {
+                "x": 1750,
+                "y": 180
+              },
+              "width": 195,
+              "height": 44,
+              "selected": true,
+              "positionAbsolute": {
+                "x": 1750,
+                "y": 180
+              },
+              "dragging": false
+            }
+          ]
+        ]
+      ]
+    ]
+  ]
+}
