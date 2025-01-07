@@ -1,22 +1,11 @@
 import './node.css';
-import React, { memo, useEffect } from 'react';
+import React, { memo } from 'react';
 import { Handle, Position } from 'reactflow';
-
-const getInitialState = () => ({
-    imports: 'from sklearn.metrics import classification_report',
-    code: 'print(classification_report(y_test, y_pred))',
-});
 
 export default memo(({ data }) => {
 
-
-    // Initialize state when component mounts if it's empty
-    useEffect(() => {
-        if (data.updateNodeState && Object.keys(data).length <= 1) {
-            data.updateNodeState(getInitialState());
-        }
-    }, [data]);
-
+    data.imports = 'from sklearn.metrics import classification_report';
+    data.code = 'print(classification_report(y_test, y_pred))';
 
     return (
         <div className='customNode node-type-output'>
@@ -37,5 +26,3 @@ export default memo(({ data }) => {
         </div>
     );
 });
-
-export { getInitialState };

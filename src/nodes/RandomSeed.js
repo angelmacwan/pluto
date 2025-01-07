@@ -5,6 +5,7 @@ import { Handle, Position } from 'reactflow';
 // Define initial state for this node type
 const getInitialState = () => ({
     seed: 12,
+    code: 'RANDOM_SEED = 12'
 });
 
 export default memo(({ data }) => {
@@ -18,13 +19,18 @@ export default memo(({ data }) => {
     // Destructure values from data, falling back to initial state values
     const {
         seed = 12,
+        code = `RANDOM_SEED = ${seed}`,
         updateNodeState = () => { }
     } = data;
 
     const updateState = (updates) => {
-        updateNodeState({
+        const newState = {
             ...data,
             ...updates
+        };
+        newState.code = `RANDOM_SEED = ${newState.seed}`
+        updateNodeState({
+            ...newState,
         });
     };
 

@@ -2,7 +2,10 @@ import './node.css';
 import React, { memo } from 'react';
 import { Handle, Position } from 'reactflow';
 
-export default memo(() => {
+
+export default memo(({ data }) => {
+
+    data.code = 'df = df.dropna()';
 
     return (
         <div className='customNode node-type-data-processor'>

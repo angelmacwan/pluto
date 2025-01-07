@@ -6,6 +6,8 @@ import { Handle, Position } from 'reactflow';
 const getInitialState = () => ({
     withMean: true,          // Center data to zero mean
     withStd: true,           // Scale data to unit variance
+    code: 'scaler = StandardScaler() \nX_train = scaler.fit_transform(X_train) \nX_test = scaler.transform(X_test)',
+    imports: 'from sklearn.preprocessing import StandardScaler',
 });
 
 export default memo(({ data }) => {
@@ -20,14 +22,20 @@ export default memo(({ data }) => {
     const {
         withMean = true,
         withStd = true,
+        code = 'scaler = StandardScaler() \nX_train = scaler.fit_transform(X_train) \nX_test = scaler.transform(X_test)',
+        imports = 'from sklearn.preprocessing import StandardScaler',
         updateNodeState = () => { }
     } = data;
 
     const updateState = (updates) => {
-        updateNodeState({
+        const newState = {
             ...data,
             ...updates
-        });
+        }
+
+        newState.code = `scaler = StandardScaler(with_mean=${newState.withMean ? "True" : "False"}, with_std=${newState.withStd ? "True" : "False"})`
+        newState.code += `\nX_train = scaler.fit_transform(X_train) \nX_test = scaler.transform(X_test)`
+        updateNodeState(newState);
     };
 
     return (

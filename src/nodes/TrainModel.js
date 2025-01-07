@@ -2,7 +2,10 @@ import './node.css';
 import React, { memo } from 'react';
 import { Handle, Position } from 'reactflow';
 
-export default memo(() => {
+export default memo(({ data }) => {
+
+    data.code = `model.fit(X_train, y_train)
+y_pred = model.predict(X_test)`
 
     return (
         <div className='customNode node-type-model'>
