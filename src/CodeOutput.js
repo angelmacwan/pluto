@@ -5,7 +5,6 @@ import { atomOneDark } from 'react-syntax-highlighter/dist/esm/styles/hljs';
 import './CodeOutput.css';
 import "prismjs/themes/prism-tomorrow.css";
 
-import { generateCode } from './CodeGenerator';
 import { generateAiCode } from './AiCodeGenerator';
 
 const CodeOutput = memo(({ data, useAi }) => {
@@ -21,11 +20,18 @@ const CodeOutput = memo(({ data, useAi }) => {
                 return self.indexOf(value) === index;
             }
 
-            const flatData = data.flat(Infinity);
-            const code = flatData.map(node => generateCode(node));
 
-            const importsOutput = code.map(c => c.imports).filter(x => x !== '').filter(onlyUnique).join('\n');
-            const codeOutput = code.map(c => c.code).join('\n\n');
+            const flatData = data.flat(Infinity);
+
+            let code = [];
+            let imports = []
+            for (let node of flatData) {
+                code.push(node.data.code);
+                imports.push(node.data.imports);
+            }
+
+            const importsOutput = imports.filter(x => x !== '').filter(onlyUnique).join('\n');
+            const codeOutput = code.join('\n\n');
 
             return `${importsOutput.trim()}\n\n${codeOutput.trim()}`;
         };
