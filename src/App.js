@@ -90,12 +90,6 @@ const nodeTypeClass = {
 };
 
 
-// initialState will be removed at some point
-const initialState = {
-  dataNode: { input: null, type: 'file' },
-  TrainTestSplit: { splitRatio: 0.8, randomState: 42, stratify: false, shuffle: true }
-};
-
 const MainApp = () => {
   const gridSize = 10;
   const [nodes, setNodes, onNodesChange] = useNodesState([]);
@@ -235,7 +229,6 @@ const MainApp = () => {
       id,
       type: nodeType,
       data: {
-        ...initialState[nodeType],
         updateNodeState: (newData) => updateNodeState(id, newData)
       },
       position: newNodePosition,

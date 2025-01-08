@@ -8,6 +8,8 @@ const getInitialState = () => ({
     withScaling: true,         // Scale data to the interquartile range
     quantileRange: [25.0, 75.0], // Default interquartile range
     unitVariance: false,       // Scale data to unit variance
+    code: 'scaler = RobustScaler()\nX_train = scaler.fit_transform(X_train)\nX_test = scaler.transform(X_test)',
+    imports: 'from sklearn.preprocessing import RobustScaler',
 });
 
 export default memo(({ data }) => {
@@ -24,14 +26,23 @@ export default memo(({ data }) => {
         withScaling = true,
         quantileRange = [25.0, 75.0],
         unitVariance = false,
+        code = 'scaler = RobustScaler()\nX_train = scaler.fit_transform(X_train)\nX_test = scaler.transform(X_test)',
+        imports = 'from sklearn.preprocessing import RobustScaler',
         updateNodeState = () => { }
     } = data;
 
     const updateState = (updates) => {
-        updateNodeState({
+        const newState = {
             ...data,
             ...updates
-        });
+        };
+        newState.code = `scaler = RobustScaler(with_centering = ${newState.withCentering ? "True" : "False"},
+            with_scaling = ${newState.withScaling ? "True" : "False"},
+            quantile_range = (${newState.quantileRange}), unit_variance = ${newState.unitVariance ? "True" : "False"})
+
+X_train = scaler.fit_transform(X_train)
+X_test = scaler.transform(X_test)`;
+        updateNodeState(newState);
     };
 
     const updateQuantileRange = (index, value) => {

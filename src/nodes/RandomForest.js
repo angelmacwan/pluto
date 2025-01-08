@@ -9,6 +9,14 @@ const getInitialState = () => ({
     min_samples_leaf: 1,     // Minimum samples required at leaf node
     criterion: 'gini',       // Split criterion
     bootstrap: true,         // Whether to use bootstrap samples
+    imports: 'from sklearn.ensemble import RandomForestClassifier',
+    code: `model = RandomForestClassifier(n_estimators = 100,
+                    criterion = 'gini',
+                    max_depth = 12,
+                    min_samples_split = 2,
+                    min_samples_leaf = 1,
+                    bootstrap = True,
+                    random_state = RANDOM_SEED)`,
 });
 
 export default memo(({ data }) => {
@@ -27,14 +35,32 @@ export default memo(({ data }) => {
         min_samples_leaf = 1,
         criterion = 'gini',
         bootstrap = true,
+        imports = 'from sklearn.ensemble import RandomForestClassifier',
+        code = `model = RandomForestClassifier(n_estimators = 100,
+                            criterion = 'gini',
+                            max_depth = 12,
+                            min_samples_split = 2,
+                            min_samples_leaf = 1,
+                            bootstrap = True,
+                            random_state = RANDOM_SEED)`,
         updateNodeState = () => { }
     } = data;
 
     const updateState = (updates) => {
-        updateNodeState({
+        const newState = {
             ...data,
             ...updates
-        });
+        }
+
+        newState.code = `model = RandomForestClassifier(n_estimators = ${newState.n_estimators},
+                                    criterion = '${newState.criterion}',
+                                    max_depth = ${newState.max_depth},
+                                    min_samples_split = ${newState.min_samples_split},
+                                    min_samples_leaf = ${newState.min_samples_leaf},
+                                    bootstrap = ${newState.bootstrap},
+                                    random_state = RANDOM_SEED)`
+
+        updateNodeState(newState);
     };
 
     return (

@@ -5,7 +5,29 @@ import { Handle, Position } from 'reactflow';
 const getInitialState = () => ({
     k: 5,
     shuffle: true,
-    stratify: false
+    stratify: false,
+    imports: `from sklearn.model_selection import StratifiedKFold, KFold
+import numpy as np
+from sklearn.metrics import accuracy_score, classification_report`,
+
+    code: `kf = KFold(n_splits = 5, shuffle = True, random_state = RANDOM_SEED)
+
+X = np.array(X)
+y = np.array(y)
+fold_accuracies = []
+
+for fold, (train_index, test_index) in enumerate(kf.split(X,y)):
+    print(f"Fold {fold}")
+    X_train, X_test = X[train_index], X[test_index]
+    y_train, y_test = y[train_index], y[test_index]
+    model.fit(X_train, y_train)
+    y_pred = model.predict(X_test)
+    accuracy = accuracy_score(y_test, y_pred)
+    fold_accuracies.append(accuracy)
+    print(classification_report(y_test, y_pred))
+
+print(f"Mean Accuracy: {np.mean(fold_accuracies):.4f}")
+print(f"Standard Deviation: {np.std(fold_accuracies):.4f}")`,
 });
 
 export default memo(({ data }) => {
@@ -21,14 +43,68 @@ export default memo(({ data }) => {
         k = 5,
         shuffle = true,
         stratify = false,
+        imports = `from sklearn.model_selection import StratifiedKFold, KFold
+import numpy as np
+from sklearn.metrics import accuracy_score, classification_report`,
+
+        code = `kf = KFold(n_splits = 5, shuffle = True, random_state = RANDOM_SEED)
+
+X = np.array(X)
+y = np.array(y)
+fold_accuracies = []
+
+for fold, (train_index, test_index) in enumerate(kf.split(X,y)):
+    print(f"Fold {fold}")
+    X_train, X_test = X[train_index], X[test_index]
+    y_train, y_test = y[train_index], y[test_index]
+    model.fit(X_train, y_train)
+    y_pred = model.predict(X_test)
+    accuracy = accuracy_score(y_test, y_pred)
+    fold_accuracies.append(accuracy)
+    print(classification_report(y_test, y_pred))
+
+print(f"Mean Accuracy: {np.mean(fold_accuracies):.4f}")
+print(f"Standard Deviation: {np.std(fold_accuracies):.4f}")`,
         updateNodeState = () => { }
     } = data;
 
     const updateState = (updates) => {
-        updateNodeState({
+        const newState = {
             ...data,
             ...updates
-        });
+        }
+        newState.code = ""
+
+        if (newState.stratify) {
+            newState.code = `kf = StratifiedKFold(n_splits = ${newState.k},
+                shuffle = ${newState.shuffle ? "True" : "False"},
+                random_state = RANDOM_SEED)`
+
+        } else {
+            newState.code = `kf = KFold(n_splits = ${newState.k},
+                shuffle = ${newState.shuffle ? "True" : "False"},
+                random_state = RANDOM_SEED)`
+        }
+        newState.code += `
+        X = np.array(X)
+        y = np.array(y)
+        fold_accuracies = []
+        
+        for fold, (train_index, test_index) in enumerate(kf.split(X,y)):
+            print(f"Fold {fold}")
+            X_train, X_test = X[train_index], X[test_index]
+            y_train, y_test = y[train_index], y[test_index]
+            model = get_model()
+            model.fit(X_train, y_train)
+            y_pred = model.predict(X_test)
+            accuracy = accuracy_score(y_test, y_pred)
+            fold_accuracies.append(accuracy)
+            print(classification_report(y_test, y_pred))
+        
+        print(f"Mean Accuracy: {np.mean(fold_accuracies):.4f}")
+        print(f"Standard Deviation: {np.std(fold_accuracies):.4f}")`
+
+        updateNodeState(newState);
     };
 
     return (
