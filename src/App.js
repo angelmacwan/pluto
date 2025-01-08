@@ -67,6 +67,7 @@ const nodeTypes = {
   CustomCode: CustomCode,
 };
 
+// THIS IS FOR BUTTONS TO ADD THE NODE TO CANVAS
 // Mappint of node type to its css class
 const nodeTypeClass = {
   DataInput: 'node-type-input',
