@@ -9,6 +9,9 @@ const getInitialState = () => ({
     dual: true,                // Dual or primal formulation
     loss: 'squared_hinge',     // Loss function
     penalty: 'l2',             // Penalty (regularization) type
+    imports: 'from sklearn.svm import LinearSVC',
+    code: `model = LinearSVC(C = 1.0, max_iter = 1000,
+    tol = 0.0001, dual = True, loss = 'squared_hinge', penalty = 'l2')`
 });
 
 export default memo(({ data }) => {
@@ -27,14 +30,22 @@ export default memo(({ data }) => {
         dual = true,
         loss = 'squared_hinge',
         penalty = 'l2',
+        imports = 'from sklearn.svm import LinearSVC',
+        code = `model = LinearSVC(C = 1.0, max_iter = 1000,
+    tol = 0.0001, dual = True, loss = 'squared_hinge', penalty = 'l2')`,
+
         updateNodeState = () => { }
     } = data;
 
     const updateState = (updates) => {
-        updateNodeState({
+        const newState = {
             ...data,
             ...updates
-        });
+        };
+        newState.code = `model = LinearSVC(C = ${newState.C}, max_iter = ${newState.max_iter},
+                            tol = ${newState.tol}, dual = ${newState.dual},
+                            loss = '${newState.loss}', penalty = '${newState.penalty}')`
+        updateNodeState(newState);
     };
 
     return (

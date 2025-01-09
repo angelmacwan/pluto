@@ -9,6 +9,8 @@ const getInitialState = () => ({
     max_depth: null,            // Maximum depth of the tree
     min_samples_split: 2,       // Minimum samples to split an internal node
     min_samples_leaf: 1,        // Minimum samples to form a leaf node
+    imports: 'from sklearn.tree import DecisionTreeClassifier',
+    code: 'model = DecisionTreeClassifier()',
 });
 
 export default memo(({ data }) => {
@@ -26,14 +28,25 @@ export default memo(({ data }) => {
         max_depth = null,
         min_samples_split = 2,
         min_samples_leaf = 1,
+        imports = 'from sklearn.tree import DecisionTreeClassifier',
+        code = 'model = DecisionTreeClassifier()',
         updateNodeState = () => { }
     } = data;
 
     const updateState = (updates) => {
-        updateNodeState({
+        const newState = {
             ...data,
             ...updates
-        });
+        }
+
+        newState.code = `model = DecisionTreeClassifier(criterion = '${newState.criterion}',
+        splitter = '${newState.splitter}',
+        max_depth = ${newState.max_depth},
+        min_samples_split = ${newState.min_samples_split},
+        min_samples_leaf = ${newState.min_samples_leaf})`;
+
+
+        updateNodeState(newState);
     };
 
     return (

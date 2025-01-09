@@ -4,7 +4,12 @@ import { Handle, Position } from 'reactflow';
 // Define initial state for Simple Imputer node
 const getInitialState = () => ({
     missing_values: 'nan',
-    strategy: 'mean'
+    strategy: 'mean',
+    code: `imputer = SimpleImputer(missing_values = np.nan, strategy = 'mean')
+X_train = imputer.fit_transform(X_train)
+X_test = imputer.transform(X_test)`,
+
+    imports: 'from sklearn.impute import SimpleImputer',
 });
 
 export default memo(({ data }) => {
@@ -19,14 +24,24 @@ export default memo(({ data }) => {
     const {
         missing_values = 'nan',
         strategy = 'mean',
+        imports = 'from sklearn.impute import SimpleImputer',
+        code = `imputer = SimpleImputer(missing_values = np.nan, strategy = 'mean')
+X_train = imputer.fit_transform(X_train)
+X_test = imputer.transform(X_test)`,
+
         updateNodeState = () => { }
     } = data;
 
     const updateState = (updates) => {
-        updateNodeState({
+        const newState = {
             ...data,
             ...updates
-        });
+        }
+        newState.code = `imputer = SimpleImputer(missing_values = ${newState.missing_values}, strategy = '${newState.strategy}')
+
+X_train = imputer.fit_transform(X_train)
+X_test = imputer.transform(X_test)`
+        updateNodeState(newState);
     };
 
     return (

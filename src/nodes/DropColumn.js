@@ -5,6 +5,7 @@ import { Handle, Position } from 'reactflow';
 // Define initial state for this node type
 const getInitialState = () => ({
     columnName: 'none',
+    code: 'None',
 });
 
 export default memo(({ data }) => {
@@ -18,14 +19,17 @@ export default memo(({ data }) => {
     // Destructure values from data, falling back to initial state values
     const {
         columnName = 'none',
+        code = `X.drop(columns=[${columnName}], inplace=True)`,
         updateNodeState = () => { }
     } = data;
 
     const updateState = (updates) => {
-        updateNodeState({
+        const newState = {
             ...data,
             ...updates
-        });
+        }
+        newState.code = `X.drop(columns=['${newState.columnName}'], inplace=True)`
+        updateNodeState(newState);
     };
 
 

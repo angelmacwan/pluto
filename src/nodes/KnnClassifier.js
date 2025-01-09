@@ -8,6 +8,8 @@ const getInitialState = () => ({
     algorithm: 'auto',       // Algorithm used for computation
     leaf_size: 30,           // Leaf size for tree-based algorithms
     metric: 'minkowski',     // Distance metric
+    code: 'model = KNeighborsClassifier(n_neighbors=5)',
+    imports: 'from sklearn.neighbors import KNeighborsClassifier'
 });
 
 export default memo(({ data }) => {
@@ -24,14 +26,22 @@ export default memo(({ data }) => {
         algorithm = 'auto',
         leaf_size = 30,
         metric = 'minkowski',
+        code = 'model = KNeighborsClassifier(n_neighbors=5)',
+        imports = 'from sklearn.neighbors import KNeighborsClassifier',
         updateNodeState = () => { }
     } = data;
 
     const updateState = (updates) => {
-        updateNodeState({
+        const newState = {
             ...data,
             ...updates
-        });
+        };
+
+        // Generate code using the updated values
+        newState.code = `model = KNeighborsClassifier(n_neighbors=${newState.n_neighbors}, algorithm='${newState.algorithm}', leaf_size=${newState.leaf_size}, metric='${newState.metric}')`;
+        newState.imports = 'from sklearn.neighbors import KNeighborsClassifier';
+
+        updateNodeState(newState);
     };
 
     return (
@@ -56,7 +66,6 @@ export default memo(({ data }) => {
                         />
                     </label>
                 </div>
-
 
                 <div className="input-group">
                     <label>

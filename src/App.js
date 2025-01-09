@@ -67,6 +67,7 @@ const nodeTypes = {
   CustomCode: CustomCode,
 };
 
+// THIS IS FOR BUTTONS TO ADD THE NODE TO CANVAS
 // Mappint of node type to its css class
 const nodeTypeClass = {
   DataInput: 'node-type-input',
@@ -89,12 +90,6 @@ const nodeTypeClass = {
   TrainModel: 'node-type-model',
 };
 
-
-// initialState will be removed at some point
-const initialState = {
-  dataNode: { input: null, type: 'file' },
-  TrainTestSplit: { splitRatio: 0.8, randomState: 42, stratify: false, shuffle: true }
-};
 
 const MainApp = () => {
   const gridSize = 10;
@@ -235,7 +230,6 @@ const MainApp = () => {
       id,
       type: nodeType,
       data: {
-        ...initialState[nodeType],
         updateNodeState: (newData) => updateNodeState(id, newData)
       },
       position: newNodePosition,

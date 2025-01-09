@@ -2,23 +2,43 @@ import './node.css';
 import React, { memo, useEffect, useState } from 'react';
 import { Handle, Position } from 'reactflow';
 
+// Define initial state for this node type
+const getInitialState = () => ({
+    fileType: 'CSV',
+    seperator: ',',
+    fileName: '',
+    fileContent: '',
+    targetColumn: '',
+    code: 'data = pd.read_csv("data.csv")',
+    imports: 'import pandas as pd'
+});
+
 export default memo(({ data }) => {
+    // Initialize state when component mounts if it's empty
+    useEffect(() => {
+        if (data.updateNodeState && Object.keys(data).length <= 1) {
+            data.updateNodeState(getInitialState());
+        }
+    }, [data]);
+
+    const [columns, setColumns] = useState([]);
+
+    // Destructure values from data, falling back to initial state values
     const {
         fileType = 'CSV',
         seperator = ',',
         fileName = '',
         fileContent = '',
         targetColumn = '',
+        code = 'data = pd.read_csv("data.csv")',
+        imports = 'import pandas as pd',
         updateNodeState = () => { }
     } = data;
-
-    const [columns, setColumns] = useState([]);
 
     useEffect(() => {
         if (fileContent) {
             let headers = [];
             if (fileType === 'CSV' || fileType === 'TSV') {
-                // Get first line and split by separator
                 const lines = fileContent.split('\n');
                 if (lines.length > 0) {
                     headers = lines[0].split(seperator).map(h => h.trim());
@@ -38,10 +58,17 @@ export default memo(({ data }) => {
     }, [fileContent, fileType, seperator]);
 
     const updateState = (updates) => {
-        updateNodeState({
+        const newState = {
             ...data,
             ...updates
-        });
+        };
+
+        // Generate code using the updated values
+        newState.imports = 'import pandas as pd';
+        newState.code = `target_column = '${newState.targetColumn}'
+df = pd.read_csv("${newState.fileName}", sep="${newState.seperator}")`
+
+        updateNodeState(newState);
     };
 
     const handleFileTypeChange = (e) => {
@@ -49,16 +76,15 @@ export default memo(({ data }) => {
         updateState({
             fileType: newFileType,
             seperator: newFileType === 'CSV' ? ',' :
-                newFileType === 'TSV' ? '\t' :
-                    undefined,
-            targetColumn: '' // Reset target column when file type changes
+                newFileType === 'TSV' ? '\t' : undefined,
+            targetColumn: ''
         });
     };
 
     const handleseperatorChange = (e) => {
         updateState({
             seperator: e.target.value,
-            targetColumn: '' // Reset target column when separator changes
+            targetColumn: ''
         });
     };
 
@@ -66,22 +92,17 @@ export default memo(({ data }) => {
         const file = event.target.files[0];
         if (file) {
             const reader = new FileReader();
-
             reader.onload = (e) => {
                 updateState({
                     fileName: file.name,
                     filePath: event.target.value,
                     fileContent: e.target.result,
-                    fileType,
-                    seperator,
-                    targetColumn: '' // Reset target column when file changes
+                    targetColumn: ''
                 });
             };
-
             reader.readAsText(file);
         }
     };
-
 
     const handleTargetColumnChange = (e) => {
         updateState({ targetColumn: e.target.value });
@@ -89,67 +110,68 @@ export default memo(({ data }) => {
 
     return (
         <div className="customNode node-type-data-loader">
+            <Handle
+                type="source"
+                position={Position.Right}
+            />
+
             <div className="node-header">Data Input</div>
 
             <div className="node-body">
-                {/* File Type Selection */}
-                <label htmlFor="fileType">File Type</label>
-                <select
-                    id="fileType"
-                    value={fileType}
-                    onChange={handleFileTypeChange}
-                    className="mb-2 w-full p-1 border rounded"
-                >
-                    <option value="CSV">CSV</option>
-                    <option value="TSV">TSV</option>
-                    <option value="JSON">JSON</option>
-                    <option value="XLSX">XLSX</option>
-                </select>
+                <div className="input-group">
+                    <label>
+                        File Type:
+                        <select
+                            value={fileType}
+                            onChange={handleFileTypeChange}
+                        >
+                            <option value="CSV">CSV</option>
+                            <option value="TSV">TSV</option>
+                            <option value="JSON">JSON</option>
+                            <option value="XLSX">XLSX</option>
+                        </select>
+                    </label>
+                </div>
 
-                {/* Separator Selection */}
                 {(fileType === 'CSV' || fileType === 'TSV') && (
-                    <div className="mt-2">
-                        <label htmlFor="seperator">Separator</label>
-                        <select
-                            id="seperator"
-                            value={seperator}
-                            onChange={handleseperatorChange}
-                            className="w-full p-1 border rounded"
-                        >
-                            <option value=",">Comma (,)</option>
-                            <option value="\t">Tab (\t)</option>
-                            <option value=";">Semicolon (;)</option>
-                            <option value="|">Pipe (|)</option>
-                        </select>
+                    <div className="input-group">
+                        <label>
+                            Separator:
+                            <select
+                                value={seperator}
+                                onChange={handleseperatorChange}
+                            >
+                                <option value=",">Comma (,)</option>
+                                <option value="\t">Tab (\t)</option>
+                                <option value=";">Semicolon (;)</option>
+                                <option value="|">Pipe (|)</option>
+                            </select>
+                        </label>
                     </div>
                 )}
 
-                {/* Target Column Selection */}
                 {columns.length > 0 && (
-                    <div className="mt-2">
-                        <label htmlFor="targetColumn">Target Column</label>
-                        <select
-                            id="targetColumn"
-                            value={targetColumn}
-                            onChange={handleTargetColumnChange}
-                            className="w-full p-1 border rounded"
-                        >
-                            <option value="">Select target column</option>
-                            {columns.map((column, index) => (
-                                <option key={index} value={column}>
-                                    {column}
-                                </option>
-                            ))}
-                        </select>
+                    <div className="input-group">
+                        <label>
+                            Target Column:
+                            <select
+                                value={targetColumn}
+                                onChange={handleTargetColumnChange}
+                            >
+                                <option value="">Select target column</option>
+                                {columns.map((column, index) => (
+                                    <option key={index} value={column}>
+                                        {column}
+                                    </option>
+                                ))}
+                            </select>
+                        </label>
                     </div>
                 )}
 
-                {/* File Upload */}
-                <div className="mt-2">
+                <div className="input-group">
                     <input
                         type="file"
-                        id="fileUpload"
-                        className="file-upload-input"
                         onChange={handleFileChange}
                         accept={
                             fileType === 'CSV' || fileType === 'TSV' ? '.csv,.tsv' :
@@ -161,16 +183,15 @@ export default memo(({ data }) => {
                 </div>
 
                 {fileName && (
-                    <p className="file-name mt-2 text-sm text-gray-600">
-                        {fileName}
-                    </p>
+                    <div className="input-group">
+                        <span className="file-name">
+                            {fileName}
+                        </span>
+                    </div>
                 )}
             </div>
-
-            <Handle
-                type="source"
-                position={Position.Right}
-            />
         </div>
     );
 });
+
+export { getInitialState };

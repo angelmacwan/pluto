@@ -10,7 +10,11 @@ const getInitialState = () => ({
     coef0: 0.0,               // Independent term in poly/sigmoid
     probability: false,        // Enable probability estimates
     tol: 0.001,               // Tolerance for stopping criterion
-    max_iter: -1               // Maximum iterations (-1 for no limit)
+    max_iter: -1,             // Maximum iterations (-1 for no limit)
+    imports: 'from sklearn.svm import SVC',
+    code: `model = SVC(C = 1.0, kernel = 'rbf', degree = 3,
+    gamma = 'scale', coef0 = 0.0,
+    probability = False, tol = 0.001, max_iter = -1)`,
 });
 
 export default memo(({ data }) => {
@@ -31,14 +35,26 @@ export default memo(({ data }) => {
         probability = false,
         tol = 0.001,
         max_iter = -1,
+        imports = 'from sklearn.svm import SVC',
+        code = `model = SVC(C = 1.0, kernel = 'rbf', degree = 3,
+        gamma = 'scale', coef0 = 0.0,
+        probability = False, tol = 0.001, max_iter = -1)`,
+
         updateNodeState = () => { }
     } = data;
 
     const updateState = (updates) => {
-        updateNodeState({
+        const newState = {
             ...data,
             ...updates
-        });
+        }
+
+        newState.code = `model = SVC(C = ${newState.C}, kernel = '${newState.kernel}',
+                degree = ${newState.degree}, gamma = '${newState.gamma}',
+                coef0 = ${newState.coef0}, probability = ${newState.probability ? "True" : "False"},
+                tol = ${newState.tol}, max_iter = ${newState.max_iter})`
+
+        updateNodeState(newState);
     };
 
     return (

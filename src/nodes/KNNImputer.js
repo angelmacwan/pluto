@@ -5,7 +5,11 @@ import { Handle, Position } from 'reactflow';
 const getInitialState = () => ({
     n_neighbors: 5,
     weights: 'uniform',
-    metric: 'nan_euclidean'
+    metric: 'nan_euclidean',
+    code: `imputer = KNNImputer(n_neighbors = 5, weights = 'uniform', metric = 'nan_euclidean')  
+X_train = imputer.fit_transform(X_train)
+X_test = imputer.transform(X_test)`,
+    imports: 'from sklearn.impute import KNNImputer',
 });
 
 export default memo(({ data }) => {
@@ -21,14 +25,25 @@ export default memo(({ data }) => {
         n_neighbors = 5,
         weights = 'uniform',
         metric = 'nan_euclidean',
+        imports = 'from sklearn.impute import KNNImputer',
+        code = `imputer = KNNImputer(n_neighbors = 5, weights = 'uniform', metric = 'nan_euclidean')  
+X_train = imputer.fit_transform(X_train)
+X_test = imputer.transform(X_test)`,
         updateNodeState = () => { }
     } = data;
 
     const updateState = (updates) => {
-        updateNodeState({
+        const newState = {
             ...data,
             ...updates
-        });
+        };
+        newState.code = `imputer = KNNImputer(n_neighbors = ${newState.n_neighbors},
+            weights = '${newState.weights}',
+            metric = '${newState.metric}')
+
+X_train = imputer.fit_transform(X_train)
+X_test = imputer.transform(X_test)`
+        updateNodeState(newState);
     };
 
     return (

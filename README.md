@@ -1,6 +1,15 @@
 Live Site:
 PURGED
 
+### TODO
+
+-   🟨 Improve code generation
+-   ✅ Make code generation local to each element
+-   🟨 Saving and Loading files needs a fix (Problem with loading files)
+-   🟨 Add more ML models and Nodes for data processing
+-   🟨 Make a dropdown to quickly select new nodes when a handle is dragged
+-   🟨 Make the AI generate feature more accessable
+
 ## start the react app in dev server
 
 ```
