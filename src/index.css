@@ -95,6 +95,10 @@ code {
   border: 2px solid white;
 }
 
+.SideBar>.node-type-data-transform {
+  background: var(--node-transform-color);
+}
+
 .SideBar>.node-type-input {
   background: var(--node-data-color);
 }

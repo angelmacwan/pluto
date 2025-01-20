@@ -31,6 +31,8 @@ import LinearSVC from './nodes/LinearSVC';
 import SVC from './nodes/SVC';
 import KfoldCV from './nodes/KfoldCV';
 import TrainModel from './nodes/TrainModel';
+import PCA from './nodes/PCA';
+import LableEncoder from './nodes/LableEncoder';
 
 
 
@@ -48,6 +50,8 @@ const nodeTypes = {
   TrainTestSplit: TrainTestSplit,
   StandardScaler: StandardScaler,
   RobustScaler: RobustScaler,
+  PCA: PCA,
+  LableEncoder: LableEncoder,
 
   // MODELS
   KnnClassifier: KnnClassifier,
@@ -88,6 +92,8 @@ const nodeTypeClass = {
   SVC: 'node-type-model',
   KfoldCV: 'node-type-cv',
   TrainModel: 'node-type-model',
+  PCA: 'node-type-data-transform',
+  LableEncoder: 'node-type-data-transform',
 };
 
 

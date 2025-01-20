@@ -48,6 +48,10 @@ select {
     background-color: var(--node-cv-color);
 }
 
+.node-type-data-transform>.node-header {
+    background-color: var(--node-transform-color);
+}
+
 .react-flow__handle {
     background-color: var(--node-handle-color);
     width: 16px;
