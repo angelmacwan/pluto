@@ -66,7 +66,9 @@ export default memo(({ data }) => {
         // Generate code using the updated values
         newState.imports = 'import pandas as pd';
         newState.code = `target_column = '${newState.targetColumn}'
-df = pd.read_csv("${newState.fileName}", sep="${newState.seperator}")`
+df = pd.read_csv("${newState.fileName}", sep="${newState.seperator}")
+X = df.drop(columns=[target_column])
+y = df[target_column]`
 
         updateNodeState(newState);
     };

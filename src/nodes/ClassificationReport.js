@@ -5,7 +5,8 @@ import { Handle, Position } from 'reactflow';
 export default memo(({ data }) => {
 
     data.imports = 'from sklearn.metrics import classification_report';
-    data.code = 'print(classification_report(y_test, y_pred))';
+    data.code = `print(f"Classification Report for {str(type(model).__name__)}")
+print(classification_report(y_test, y_pred))`;
 
     return (
         <div className='customNode node-type-output'>
