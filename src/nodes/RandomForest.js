@@ -8,7 +8,7 @@ const getInitialState = () => ({
     min_samples_split: 2,    // Minimum samples required to split
     min_samples_leaf: 1,     // Minimum samples required at leaf node
     criterion: 'gini',       // Split criterion
-    bootstrap: true,         // Whether to use bootstrap samples
+    bootstrap: 'True',         // Whether to use bootstrap samples
     imports: 'from sklearn.ensemble import RandomForestClassifier',
     code: `model = RandomForestClassifier(n_estimators = 100,
                     criterion = 'gini',
@@ -34,7 +34,7 @@ export default memo(({ data }) => {
         min_samples_split = 2,
         min_samples_leaf = 1,
         criterion = 'gini',
-        bootstrap = true,
+        bootstrap = 'True',
         imports = 'from sklearn.ensemble import RandomForestClassifier',
         code = `model = RandomForestClassifier(n_estimators = 100,
                             criterion = 'gini',
