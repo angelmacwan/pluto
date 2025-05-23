@@ -1,90 +1,90 @@
 {
   "nodes": [
     {
-      "id": "698.0916373233234",
+      "id": "46.00427077559244",
       "type": "DataInput",
       "position": {
-        "x": 0,
+        "x": 200,
         "y": 200
       },
       "data": {
-        "fileName": "iris.csv",
-        "filePath": "C:\\fakepath\\iris.csv",
-        "fileContent": "sepal.length,sepal.width,petal.length,petal.width,variety\r\n5.1,3.5,1.4,.2,Setosa\r\n4.9,3,1.4,.2,Setosa\r\n4.7,3.2,1.3,.2,Setosa\r\n4.6,3.1,1.5,.2,Setosa\r\n5,3.6,1.4,.2,Setosa\r\n5.4,3.9,1.7,.4,Setosa\r\n4.6,3.4,1.4,.3,Setosa\r\n5,3.4,1.5,.2,Setosa\r\n4.4,2.9,1.4,.2,Setosa\r\n4.9,3.1,1.5,.1,Setosa\r\n5.4,3.7,1.5,.2,Setosa\r\n4.8,3.4,1.6,.2,Setosa\r\n4.8,3,1.4,.1,Setosa\r\n4.3,3,1.1,.1,Setosa\r\n5.8,4,1.2,.2,Setosa\r\n5.7,4.4,1.5,.4,Setosa\r\n5.4,3.9,1.3,.4,Setosa\r\n5.1,3.5,1.4,.3,Setosa\r\n5.7,3.8,1.7,.3,Setosa\r\n5.1,3.8,1.5,.3,Setosa\r\n5.4,3.4,1.7,.2,Setosa\r\n5.1,3.7,1.5,.4,Setosa\r\n4.6,3.6,1,.2,Setosa\r\n5.1,3.3,1.7,.5,Setosa\r\n4.8,3.4,1.9,.2,Setosa\r\n5,3,1.6,.2,Setosa\r\n5,3.4,1.6,.4,Setosa\r\n5.2,3.5,1.5,.2,Setosa\r\n5.2,3.4,1.4,.2,Setosa\r\n4.7,3.2,1.6,.2,Setosa\r\n4.8,3.1,1.6,.2,Setosa\r\n5.4,3.4,1.5,.4,Setosa\r\n5.2,4.1,1.5,.1,Setosa\r\n5.5,4.2,1.4,.2,Setosa\r\n4.9,3.1,1.5,.2,Setosa\r\n5,3.2,1.2,.2,Setosa\r\n5.5,3.5,1.3,.2,Setosa\r\n4.9,3.6,1.4,.1,Setosa\r\n4.4,3,1.3,.2,Setosa\r\n5.1,3.4,1.5,.2,Setosa\r\n5,3.5,1.3,.3,Setosa\r\n4.5,2.3,1.3,.3,Setosa\r\n4.4,3.2,1.3,.2,Setosa\r\n5,3.5,1.6,.6,Setosa\r\n5.1,3.8,1.9,.4,Setosa\r\n4.8,3,1.4,.3,Setosa\r\n5.1,3.8,1.6,.2,Setosa\r\n4.6,3.2,1.4,.2,Setosa\r\n5.3,3.7,1.5,.2,Setosa\r\n5,3.3,1.4,.2,Setosa\r\n7,3.2,4.7,1.4,Versicolor\r\n6.4,3.2,4.5,1.5,Versicolor\r\n6.9,3.1,4.9,1.5,Versicolor\r\n5.5,2.3,4,1.3,Versicolor\r\n6.5,2.8,4.6,1.5,Versicolor\r\n5.7,2.8,4.5,1.3,Versicolor\r\n6.3,3.3,4.7,1.6,Versicolor\r\n4.9,2.4,3.3,1,Versicolor\r\n6.6,2.9,4.6,1.3,Versicolor\r\n5.2,2.7,3.9,1.4,Versicolor\r\n5,2,3.5,1,Versicolor\r\n5.9,3,4.2,1.5,Versicolor\r\n6,2.2,4,1,Versicolor\r\n6.1,2.9,4.7,1.4,Versicolor\r\n5.6,2.9,3.6,1.3,Versicolor\r\n6.7,3.1,4.4,1.4,Versicolor\r\n5.6,3,4.5,1.5,Versicolor\r\n5.8,2.7,4.1,1,Versicolor\r\n6.2,2.2,4.5,1.5,Versicolor\r\n5.6,2.5,3.9,1.1,Versicolor\r\n5.9,3.2,4.8,1.8,Versicolor\r\n6.1,2.8,4,1.3,Versicolor\r\n6.3,2.5,4.9,1.5,Versicolor\r\n6.1,2.8,4.7,1.2,Versicolor\r\n6.4,2.9,4.3,1.3,Versicolor\r\n6.6,3,4.4,1.4,Versicolor\r\n6.8,2.8,4.8,1.4,Versicolor\r\n6.7,3,5,1.7,Versicolor\r\n6,2.9,4.5,1.5,Versicolor\r\n5.7,2.6,3.5,1,Versicolor\r\n5.5,2.4,3.8,1.1,Versicolor\r\n5.5,2.4,3.7,1,Versicolor\r\n5.8,2.7,3.9,1.2,Versicolor\r\n6,2.7,5.1,1.6,Versicolor\r\n5.4,3,4.5,1.5,Versicolor\r\n6,3.4,4.5,1.6,Versicolor\r\n6.7,3.1,4.7,1.5,Versicolor\r\n6.3,2.3,4.4,1.3,Versicolor\r\n5.6,3,4.1,1.3,Versicolor\r\n5.5,2.5,4,1.3,Versicolor\r\n5.5,2.6,4.4,1.2,Versicolor\r\n6.1,3,4.6,1.4,Versicolor\r\n5.8,2.6,4,1.2,Versicolor\r\n5,2.3,3.3,1,Versicolor\r\n5.6,2.7,4.2,1.3,Versicolor\r\n5.7,3,4.2,1.2,Versicolor\r\n5.7,2.9,4.2,1.3,Versicolor\r\n6.2,2.9,4.3,1.3,Versicolor\r\n5.1,2.5,3,1.1,Versicolor\r\n5.7,2.8,4.1,1.3,Versicolor\r\n6.3,3.3,6,2.5,Virginica\r\n5.8,2.7,5.1,1.9,Virginica\r\n7.1,3,5.9,2.1,Virginica\r\n6.3,2.9,5.6,1.8,Virginica\r\n6.5,3,5.8,2.2,Virginica\r\n7.6,3,6.6,2.1,Virginica\r\n4.9,2.5,4.5,1.7,Virginica\r\n7.3,2.9,6.3,1.8,Virginica\r\n6.7,2.5,5.8,1.8,Virginica\r\n7.2,3.6,6.1,2.5,Virginica\r\n6.5,3.2,5.1,2,Virginica\r\n6.4,2.7,5.3,1.9,Virginica\r\n6.8,3,5.5,2.1,Virginica\r\n5.7,2.5,5,2,Virginica\r\n5.8,2.8,5.1,2.4,Virginica\r\n6.4,3.2,5.3,2.3,Virginica\r\n6.5,3,5.5,1.8,Virginica\r\n7.7,3.8,6.7,2.2,Virginica\r\n7.7,2.6,6.9,2.3,Virginica\r\n6,2.2,5,1.5,Virginica\r\n6.9,3.2,5.7,2.3,Virginica\r\n5.6,2.8,4.9,2,Virginica\r\n7.7,2.8,6.7,2,Virginica\r\n6.3,2.7,4.9,1.8,Virginica\r\n6.7,3.3,5.7,2.1,Virginica\r\n7.2,3.2,6,1.8,Virginica\r\n6.2,2.8,4.8,1.8,Virginica\r\n6.1,3,4.9,1.8,Virginica\r\n6.4,2.8,5.6,2.1,Virginica\r\n7.2,3,5.8,1.6,Virginica\r\n7.4,2.8,6.1,1.9,Virginica\r\n7.9,3.8,6.4,2,Virginica\r\n6.4,2.8,5.6,2.2,Virginica\r\n6.3,2.8,5.1,1.5,Virginica\r\n6.1,2.6,5.6,1.4,Virginica\r\n7.7,3,6.1,2.3,Virginica\r\n6.3,3.4,5.6,2.4,Virginica\r\n6.4,3.1,5.5,1.8,Virginica\r\n6,3,4.8,1.8,Virginica\r\n6.9,3.1,5.4,2.1,Virginica\r\n6.7,3.1,5.6,2.4,Virginica\r\n6.9,3.1,5.1,2.3,Virginica\r\n5.8,2.7,5.1,1.9,Virginica\r\n6.8,3.2,5.9,2.3,Virginica\r\n6.7,3.3,5.7,2.5,Virginica\r\n6.7,3,5.2,2.3,Virginica\r\n6.3,2.5,5,1.9,Virginica\r\n6.5,3,5.2,2,Virginica\r\n6.2,3.4,5.4,2.3,Virginica\r\n5.9,3,5.1,1.8,Virginica",
         "fileType": "CSV",
         "seperator": ",",
-        "targetColumn": "variety"
+        "fileName": "iris.csv",
+        "targetColumn": "variety",
+        "code": "target_column = 'variety'\ndf = pd.read_csv(\"iris.csv\", sep=\",\")\nX = df.drop(columns=[target_column])\ny = df[target_column]",
+        "imports": "import pandas as pd"
       }
     },
     {
-      "id": "225.82424697648062",
-      "type": "RandomSeed",
+      "id": "676.0712994972439",
+      "type": "KNNImputer",
       "position": {
-        "x": 80,
-        "y": 460
+        "x": 550,
+        "y": 210
       },
       "data": {
-        "seed": 12
+        "n_neighbors": 5,
+        "weights": "uniform",
+        "metric": "nan_euclidean",
+        "code": "imputer = KNNImputer(n_neighbors = 5, weights = 'uniform', metric = 'nan_euclidean')  \nX_train = imputer.fit_transform(X_train)\nX_test = imputer.transform(X_test)",
+        "imports": "from sklearn.impute import KNNImputer"
       }
     },
     {
-      "id": "150.38913557819146",
-      "type": "RemoveNa",
-      "position": {
-        "x": 180,
-        "y": 550
-      },
-      "data": {}
-    },
-    {
-      "id": "286.654751198983",
+      "id": "881.2069032637195",
       "type": "TrainTestSplit",
       "position": {
-        "x": 380,
+        "x": 910,
         "y": 210
       },
       "data": {
         "splitRatio": 0.8,
-        "randomState": 42,
-        "stratify": true,
-        "shuffle": true
+        "stratify": false,
+        "shuffle": true,
+        "code": "X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)",
+        "imports": "from sklearn.model_selection import train_test_split"
       }
     },
     {
-      "id": "629.3124919893363",
-      "type": "StandardScaler",
+      "id": "721.2198917481994",
+      "type": "KnnClassifier",
       "position": {
-        "x": 740,
-        "y": 180
+        "x": 1480,
+        "y": -120
       },
       "data": {
-        "withMean": true,
-        "withStd": true
+        "n_neighbors": 5,
+        "algorithm": "auto",
+        "leaf_size": 30,
+        "metric": "minkowski",
+        "code": "model = KNeighborsClassifier(n_neighbors=5)",
+        "imports": "from sklearn.neighbors import KNeighborsClassifier"
       }
     },
     {
-      "id": "805.2556693399098",
-      "type": "RobustScaler",
+      "id": "637.5465365145498",
+      "type": "DecisionTree",
       "position": {
-        "x": 740,
-        "y": 310
+        "x": 1470,
+        "y": 80
       },
       "data": {
-        "withCentering": true,
-        "withScaling": true,
-        "quantileRange": [
-          25,
-          75
-        ],
-        "unitVariance": false
+        "criterion": "gini",
+        "splitter": "best",
+        "max_depth": 12,
+        "min_samples_split": 2,
+        "min_samples_leaf": 1,
+        "imports": "from sklearn.tree import DecisionTreeClassifier",
+        "code": "model = DecisionTreeClassifier(criterion = 'gini',\n        splitter = 'best',\n        max_depth = 12,\n        min_samples_split = 2,\n        min_samples_leaf = 1)"
       }
     },
     {
-      "id": "914.4378062833578",
+      "id": "454.89316428585715",
       "type": "RandomForest",
       "position": {
-        "x": 1060,
-        "y": 80
+        "x": 1470,
+        "y": 300
       },
       "data": {
         "n_estimators": 100,
@@ -92,160 +92,175 @@
         "min_samples_split": 2,
         "min_samples_leaf": 1,
         "criterion": "gini",
-        "bootstrap": true
+        "bootstrap": "True",
+        "imports": "from sklearn.ensemble import RandomForestClassifier",
+        "code": "model = RandomForestClassifier(n_estimators = 100,\n                                    criterion = 'gini',\n                                    max_depth = 12,\n                                    min_samples_split = 2,\n                                    min_samples_leaf = 1,\n                                    bootstrap = True,\n                                    random_state = RANDOM_SEED)"
       }
     },
     {
-      "id": "489.00902227953424",
-      "type": "DecisionTree",
+      "id": "573.4163846625372",
+      "type": "LinearSVC",
       "position": {
-        "x": 1060,
-        "y": 320
+        "x": 1480,
+        "y": 520
       },
       "data": {
-        "criterion": "gini",
-        "splitter": "best",
-        "max_depth": null,
-        "min_samples_split": 2,
-        "min_samples_leaf": 1
+        "C": 1,
+        "max_iter": 1000,
+        "tol": 0.0001,
+        "dual": true,
+        "loss": "squared_hinge",
+        "penalty": "l2",
+        "imports": "from sklearn.svm import LinearSVC",
+        "code": "model = LinearSVC(C = 1.0, max_iter = 1000,\n    tol = 0.0001, dual = True, loss = 'squared_hinge', penalty = 'l2')"
       }
     },
     {
-      "id": "383.5556456030036",
+      "id": "768.2732502389016",
+      "type": "TrainModel",
+      "position": {
+        "x": 1990,
+        "y": 230
+      },
+      "data": {
+        "code": "model.fit(X_train, y_train)\ny_pred = model.predict(X_test)"
+      }
+    },
+    {
+      "id": "251.7607314906334",
       "type": "ClassificationReport",
       "position": {
-        "x": 1450,
-        "y": 250
+        "x": 2190,
+        "y": 230
       },
-      "data": {}
+      "data": {
+        "imports": "from sklearn.metrics import classification_report",
+        "code": "print(f\"Classification Report for {str(type(model).__name__)}\")\nprint(classification_report(y_test, y_pred))"
+      }
     }
   ],
   "edges": [
     {
-      "id": "reactflow__edge-698.0916373233234-225.82424697648062",
-      "source": "698.0916373233234",
-      "target": "225.82424697648062"
+      "id": "reactflow__edge-46.00427077559244-676.0712994972439",
+      "source": "46.00427077559244",
+      "target": "676.0712994972439"
     },
     {
-      "id": "reactflow__edge-225.82424697648062-150.38913557819146",
-      "source": "225.82424697648062",
-      "target": "150.38913557819146"
+      "id": "reactflow__edge-676.0712994972439-881.2069032637195",
+      "source": "676.0712994972439",
+      "target": "881.2069032637195"
     },
     {
-      "id": "reactflow__edge-150.38913557819146-286.654751198983",
-      "source": "150.38913557819146",
-      "target": "286.654751198983"
+      "id": "reactflow__edge-881.2069032637195-721.2198917481994",
+      "source": "881.2069032637195",
+      "target": "721.2198917481994"
     },
     {
-      "id": "reactflow__edge-286.654751198983-629.3124919893363",
-      "source": "286.654751198983",
-      "target": "629.3124919893363"
+      "id": "reactflow__edge-881.2069032637195-637.5465365145498",
+      "source": "881.2069032637195",
+      "target": "637.5465365145498"
     },
     {
-      "id": "reactflow__edge-286.654751198983-805.2556693399098",
-      "source": "286.654751198983",
-      "target": "805.2556693399098"
+      "id": "reactflow__edge-881.2069032637195-454.89316428585715",
+      "source": "881.2069032637195",
+      "target": "454.89316428585715"
     },
     {
-      "id": "reactflow__edge-629.3124919893363-914.4378062833578",
-      "source": "629.3124919893363",
-      "target": "914.4378062833578"
+      "id": "reactflow__edge-881.2069032637195-573.4163846625372",
+      "source": "881.2069032637195",
+      "target": "573.4163846625372"
     },
     {
-      "id": "reactflow__edge-805.2556693399098-489.00902227953424",
-      "source": "805.2556693399098",
-      "target": "489.00902227953424"
+      "id": "reactflow__edge-721.2198917481994-768.2732502389016",
+      "source": "721.2198917481994",
+      "target": "768.2732502389016"
     },
     {
-      "id": "reactflow__edge-914.4378062833578-383.5556456030036",
-      "source": "914.4378062833578",
-      "target": "383.5556456030036"
+      "id": "reactflow__edge-637.5465365145498-768.2732502389016",
+      "source": "637.5465365145498",
+      "target": "768.2732502389016"
     },
     {
-      "id": "reactflow__edge-489.00902227953424-383.5556456030036",
-      "source": "489.00902227953424",
-      "target": "383.5556456030036"
+      "id": "reactflow__edge-454.89316428585715-768.2732502389016",
+      "source": "454.89316428585715",
+      "target": "768.2732502389016"
+    },
+    {
+      "id": "reactflow__edge-573.4163846625372-768.2732502389016",
+      "source": "573.4163846625372",
+      "target": "768.2732502389016"
+    },
+    {
+      "id": "reactflow__edge-768.2732502389016-251.7607314906334",
+      "source": "768.2732502389016",
+      "target": "251.7607314906334"
     }
   ],
   "flowOrder": [
     {
-      "id": "698.0916373233234",
+      "id": "46.00427077559244",
       "type": "DataInput",
       "data": {
-        "fileName": "iris.csv",
-        "filePath": "C:\\fakepath\\iris.csv",
-        "fileContent": "sepal.length,sepal.width,petal.length,petal.width,variety\r\n5.1,3.5,1.4,.2,Setosa\r\n4.9,3,1.4,.2,Setosa\r\n4.7,3.2,1.3,.2,Setosa\r\n4.6,3.1,1.5,.2,Setosa\r\n5,3.6,1.4,.2,Setosa\r\n5.4,3.9,1.7,.4,Setosa\r\n4.6,3.4,1.4,.3,Setosa\r\n5,3.4,1.5,.2,Setosa\r\n4.4,2.9,1.4,.2,Setosa\r\n4.9,3.1,1.5,.1,Setosa\r\n5.4,3.7,1.5,.2,Setosa\r\n4.8,3.4,1.6,.2,Setosa\r\n4.8,3,1.4,.1,Setosa\r\n4.3,3,1.1,.1,Setosa\r\n5.8,4,1.2,.2,Setosa\r\n5.7,4.4,1.5,.4,Setosa\r\n5.4,3.9,1.3,.4,Setosa\r\n5.1,3.5,1.4,.3,Setosa\r\n5.7,3.8,1.7,.3,Setosa\r\n5.1,3.8,1.5,.3,Setosa\r\n5.4,3.4,1.7,.2,Setosa\r\n5.1,3.7,1.5,.4,Setosa\r\n4.6,3.6,1,.2,Setosa\r\n5.1,3.3,1.7,.5,Setosa\r\n4.8,3.4,1.9,.2,Setosa\r\n5,3,1.6,.2,Setosa\r\n5,3.4,1.6,.4,Setosa\r\n5.2,3.5,1.5,.2,Setosa\r\n5.2,3.4,1.4,.2,Setosa\r\n4.7,3.2,1.6,.2,Setosa\r\n4.8,3.1,1.6,.2,Setosa\r\n5.4,3.4,1.5,.4,Setosa\r\n5.2,4.1,1.5,.1,Setosa\r\n5.5,4.2,1.4,.2,Setosa\r\n4.9,3.1,1.5,.2,Setosa\r\n5,3.2,1.2,.2,Setosa\r\n5.5,3.5,1.3,.2,Setosa\r\n4.9,3.6,1.4,.1,Setosa\r\n4.4,3,1.3,.2,Setosa\r\n5.1,3.4,1.5,.2,Setosa\r\n5,3.5,1.3,.3,Setosa\r\n4.5,2.3,1.3,.3,Setosa\r\n4.4,3.2,1.3,.2,Setosa\r\n5,3.5,1.6,.6,Setosa\r\n5.1,3.8,1.9,.4,Setosa\r\n4.8,3,1.4,.3,Setosa\r\n5.1,3.8,1.6,.2,Setosa\r\n4.6,3.2,1.4,.2,Setosa\r\n5.3,3.7,1.5,.2,Setosa\r\n5,3.3,1.4,.2,Setosa\r\n7,3.2,4.7,1.4,Versicolor\r\n6.4,3.2,4.5,1.5,Versicolor\r\n6.9,3.1,4.9,1.5,Versicolor\r\n5.5,2.3,4,1.3,Versicolor\r\n6.5,2.8,4.6,1.5,Versicolor\r\n5.7,2.8,4.5,1.3,Versicolor\r\n6.3,3.3,4.7,1.6,Versicolor\r\n4.9,2.4,3.3,1,Versicolor\r\n6.6,2.9,4.6,1.3,Versicolor\r\n5.2,2.7,3.9,1.4,Versicolor\r\n5,2,3.5,1,Versicolor\r\n5.9,3,4.2,1.5,Versicolor\r\n6,2.2,4,1,Versicolor\r\n6.1,2.9,4.7,1.4,Versicolor\r\n5.6,2.9,3.6,1.3,Versicolor\r\n6.7,3.1,4.4,1.4,Versicolor\r\n5.6,3,4.5,1.5,Versicolor\r\n5.8,2.7,4.1,1,Versicolor\r\n6.2,2.2,4.5,1.5,Versicolor\r\n5.6,2.5,3.9,1.1,Versicolor\r\n5.9,3.2,4.8,1.8,Versicolor\r\n6.1,2.8,4,1.3,Versicolor\r\n6.3,2.5,4.9,1.5,Versicolor\r\n6.1,2.8,4.7,1.2,Versicolor\r\n6.4,2.9,4.3,1.3,Versicolor\r\n6.6,3,4.4,1.4,Versicolor\r\n6.8,2.8,4.8,1.4,Versicolor\r\n6.7,3,5,1.7,Versicolor\r\n6,2.9,4.5,1.5,Versicolor\r\n5.7,2.6,3.5,1,Versicolor\r\n5.5,2.4,3.8,1.1,Versicolor\r\n5.5,2.4,3.7,1,Versicolor\r\n5.8,2.7,3.9,1.2,Versicolor\r\n6,2.7,5.1,1.6,Versicolor\r\n5.4,3,4.5,1.5,Versicolor\r\n6,3.4,4.5,1.6,Versicolor\r\n6.7,3.1,4.7,1.5,Versicolor\r\n6.3,2.3,4.4,1.3,Versicolor\r\n5.6,3,4.1,1.3,Versicolor\r\n5.5,2.5,4,1.3,Versicolor\r\n5.5,2.6,4.4,1.2,Versicolor\r\n6.1,3,4.6,1.4,Versicolor\r\n5.8,2.6,4,1.2,Versicolor\r\n5,2.3,3.3,1,Versicolor\r\n5.6,2.7,4.2,1.3,Versicolor\r\n5.7,3,4.2,1.2,Versicolor\r\n5.7,2.9,4.2,1.3,Versicolor\r\n6.2,2.9,4.3,1.3,Versicolor\r\n5.1,2.5,3,1.1,Versicolor\r\n5.7,2.8,4.1,1.3,Versicolor\r\n6.3,3.3,6,2.5,Virginica\r\n5.8,2.7,5.1,1.9,Virginica\r\n7.1,3,5.9,2.1,Virginica\r\n6.3,2.9,5.6,1.8,Virginica\r\n6.5,3,5.8,2.2,Virginica\r\n7.6,3,6.6,2.1,Virginica\r\n4.9,2.5,4.5,1.7,Virginica\r\n7.3,2.9,6.3,1.8,Virginica\r\n6.7,2.5,5.8,1.8,Virginica\r\n7.2,3.6,6.1,2.5,Virginica\r\n6.5,3.2,5.1,2,Virginica\r\n6.4,2.7,5.3,1.9,Virginica\r\n6.8,3,5.5,2.1,Virginica\r\n5.7,2.5,5,2,Virginica\r\n5.8,2.8,5.1,2.4,Virginica\r\n6.4,3.2,5.3,2.3,Virginica\r\n6.5,3,5.5,1.8,Virginica\r\n7.7,3.8,6.7,2.2,Virginica\r\n7.7,2.6,6.9,2.3,Virginica\r\n6,2.2,5,1.5,Virginica\r\n6.9,3.2,5.7,2.3,Virginica\r\n5.6,2.8,4.9,2,Virginica\r\n7.7,2.8,6.7,2,Virginica\r\n6.3,2.7,4.9,1.8,Virginica\r\n6.7,3.3,5.7,2.1,Virginica\r\n7.2,3.2,6,1.8,Virginica\r\n6.2,2.8,4.8,1.8,Virginica\r\n6.1,3,4.9,1.8,Virginica\r\n6.4,2.8,5.6,2.1,Virginica\r\n7.2,3,5.8,1.6,Virginica\r\n7.4,2.8,6.1,1.9,Virginica\r\n7.9,3.8,6.4,2,Virginica\r\n6.4,2.8,5.6,2.2,Virginica\r\n6.3,2.8,5.1,1.5,Virginica\r\n6.1,2.6,5.6,1.4,Virginica\r\n7.7,3,6.1,2.3,Virginica\r\n6.3,3.4,5.6,2.4,Virginica\r\n6.4,3.1,5.5,1.8,Virginica\r\n6,3,4.8,1.8,Virginica\r\n6.9,3.1,5.4,2.1,Virginica\r\n6.7,3.1,5.6,2.4,Virginica\r\n6.9,3.1,5.1,2.3,Virginica\r\n5.8,2.7,5.1,1.9,Virginica\r\n6.8,3.2,5.9,2.3,Virginica\r\n6.7,3.3,5.7,2.5,Virginica\r\n6.7,3,5.2,2.3,Virginica\r\n6.3,2.5,5,1.9,Virginica\r\n6.5,3,5.2,2,Virginica\r\n6.2,3.4,5.4,2.3,Virginica\r\n5.9,3,5.1,1.8,Virginica",
         "fileType": "CSV",
         "seperator": ",",
-        "targetColumn": "variety"
+        "fileName": "iris.csv",
+        "fileContent": "sepal.length,sepal.width,petal.length,petal.width,variety\r\n5.1,3.5,1.4,.2,Setosa\r\n4.9,3,1.4,.2,Setosa\r\n4.7,3.2,1.3,.2,Setosa\r\n4.6,3.1,1.5,.2,Setosa\r\n5,3.6,1.4,.2,Setosa\r\n5.4,3.9,1.7,.4,Setosa\r\n4.6,3.4,1.4,.3,Setosa\r\n5,3.4,1.5,.2,Setosa\r\n4.4,2.9,1.4,.2,Setosa\r\n4.9,3.1,1.5,.1,Setosa\r\n5.4,3.7,1.5,.2,Setosa\r\n4.8,3.4,1.6,.2,Setosa\r\n4.8,3,1.4,.1,Setosa\r\n4.3,3,1.1,.1,Setosa\r\n5.8,4,1.2,.2,Setosa\r\n5.7,4.4,1.5,.4,Setosa\r\n5.4,3.9,1.3,.4,Setosa\r\n5.1,3.5,1.4,.3,Setosa\r\n5.7,3.8,1.7,.3,Setosa\r\n5.1,3.8,1.5,.3,Setosa\r\n5.4,3.4,1.7,.2,Setosa\r\n5.1,3.7,1.5,.4,Setosa\r\n4.6,3.6,1,.2,Setosa\r\n5.1,3.3,1.7,.5,Setosa\r\n4.8,3.4,1.9,.2,Setosa\r\n5,3,1.6,.2,Setosa\r\n5,3.4,1.6,.4,Setosa\r\n5.2,3.5,1.5,.2,Setosa\r\n5.2,3.4,1.4,.2,Setosa\r\n4.7,3.2,1.6,.2,Setosa\r\n4.8,3.1,1.6,.2,Setosa\r\n5.4,3.4,1.5,.4,Setosa\r\n5.2,4.1,1.5,.1,Setosa\r\n5.5,4.2,1.4,.2,Setosa\r\n4.9,3.1,1.5,.2,Setosa\r\n5,3.2,1.2,.2,Setosa\r\n5.5,3.5,1.3,.2,Setosa\r\n4.9,3.6,1.4,.1,Setosa\r\n4.4,3,1.3,.2,Setosa\r\n5.1,3.4,1.5,.2,Setosa\r\n5,3.5,1.3,.3,Setosa\r\n4.5,2.3,1.3,.3,Setosa\r\n4.4,3.2,1.3,.2,Setosa\r\n5,3.5,1.6,.6,Setosa\r\n5.1,3.8,1.9,.4,Setosa\r\n4.8,3,1.4,.3,Setosa\r\n5.1,3.8,1.6,.2,Setosa\r\n4.6,3.2,1.4,.2,Setosa\r\n5.3,3.7,1.5,.2,Setosa\r\n5,3.3,1.4,.2,Setosa\r\n7,3.2,4.7,1.4,Versicolor\r\n6.4,3.2,4.5,1.5,Versicolor\r\n6.9,3.1,4.9,1.5,Versicolor\r\n5.5,2.3,4,1.3,Versicolor\r\n6.5,2.8,4.6,1.5,Versicolor\r\n5.7,2.8,4.5,1.3,Versicolor\r\n6.3,3.3,4.7,1.6,Versicolor\r\n4.9,2.4,3.3,1,Versicolor\r\n6.6,2.9,4.6,1.3,Versicolor\r\n5.2,2.7,3.9,1.4,Versicolor\r\n5,2,3.5,1,Versicolor\r\n5.9,3,4.2,1.5,Versicolor\r\n6,2.2,4,1,Versicolor\r\n6.1,2.9,4.7,1.4,Versicolor\r\n5.6,2.9,3.6,1.3,Versicolor\r\n6.7,3.1,4.4,1.4,Versicolor\r\n5.6,3,4.5,1.5,Versicolor\r\n5.8,2.7,4.1,1,Versicolor\r\n6.2,2.2,4.5,1.5,Versicolor\r\n5.6,2.5,3.9,1.1,Versicolor\r\n5.9,3.2,4.8,1.8,Versicolor\r\n6.1,2.8,4,1.3,Versicolor\r\n6.3,2.5,4.9,1.5,Versicolor\r\n6.1,2.8,4.7,1.2,Versicolor\r\n6.4,2.9,4.3,1.3,Versicolor\r\n6.6,3,4.4,1.4,Versicolor\r\n6.8,2.8,4.8,1.4,Versicolor\r\n6.7,3,5,1.7,Versicolor\r\n6,2.9,4.5,1.5,Versicolor\r\n5.7,2.6,3.5,1,Versicolor\r\n5.5,2.4,3.8,1.1,Versicolor\r\n5.5,2.4,3.7,1,Versicolor\r\n5.8,2.7,3.9,1.2,Versicolor\r\n6,2.7,5.1,1.6,Versicolor\r\n5.4,3,4.5,1.5,Versicolor\r\n6,3.4,4.5,1.6,Versicolor\r\n6.7,3.1,4.7,1.5,Versicolor\r\n6.3,2.3,4.4,1.3,Versicolor\r\n5.6,3,4.1,1.3,Versicolor\r\n5.5,2.5,4,1.3,Versicolor\r\n5.5,2.6,4.4,1.2,Versicolor\r\n6.1,3,4.6,1.4,Versicolor\r\n5.8,2.6,4,1.2,Versicolor\r\n5,2.3,3.3,1,Versicolor\r\n5.6,2.7,4.2,1.3,Versicolor\r\n5.7,3,4.2,1.2,Versicolor\r\n5.7,2.9,4.2,1.3,Versicolor\r\n6.2,2.9,4.3,1.3,Versicolor\r\n5.1,2.5,3,1.1,Versicolor\r\n5.7,2.8,4.1,1.3,Versicolor\r\n6.3,3.3,6,2.5,Virginica\r\n5.8,2.7,5.1,1.9,Virginica\r\n7.1,3,5.9,2.1,Virginica\r\n6.3,2.9,5.6,1.8,Virginica\r\n6.5,3,5.8,2.2,Virginica\r\n7.6,3,6.6,2.1,Virginica\r\n4.9,2.5,4.5,1.7,Virginica\r\n7.3,2.9,6.3,1.8,Virginica\r\n6.7,2.5,5.8,1.8,Virginica\r\n7.2,3.6,6.1,2.5,Virginica\r\n6.5,3.2,5.1,2,Virginica\r\n6.4,2.7,5.3,1.9,Virginica\r\n6.8,3,5.5,2.1,Virginica\r\n5.7,2.5,5,2,Virginica\r\n5.8,2.8,5.1,2.4,Virginica\r\n6.4,3.2,5.3,2.3,Virginica\r\n6.5,3,5.5,1.8,Virginica\r\n7.7,3.8,6.7,2.2,Virginica\r\n7.7,2.6,6.9,2.3,Virginica\r\n6,2.2,5,1.5,Virginica\r\n6.9,3.2,5.7,2.3,Virginica\r\n5.6,2.8,4.9,2,Virginica\r\n7.7,2.8,6.7,2,Virginica\r\n6.3,2.7,4.9,1.8,Virginica\r\n6.7,3.3,5.7,2.1,Virginica\r\n7.2,3.2,6,1.8,Virginica\r\n6.2,2.8,4.8,1.8,Virginica\r\n6.1,3,4.9,1.8,Virginica\r\n6.4,2.8,5.6,2.1,Virginica\r\n7.2,3,5.8,1.6,Virginica\r\n7.4,2.8,6.1,1.9,Virginica\r\n7.9,3.8,6.4,2,Virginica\r\n6.4,2.8,5.6,2.2,Virginica\r\n6.3,2.8,5.1,1.5,Virginica\r\n6.1,2.6,5.6,1.4,Virginica\r\n7.7,3,6.1,2.3,Virginica\r\n6.3,3.4,5.6,2.4,Virginica\r\n6.4,3.1,5.5,1.8,Virginica\r\n6,3,4.8,1.8,Virginica\r\n6.9,3.1,5.4,2.1,Virginica\r\n6.7,3.1,5.6,2.4,Virginica\r\n6.9,3.1,5.1,2.3,Virginica\r\n5.8,2.7,5.1,1.9,Virginica\r\n6.8,3.2,5.9,2.3,Virginica\r\n6.7,3.3,5.7,2.5,Virginica\r\n6.7,3,5.2,2.3,Virginica\r\n6.3,2.5,5,1.9,Virginica\r\n6.5,3,5.2,2,Virginica\r\n6.2,3.4,5.4,2.3,Virginica\r\n5.9,3,5.1,1.8,Virginica",
+        "targetColumn": "variety",
+        "code": "target_column = 'variety'\ndf = pd.read_csv(\"iris.csv\", sep=\",\")\nX = df.drop(columns=[target_column])\ny = df[target_column]",
+        "imports": "import pandas as pd",
+        "filePath": "C:\\fakepath\\iris.csv"
       },
       "position": {
-        "x": 0,
+        "x": 200,
         "y": 200
       },
       "width": 301,
-      "height": 248,
+      "height": 216,
       "selected": false,
-      "positionAbsolute": {
-        "x": 0,
-        "y": 200
-      },
       "dragging": false
     },
     {
-      "id": "225.82424697648062",
-      "type": "RandomSeed",
+      "id": "676.0712994972439",
+      "type": "KNNImputer",
       "data": {
-        "seed": 12
+        "n_neighbors": 5,
+        "weights": "uniform",
+        "metric": "nan_euclidean",
+        "code": "imputer = KNNImputer(n_neighbors = 5, weights = 'uniform', metric = 'nan_euclidean')  \nX_train = imputer.fit_transform(X_train)\nX_test = imputer.transform(X_test)",
+        "imports": "from sklearn.impute import KNNImputer"
       },
       "position": {
-        "x": 80,
-        "y": 460
-      },
-      "width": 221,
-      "height": 67,
-      "selected": false,
-      "positionAbsolute": {
-        "x": 80,
-        "y": 460
-      },
-      "dragging": false
-    },
-    {
-      "id": "150.38913557819146",
-      "type": "RemoveNa",
-      "data": {},
-      "position": {
-        "x": 180,
-        "y": 550
-      },
-      "width": 116,
-      "height": 46,
-      "selected": false,
-      "positionAbsolute": {
-        "x": 180,
-        "y": 550
-      },
-      "dragging": false
-    },
-    {
-      "id": "286.654751198983",
-      "type": "TrainTestSplit",
-      "data": {
-        "splitRatio": 0.8,
-        "randomState": 42,
-        "stratify": true,
-        "shuffle": true
-      },
-      "position": {
-        "x": 380,
+        "x": 550,
         "y": 210
       },
-      "width": 264,
+      "width": 291,
       "height": 151,
       "selected": false,
       "positionAbsolute": {
-        "x": 380,
+        "x": 550,
+        "y": 210
+      },
+      "dragging": false
+    },
+    {
+      "id": "881.2069032637195",
+      "type": "TrainTestSplit",
+      "data": {
+        "splitRatio": 0.8,
+        "stratify": false,
+        "shuffle": true,
+        "code": "X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)",
+        "imports": "from sklearn.model_selection import train_test_split"
+      },
+      "position": {
+        "x": 910,
+        "y": 210
+      },
+      "width": 443,
+      "height": 151,
+      "selected": false,
+      "positionAbsolute": {
+        "x": 910,
         "y": 210
       },
       "dragging": false
@@ -253,27 +268,126 @@
     [
       [
         {
-          "id": "629.3124919893363",
-          "type": "StandardScaler",
+          "id": "721.2198917481994",
+          "type": "KnnClassifier",
           "data": {
-            "withMean": true,
-            "withStd": true
+            "n_neighbors": 5,
+            "algorithm": "auto",
+            "leaf_size": 30,
+            "metric": "minkowski",
+            "code": "model = KNeighborsClassifier(n_neighbors=5)",
+            "imports": "from sklearn.neighbors import KNeighborsClassifier"
           },
           "position": {
-            "x": 740,
-            "y": 180
+            "x": 1480,
+            "y": -120
           },
-          "width": 262,
-          "height": 88,
+          "width": 291,
+          "height": 172,
           "selected": false,
           "positionAbsolute": {
-            "x": 740,
-            "y": 180
+            "x": 1480,
+            "y": -120
           },
           "dragging": false
         },
         {
-          "id": "914.4378062833578",
+          "id": "768.2732502389016",
+          "type": "TrainModel",
+          "data": {
+            "code": "model.fit(X_train, y_train)\ny_pred = model.predict(X_test)"
+          },
+          "position": {
+            "x": 1990,
+            "y": 230
+          },
+          "width": 131,
+          "height": 46,
+          "selected": false,
+          "positionAbsolute": {
+            "x": 1990,
+            "y": 230
+          },
+          "dragging": false
+        },
+        {
+          "id": "251.7607314906334",
+          "type": "ClassificationReport",
+          "data": {
+            "imports": "from sklearn.metrics import classification_report",
+            "code": "print(f\"Classification Report for {str(type(model).__name__)}\")\nprint(classification_report(y_test, y_pred))"
+          },
+          "position": {
+            "x": 2190,
+            "y": 230
+          },
+          "width": 191,
+          "height": 46
+        }
+      ],
+      [
+        {
+          "id": "637.5465365145498",
+          "type": "DecisionTree",
+          "data": {
+            "criterion": "gini",
+            "splitter": "best",
+            "max_depth": 12,
+            "min_samples_split": 2,
+            "min_samples_leaf": 1,
+            "imports": "from sklearn.tree import DecisionTreeClassifier",
+            "code": "model = DecisionTreeClassifier(criterion = 'gini',\n        splitter = 'best',\n        max_depth = 12,\n        min_samples_split = 2,\n        min_samples_leaf = 1)"
+          },
+          "position": {
+            "x": 1470,
+            "y": 80
+          },
+          "width": 261,
+          "height": 193,
+          "selected": false,
+          "positionAbsolute": {
+            "x": 1470,
+            "y": 80
+          },
+          "dragging": false
+        },
+        {
+          "id": "768.2732502389016",
+          "type": "TrainModel",
+          "data": {
+            "code": "model.fit(X_train, y_train)\ny_pred = model.predict(X_test)"
+          },
+          "position": {
+            "x": 1990,
+            "y": 230
+          },
+          "width": 131,
+          "height": 46,
+          "selected": false,
+          "positionAbsolute": {
+            "x": 1990,
+            "y": 230
+          },
+          "dragging": false
+        },
+        {
+          "id": "251.7607314906334",
+          "type": "ClassificationReport",
+          "data": {
+            "imports": "from sklearn.metrics import classification_report",
+            "code": "print(f\"Classification Report for {str(type(model).__name__)}\")\nprint(classification_report(y_test, y_pred))"
+          },
+          "position": {
+            "x": 2190,
+            "y": 230
+          },
+          "width": 191,
+          "height": 46
+        }
+      ],
+      [
+        {
+          "id": "454.89316428585715",
           "type": "RandomForest",
           "data": {
             "n_estimators": 100,
@@ -281,104 +395,116 @@
             "min_samples_split": 2,
             "min_samples_leaf": 1,
             "criterion": "gini",
-            "bootstrap": true
+            "bootstrap": "True",
+            "imports": "from sklearn.ensemble import RandomForestClassifier",
+            "code": "model = RandomForestClassifier(n_estimators = 100,\n                                    criterion = 'gini',\n                                    max_depth = 12,\n                                    min_samples_split = 2,\n                                    min_samples_leaf = 1,\n                                    bootstrap = True,\n                                    random_state = RANDOM_SEED)"
           },
           "position": {
-            "x": 1060,
-            "y": 80
+            "x": 1470,
+            "y": 300
           },
           "width": 261,
           "height": 193,
-          "selected": true,
+          "selected": false,
           "positionAbsolute": {
-            "x": 1060,
-            "y": 80
+            "x": 1470,
+            "y": 300
           },
           "dragging": false
         },
         {
-          "id": "383.5556456030036",
-          "type": "ClassificationReport",
-          "data": {},
-          "position": {
-            "x": 1450,
-            "y": 250
+          "id": "768.2732502389016",
+          "type": "TrainModel",
+          "data": {
+            "code": "model.fit(X_train, y_train)\ny_pred = model.predict(X_test)"
           },
-          "width": 191,
+          "position": {
+            "x": 1990,
+            "y": 230
+          },
+          "width": 131,
           "height": 46,
           "selected": false,
           "positionAbsolute": {
-            "x": 1450,
-            "y": 250
+            "x": 1990,
+            "y": 230
           },
           "dragging": false
+        },
+        {
+          "id": "251.7607314906334",
+          "type": "ClassificationReport",
+          "data": {
+            "imports": "from sklearn.metrics import classification_report",
+            "code": "print(f\"Classification Report for {str(type(model).__name__)}\")\nprint(classification_report(y_test, y_pred))"
+          },
+          "position": {
+            "x": 2190,
+            "y": 230
+          },
+          "width": 191,
+          "height": 46
         }
       ],
       [
         {
-          "id": "805.2556693399098",
-          "type": "RobustScaler",
+          "id": "573.4163846625372",
+          "type": "LinearSVC",
           "data": {
-            "withCentering": true,
-            "withScaling": true,
-            "quantileRange": [
-              25,
-              75
-            ],
-            "unitVariance": false
+            "C": 1,
+            "max_iter": 1000,
+            "tol": 0.0001,
+            "dual": true,
+            "loss": "squared_hinge",
+            "penalty": "l2",
+            "imports": "from sklearn.svm import LinearSVC",
+            "code": "model = LinearSVC(C = 1.0, max_iter = 1000,\n    tol = 0.0001, dual = True, loss = 'squared_hinge', penalty = 'l2')"
           },
           "position": {
-            "x": 740,
-            "y": 310
+            "x": 1480,
+            "y": 520
           },
-          "width": 218,
-          "height": 151,
+          "width": 260,
+          "height": 214,
           "selected": false,
           "positionAbsolute": {
-            "x": 740,
-            "y": 310
+            "x": 1480,
+            "y": 520
           },
           "dragging": false
         },
         {
-          "id": "489.00902227953424",
-          "type": "DecisionTree",
+          "id": "768.2732502389016",
+          "type": "TrainModel",
           "data": {
-            "criterion": "gini",
-            "splitter": "best",
-            "max_depth": null,
-            "min_samples_split": 2,
-            "min_samples_leaf": 1
+            "code": "model.fit(X_train, y_train)\ny_pred = model.predict(X_test)"
           },
           "position": {
-            "x": 1060,
-            "y": 320
+            "x": 1990,
+            "y": 230
           },
-          "width": 261,
-          "height": 193,
-          "selected": false,
-          "positionAbsolute": {
-            "x": 1060,
-            "y": 320
-          },
-          "dragging": false
-        },
-        {
-          "id": "383.5556456030036",
-          "type": "ClassificationReport",
-          "data": {},
-          "position": {
-            "x": 1450,
-            "y": 250
-          },
-          "width": 191,
+          "width": 131,
           "height": 46,
           "selected": false,
           "positionAbsolute": {
-            "x": 1450,
-            "y": 250
+            "x": 1990,
+            "y": 230
           },
           "dragging": false
+        },
+        {
+          "id": "251.7607314906334",
+          "type": "ClassificationReport",
+          "data": {
+            "imports": "from sklearn.metrics import classification_report",
+            "code": "print(f\"Classification Report for {str(type(model).__name__)}\")\nprint(classification_report(y_test, y_pred))"
+          },
+          "position": {
+            "x": 2190,
+            "y": 230
+          },
+          "width": 191,
+          "height": 46
         }
       ]
     ]

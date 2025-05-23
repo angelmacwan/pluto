@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState, useMemo } from 'react';
 import ReactFlow, {
   Controls,
   Background,
@@ -116,54 +116,8 @@ const MainApp = () => {
   );
 
 
-  // Handle node state updates
-  const updateNodeState = useCallback((nodeId, newData) => {
-    // Also update the node's data in the nodes array
-    setNodes(nds =>
-      nds.map(node => {
-        if (node.id === nodeId) {
-          return {
-            ...node,
-            data: { ...node.data, ...newData }
-          };
-        }
-        return node;
-      })
-    );
-  }, [setNodes]);
-
-  const onSelectionChange = useCallback(
-    ({ nodes, edges }) => {
-      setSelectedNodes(nodes);
-      setSelectedEdges(edges);
-    },
-    []
-  );
-
-  useEffect(() => {
-    const handleKeyDown = (event) => {
-      if (event.key === 'Delete') {
-        if (selectedEdges.length > 0) {
-          const selectedEdgeIds = selectedEdges.map(edge => edge.id);
-          setEdges(edges => edges.filter(edge => !selectedEdgeIds.includes(edge.id)));
-        }
-
-        if (selectedNodes.length > 0) {
-          const selectedNodeIds = selectedNodes.map(node => node.id);
-          setNodes(nodes => nodes.filter(node => !selectedNodeIds.includes(node.id)));
-          setEdges(edges => edges.filter(edge =>
-            !selectedNodeIds.includes(edge.source) &&
-            !selectedNodeIds.includes(edge.target)
-          ));
-        }
-      }
-    };
-    document.addEventListener('keydown', handleKeyDown);
-    return () => document.removeEventListener('keydown', handleKeyDown);
-  }, [selectedEdges, selectedNodes, setEdges, setNodes]);
-
-
-  const getFlowOrder = () => {
+  // Memoize getFlowOrder to prevent unnecessary recalculations
+  const getFlowOrder = useCallback(() => {
     // Data structures for graph representation
     const graph = new Map();
     const inDegree = new Map();
@@ -213,13 +167,65 @@ const MainApp = () => {
       .map(([id]) => id);
 
     // Process each root and combine results
-    const result = roots
+    return roots
       .map(rootId => findPaths(rootId))
       .filter(Boolean)
       .flat();
+  }, [nodes, edges]);
 
-    return result;
-  };
+  // Update node state with proper dependencies
+  const updateNodeState = useCallback((nodeId, newData) => {
+    setNodes(nds =>
+      nds.map(node => {
+        if (node.id === nodeId) {
+          return {
+            ...node,
+            data: { ...node.data, ...newData }
+          };
+        }
+        return node;
+      })
+    );
+  }, [setNodes]);
+
+  // Update selection change with proper dependencies
+  const onSelectionChange = useCallback(
+    ({ nodes, edges }) => {
+      setSelectedNodes(nodes);
+      setSelectedEdges(edges);
+    },
+    [setSelectedNodes, setSelectedEdges]
+  );
+
+  // Memoize filtered node types for search
+  const filteredNodeTypes = useMemo(() => {
+    return Object.keys(nodeTypes).filter(nodeType => 
+      !searchTerm || nodeType.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+  }, [searchTerm]);
+
+  useEffect(() => {
+    const handleKeyDown = (event) => {
+      if (event.key === 'Delete') {
+        if (selectedEdges.length > 0) {
+          const selectedEdgeIds = selectedEdges.map(edge => edge.id);
+          setEdges(edges => edges.filter(edge => !selectedEdgeIds.includes(edge.id)));
+        }
+
+        if (selectedNodes.length > 0) {
+          const selectedNodeIds = selectedNodes.map(node => node.id);
+          setNodes(nodes => nodes.filter(node => !selectedNodeIds.includes(node.id)));
+          setEdges(edges => edges.filter(edge =>
+            !selectedNodeIds.includes(edge.source) &&
+            !selectedNodeIds.includes(edge.target)
+          ));
+        }
+      }
+    };
+    document.addEventListener('keydown', handleKeyDown);
+    return () => document.removeEventListener('keydown', handleKeyDown);
+  }, [selectedEdges, selectedNodes, setEdges, setNodes]);
+
 
   const addNewNode = (nodeType) => {
     const id = (Math.random() * 1000).toString();
@@ -248,13 +254,25 @@ const MainApp = () => {
   const handleSave = () => {
     const flowOrder = getFlowOrder();
 
-    // save position and data of all nodes as json
-    const nodesData = nodes.map(node => ({
-      id: node.id,
-      type: node.type,
-      position: node.position,
-      data: node.data
-    }));
+    // save position and data of all nodes as json, excluding file content
+    const nodesData = nodes.map(node => {
+      const nodeData = {
+        id: node.id,
+        type: node.type,
+        position: node.position,
+        data: { ...node.data }
+      };
+      
+      // Remove large file content from saved data
+      if (nodeData.data.fileContent) {
+        delete nodeData.data.fileContent;
+      }
+      if (nodeData.data.filePath) {
+        delete nodeData.data.filePath;
+      }
+      
+      return nodeData;
+    });
 
     // save position and data of all edges as json
     const edgesData = edges.map(edge => ({
@@ -263,7 +281,7 @@ const MainApp = () => {
       target: edge.target,
       type: edge.type,
       data: edge.data
-    }))
+    }));
 
     const data = {
       nodes: nodesData,
@@ -271,15 +289,20 @@ const MainApp = () => {
       flowOrder
     };
 
-    const jsonData = JSON.stringify(data, null, 2);
-    const blob = new Blob([jsonData], { type: 'application/json' });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = 'flow.json';
-    link.click();
-
-    alert('Flow saved successfully!');
+    try {
+      const jsonData = JSON.stringify(data, null, 2);
+      const blob = new Blob([jsonData], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = 'flow.json';
+      link.click();
+      URL.revokeObjectURL(url);
+      alert('Flow saved successfully!');
+    } catch (error) {
+      console.error('Error saving flow:', error);
+      alert('Error saving flow. Please try again.');
+    }
   }
 
 
@@ -287,24 +310,81 @@ const MainApp = () => {
     const input = document.createElement('input');
     input.type = 'file';
     input.accept = '.json';
+    
+    const cleanup = () => {
+      input.remove();
+    };
+
     input.onchange = (e) => {
       const file = e.target.files[0];
+      if (!file) {
+        cleanup();
+        return;
+      }
+
+      // Check file size (limit to 10MB)
+      if (file.size > 10 * 1024 * 1024) {
+        alert('File size too large. Please select a file smaller than 10MB.');
+        cleanup();
+        return;
+      }
+
       const reader = new FileReader();
       reader.onload = (e) => {
-        const contents = e.target.result;
-        const data = JSON.parse(contents);
-        setNodes(data.nodes.map(node => ({
-          ...node,
-          position: node.position,
-          data: node.data
-        })))
-        setEdges(data.edges.map(edge => ({
-          ...edge,
-          data: edge.data
-        })))
-      }
+        try {
+          const contents = e.target.result;
+          const data = JSON.parse(contents);
+
+          // Validate the loaded data structure
+          if (!data.nodes || !Array.isArray(data.nodes) || !data.edges || !Array.isArray(data.edges)) {
+            throw new Error('Invalid flow file format');
+          }
+
+          // Validate node types
+          const invalidNodes = data.nodes.filter(node => !nodeTypes[node.type]);
+          if (invalidNodes.length > 0) {
+            throw new Error(`Invalid node types found: ${invalidNodes.map(n => n.type).join(', ')}`);
+          }
+
+          // Restore nodes with proper state
+          const restoredNodes = data.nodes.map(node => ({
+            ...node,
+            data: {
+              ...node.data,
+              updateNodeState: (newData) => updateNodeState(node.id, newData)
+            }
+          }));
+
+          // Restore edges
+          const restoredEdges = data.edges.map(edge => ({
+            ...edge,
+            data: edge.data || {}
+          }));
+
+          setNodes(restoredNodes);
+          setEdges(restoredEdges);
+
+          // If flow order exists, restore it
+          if (data.flowOrder) {
+            console.log('Flow order restored:', data.flowOrder);
+          }
+
+          alert('Flow loaded successfully!');
+        } catch (error) {
+          console.error('Error loading flow:', error);
+          alert(`Error loading flow file: ${error.message}`);
+        } finally {
+          cleanup();
+        }
+      };
+
+      reader.onerror = () => {
+        alert('Error reading file. Please try again.');
+        cleanup();
+      };
+
       reader.readAsText(file);
-    }
+    };
     input.click();
   }
 
@@ -368,18 +448,15 @@ const MainApp = () => {
           />
         </div>
 
-        {Object.keys(nodeTypes).map((nodeType) => {
-          if (searchTerm && !nodeType.toLowerCase().includes(searchTerm.toLowerCase())) {
-            return null;
-          }
-          return <button
+        {filteredNodeTypes.map((nodeType) => (
+          <button
             className={nodeTypeClass[nodeType]}
             key={nodeType}
             onClick={() => addNewNode(nodeType)}
           >
             {nodeType}
           </button>
-        })}
+        ))}
       </div>
 
       {/* INFO */}
