@@ -14,6 +14,7 @@ import Info from './Info';
 import CodeOutput from './CodeOutput';
 
 import DataInput from './nodes/DataInput';
+import ApiFetch from './nodes/ApiFetch';
 import TrainTestSplit from './nodes/TrainTestSplit';
 import StandardScaler from './nodes/StandardScaler';
 import RobustScaler from './nodes/RobustScaler';
@@ -25,14 +26,15 @@ import RandomForest from './nodes/RandomForest';
 import RandomSeed from './nodes/RandomSeed';
 import RemoveNa from './nodes/RemoveNa';
 import CustomCode from './nodes/CustomCode';
-import KNNImputer from './nodes/KNNImputer';
-import SimpleImputer from './nodes/SimpleImputer';
 import LinearSVC from './nodes/LinearSVC';
 import SVC from './nodes/SVC';
 import KfoldCV from './nodes/KfoldCV';
 import TrainModel from './nodes/TrainModel';
 import PCA from './nodes/PCA';
 import LableEncoder from './nodes/LableEncoder';
+import MissingValueImputer from './nodes/MissingValueImputer';
+import OneHotEncoder from './nodes/OneHotEncoder';
+import DuplicateRemover from './nodes/DuplicateRemover';
 
 
 
@@ -40,18 +42,20 @@ import LableEncoder from './nodes/LableEncoder';
 const nodeTypes = {
   // DATA LOADERS
   DataInput: DataInput,
+  ApiFetch: ApiFetch,
   RandomSeed: RandomSeed,
 
   // DATA PROCESSORS
   DropColumn: DropColumn,
   RemoveNa: RemoveNa,
-  KNNImputer: KNNImputer,
-  SimpleImputer: SimpleImputer,
+  MissingValueImputer: MissingValueImputer,
   TrainTestSplit: TrainTestSplit,
   StandardScaler: StandardScaler,
   RobustScaler: RobustScaler,
   PCA: PCA,
   LableEncoder: LableEncoder,
+  OneHotEncoder: OneHotEncoder,
+  DuplicateRemover: DuplicateRemover,
 
   // MODELS
   KnnClassifier: KnnClassifier,
@@ -75,25 +79,27 @@ const nodeTypes = {
 // Mappint of node type to its css class
 const nodeTypeClass = {
   DataInput: 'node-type-input',
-  TrainTestSplit: 'node-type-processor',
-  StandardScaler: 'node-type-processor',
-  RobustScaler: 'node-type-processor',
+  ApiFetch: 'node-type-input',
+  TrainTestSplit: 'node-type-data-processor',
+  StandardScaler: 'node-type-data-processor',
+  RobustScaler: 'node-type-data-processor',
   KnnClassifier: 'node-type-model',
   DecisionTree: 'node-type-model',
   ClassificationReport: 'node-type-output',
-  DropColumn: 'node-type-processor',
+  DropColumn: 'node-type-data-processor',
   RandomForest: 'node-type-model',
   RandomSeed: 'node-type-input',
   CustomCode: 'node-type-custom',
-  RemoveNa: 'node-type-processor',
-  KNNImputer: 'node-type-processor',
-  SimpleImputer: 'node-type-processor',
+  RemoveNa: 'node-type-data-processor',
+  MissingValueImputer: 'node-type-data-processor',
   LinearSVC: 'node-type-model',
   SVC: 'node-type-model',
   KfoldCV: 'node-type-cv',
   TrainModel: 'node-type-model',
   PCA: 'node-type-data-transform',
   LableEncoder: 'node-type-data-transform',
+  OneHotEncoder: 'node-type-data-transform',
+  DuplicateRemover: 'node-type-data-processor',
 };
 
 

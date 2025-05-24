@@ -7,10 +7,20 @@
 }
 
 input[type="number"],
-select {
+input[type="text"],
+select,
+textarea {
     border: none;
     background: white;
     width: 100%;
+    padding: 4px;
+    border-radius: 4px;
+    font-family: monospace;
+}
+
+textarea {
+    resize: vertical;
+    min-height: 60px;
 }
 
 .input-range-number {
@@ -72,4 +82,13 @@ select {
 
 .react-flow__handle-left {
     left: -8px;
+}
+
+.error-message {
+    color: #ff4444;
+    font-size: 0.8em;
+    margin-top: 4px;
+    padding: 4px;
+    background-color: rgba(255, 68, 68, 0.1);
+    border-radius: 4px;
 }

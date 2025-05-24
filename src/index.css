@@ -103,7 +103,7 @@ code {
   background: var(--node-data-color);
 }
 
-.SideBar>.node-type-processor {
+.SideBar>.node-type-data-processor {
   background: var(--node-processor-color);
 }
 
