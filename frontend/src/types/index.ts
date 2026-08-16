@@ -2,7 +2,7 @@ import type { Node, Edge } from '@xyflow/react';
 
 export type NodeCategory = 'primitive' | 'data' | 'ml' | 'dl' | 'agent' | 'eval' | 'math';
 
-export type HandleType = 'any' | 'dataframe' | 'model' | 'string' | 'number' | 'bool' | 'list' | 'dict' | 'image' | 'tensor';
+export type HandleType = 'flow' | 'any' | 'dataframe' | 'model' | 'string' | 'number' | 'bool' | 'list' | 'dict' | 'image' | 'tensor';
 
 export type NodeStatus = 'idle' | 'running' | 'done' | 'error';
 

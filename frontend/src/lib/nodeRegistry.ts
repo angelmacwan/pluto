@@ -38,7 +38,7 @@ export const nodeRegistry: Record<string, NodeTypeDefinition> = {
     type: 'print_debug', label: 'Print / Debug', category: 'primitive',
     description: 'Print a value to stdout',
     icon: 'Terminal',
-    inputs: [{ id: 'value', label: 'value', type: 'any' }],
+    inputs: [{ id: 'value', label: 'value', type: 'any', optional: true }],
     outputs: [],
     configSchema: [{ key: 'label', label: 'Label (optional)', type: 'string', default: '' }],
     defaultConfig: { label: '' },
@@ -51,7 +51,7 @@ export const nodeRegistry: Record<string, NodeTypeDefinition> = {
 
   if_condition: {
     type: 'if_condition', label: 'If / Compare', category: 'primitive',
-    description: 'Compare two values and expose the boolean result plus a filtered value for each branch',
+    description: 'Compare two values and route program execution through the true or false path',
     icon: 'GitBranch',
     inputs: [
       { id: 'value_a', label: 'value A', type: 'any' },
@@ -59,8 +59,8 @@ export const nodeRegistry: Record<string, NodeTypeDefinition> = {
     ],
     outputs: [
       { id: 'condition',    label: 'output', type: 'bool' },
-      { id: 'true_branch',  label: 'true',   type: 'any' },
-      { id: 'false_branch', label: 'false',  type: 'any' },
+      { id: 'true_branch',  label: 'true',   type: 'flow' },
+      { id: 'false_branch', label: 'false',  type: 'flow' },
     ],
     configSchema: [
       {
@@ -78,15 +78,7 @@ export const nodeRegistry: Record<string, NodeTypeDefinition> = {
       const b   = inputs['value_b']  || 'None';
       // 'not' is a unary operator — ignore value_b
       const cond = op === 'not' ? `not ${a}` : `${a} ${op} ${b}`;
-      return [
-        `${outputVar}_condition = ${cond}`,
-        `if ${outputVar}_condition:`,
-        `    ${outputVar}_true_branch = ${a}`,
-        `    ${outputVar}_false_branch = None`,
-        `else:`,
-        `    ${outputVar}_true_branch = None`,
-        `    ${outputVar}_false_branch = ${a}`,
-      ].join('\n');
+      return `${outputVar} = ${cond}`;
     },
     imports: [], pipPackages: [],
   },
@@ -1099,6 +1091,22 @@ export const nodeRegistry: Record<string, NodeTypeDefinition> = {
     imports: ['import pandas as pd'], pipPackages: ['pandas'],
   },
 };
+
+// Data links already establish ordering for most nodes. Only operations that
+// need to be conditionally triggered expose a flow input; If owns the branch
+// outputs rather than every node carrying a redundant flow-through output.
+const conditionalInputNodes = new Set([
+  'if_condition', 'print_debug', 'custom_python', 'file_read', 'file_write',
+  'import_lib', 'api_fetch', 'model_trainer', 'training_loop', 'model_save',
+  'model_load', 'model_infer', 'llm_call', 'memory_node', 'agent_loop',
+  'structured_output', 'classification_report', 'confusion_matrix', 'roc_auc',
+  'regression_metrics', 'plotly_chart', 'df_preview', 'agg_stat',
+]);
+Object.values(nodeRegistry).forEach(def => {
+  if (conditionalInputNodes.has(def.type)) {
+    def.inputs.unshift({ id: 'flow_in', label: '', type: 'flow', optional: true });
+  }
+});
 
 export const NODE_CATEGORIES: { id: NodeCategory; label: string; color: string }[] = [
   { id: 'primitive', label: 'Primitives', color: 'hsl(212, 100%, 60%)' },

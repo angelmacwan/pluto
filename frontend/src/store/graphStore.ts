@@ -197,7 +197,38 @@ export const useGraphStore = create<GraphStore>((set, get) => ({
   },
   
   loadGraph: (stateObj) => {
-    set({ nodes: stateObj.nodes, edges: stateObj.edges, history: [], historyIndex: -1 });
+    const hydratedNodes = stateObj.nodes.map(node => {
+      const def = nodeRegistry[node.type || ''];
+      if (!def) return node;
+      return {
+        ...node,
+        data: {
+          ...node.data,
+          category: def.category,
+          description: def.description,
+          inputs: def.inputs,
+          outputs: def.outputs,
+          configSchema: def.configSchema,
+          config: { ...def.defaultConfig, ...node.data.config },
+        },
+      };
+    });
+    const hydratedEdges = stateObj.edges
+      .filter(edge => edge.sourceHandle !== 'flow_out')
+      .map(edge => {
+      const source = hydratedNodes.find(node => node.id === edge.source);
+      // Earlier versions exposed If branches as data ports. Preserve existing
+      // graphs by turning those connections into their equivalent flow path.
+      if (
+        source?.type === 'if_condition' &&
+        (edge.sourceHandle === 'true_branch' || edge.sourceHandle === 'false_branch') &&
+        edge.targetHandle !== 'flow_in'
+      ) {
+        return { ...edge, targetHandle: 'flow_in' };
+      }
+        return edge;
+      });
+    set({ nodes: hydratedNodes, edges: hydratedEdges, history: [], historyIndex: -1 });
     get().saveHistory();
   },
   

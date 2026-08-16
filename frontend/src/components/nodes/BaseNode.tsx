@@ -86,12 +86,12 @@ export function BaseNode({ id, data }: { id: string; data: PlutoNodeData }) {
                   type="target"
                   position={Position.Left}
                   id={input.id}
-                  className="pluto-node__handle"
+                  className={`pluto-node__handle${input.type === 'flow' ? ' pluto-node__handle--flow' : ''}`}
                   style={{ background: `var(--handle-${input.type}, var(--handle-any))` }}
                 />
                 <span className="pluto-node__port-label pluto-node__port-label--left" title={input.label}>
                   {input.label}
-                  {input.optional && <span className="pluto-node__port-optional">?</span>}
+                  {input.label && input.optional && <span className="pluto-node__port-optional">?</span>}
                 </span>
               </div>
             ))}
@@ -107,7 +107,7 @@ export function BaseNode({ id, data }: { id: string; data: PlutoNodeData }) {
                   type="source"
                   position={Position.Right}
                   id={output.id}
-                  className="pluto-node__handle"
+                  className={`pluto-node__handle${output.type === 'flow' ? ' pluto-node__handle--flow' : ''}`}
                   style={{ background: `var(--handle-${output.type}, var(--handle-any))` }}
                 />
               </div>

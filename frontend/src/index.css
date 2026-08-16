@@ -75,6 +75,7 @@
   --category-math: hsl(18, 90%, 62%);
 
   --handle-any: #94a3b8;
+  --handle-flow: #f8fafc;
   --handle-dataframe: hsl(142, 71%, 52%);
   --handle-model: hsl(258, 90%, 66%);
   --handle-string: hsl(38, 95%, 58%);
@@ -1198,6 +1199,20 @@ button {
 
 .pluto-node__handle.react-flow__handle:hover {
   box-shadow: 0 0 0 3px rgba(100, 100, 255, 0.18);
+}
+
+/* Optional execution-flow sockets are deliberately quieter than data ports. */
+.pluto-node__handle--flow.react-flow__handle {
+  width: 7px;
+  height: 7px;
+  border: 0;
+  border-radius: 0;
+  background: #f59e0b !important;
+  clip-path: polygon(50% 0, 100% 50%, 50% 100%, 0 50%);
+}
+
+.pluto-node__handle--flow.react-flow__handle:hover {
+  box-shadow: 0 0 0 2px rgba(245, 158, 11, 0.28);
 }
 
 /* ── Port labels ──────────────────────────────────────────────────────────── */

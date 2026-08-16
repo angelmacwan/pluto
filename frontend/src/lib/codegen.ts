@@ -11,6 +11,7 @@ export function topologicalSort(nodes: PlutoNode[], edges: PlutoEdge[]): PlutoNo
   });
   
   edges.forEach(e => {
+    if (isFlowEdge(e, nodes)) return;
     if (!adjList[e.source] || !adjList[e.target]) return;
     adjList[e.source].push(e.target);
     inDegree[e.target] = (inDegree[e.target] || 0) + 1;
@@ -62,8 +63,8 @@ export function generateCode(nodes: PlutoNode[], edges: PlutoEdge[]): { code: st
     varNames[n.id] = generateVariableName(n, idx);
   });
   
-  const nodeCodes: string[] = [];
-  
+  const nodeCodeById: Record<string, string> = {};
+
   sorted.forEach(node => {
     const def = nodeRegistry[node.type || ''];
     if (!def) return;
@@ -72,24 +73,62 @@ export function generateCode(nodes: PlutoNode[], edges: PlutoEdge[]): { code: st
     def.pipPackages.forEach((p: string) => pipPackages.add(p));
     
     const inputVars: Record<string, string> = {};
-    const incomingEdges = edges.filter(e => e.target === node.id);
+    const incomingEdges = edges.filter(e => e.target === node.id && !isFlowEdge(e, nodes));
     
     incomingEdges.forEach(e => {
       const sourceDef = nodeRegistry[nodes.find(n => n.id === e.source)?.type || ''];
       const sourceHandle = e.sourceHandle || sourceDef?.outputs[0]?.id;
-      inputVars[e.targetHandle!] = sourceDef && sourceDef.outputs.length > 1
+      const dataOutputs = sourceDef?.outputs.filter(handle => handle.type !== 'flow') || [];
+      inputVars[e.targetHandle!] = dataOutputs.length > 1
         ? `${varNames[e.source]}_${sourceHandle}`
         : varNames[e.source];
     });
     
     const nodeCode = def.generateCode(node, inputVars, varNames[node.id]);
-    nodeCodes.push(`# ${node.data.label}\n${nodeCode}`);
+    nodeCodeById[node.id] = `# ${node.data.label}\n${nodeCode}`;
   });
+
+  const flowEdges = edges.filter(edge => isFlowEdge(edge, nodes));
+  const nodesWithFlowInput = new Set(flowEdges.map(edge => edge.target));
+  const emitted = new Set<string>();
+  const nodeCodes: string[] = [];
+  const indent = (value: string, level: number) => value.split('\n').map(line => `${'    '.repeat(level)}${line}`).join('\n');
+  const emit = (nodeId: string, level = 0) => {
+    if (emitted.has(nodeId)) return;
+    emitted.add(nodeId);
+    const node = nodes.find(item => item.id === nodeId);
+    if (!node) return;
+    nodeCodes.push(indent(nodeCodeById[nodeId], level));
+    const outgoing = flowEdges.filter(edge => edge.source === nodeId);
+    if (node.type === 'if_condition') {
+      const trueTargets = outgoing.filter(edge => edge.sourceHandle === 'true_branch');
+      const falseTargets = outgoing.filter(edge => edge.sourceHandle === 'false_branch');
+      if (trueTargets.length || falseTargets.length) {
+        nodeCodes.push(`${'    '.repeat(level)}if ${varNames[nodeId]}:`);
+        if (trueTargets.length) trueTargets.forEach(edge => emit(edge.target, level + 1));
+        else nodeCodes.push(`${'    '.repeat(level + 1)}pass`);
+        if (falseTargets.length) {
+          nodeCodes.push(`${'    '.repeat(level)}else:`);
+          falseTargets.forEach(edge => emit(edge.target, level + 1));
+        }
+      }
+      return;
+    }
+    outgoing.forEach(edge => emit(edge.target, level));
+  };
+
+  sorted.filter(node => !nodesWithFlowInput.has(node.id)).forEach(node => emit(node.id));
   
   const importBlock = Array.from(imports).join('\n');
   code = `${importBlock}\n\n${nodeCodes.join('\n\n')}\n`;
   
   return { code, requirements: Array.from(pipPackages), error: null };
+}
+
+function isFlowEdge(edge: PlutoEdge, nodes: PlutoNode[]): boolean {
+  const source = nodes.find(node => node.id === edge.source);
+  const def = source && nodeRegistry[source.type || ''];
+  return def?.outputs.some(handle => handle.id === edge.sourceHandle && handle.type === 'flow') || false;
 }
 
 function validateGraph(nodes: PlutoNode[], edges: PlutoEdge[]): string | null {
