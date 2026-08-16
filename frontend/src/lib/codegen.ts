@@ -93,20 +93,59 @@ export function generateCode(nodes: PlutoNode[], edges: PlutoEdge[]): { code: st
   const emitted = new Set<string>();
   const nodeCodes: string[] = [];
   const indent = (value: string, level: number) => value.split('\n').map(line => `${'    '.repeat(level)}${line}`).join('\n');
+
+  // Find nodes that consume data produced by a given source node (and have no flow_in)
+  const getDataConsumersWithoutFlow = (sourceId: string): string[] => {
+    return edges
+      .filter(e => e.source === sourceId && !isFlowEdge(e, nodes))
+      .map(e => e.target)
+      .filter(targetId => !nodesWithFlowInput.has(targetId));
+  };
+
+  // Helper to collect non-flow ancestor data nodes that haven't been emitted yet
+  const emitDataDependencies = (nodeId: string, level: number) => {
+    const dataIncomingEdges = edges.filter(e => e.target === nodeId && !isFlowEdge(e, nodes));
+    dataIncomingEdges.forEach(e => {
+      // If the source node hasn't been emitted yet, emit its data dependencies first, then emit it.
+      if (!emitted.has(e.source)) {
+        emitDataDependencies(e.source, level);
+        emit(e.source, level);
+      }
+    });
+  };
+
   const emit = (nodeId: string, level = 0) => {
     if (emitted.has(nodeId)) return;
-    emitted.add(nodeId);
+
     const node = nodes.find(item => item.id === nodeId);
     if (!node) return;
+
+    // First ensure any data inputs needed by this node are generated before this node line
+    emitDataDependencies(nodeId, level);
+
+    // Stop if emitting dependencies recursively caused this node to be emitted already
+    if (emitted.has(nodeId)) return;
+
+    emitted.add(nodeId);
     nodeCodes.push(indent(nodeCodeById[nodeId], level));
+
+    // Emit any non-flow data consumers of this node if they have no explicit flow input
+    const dataConsumers = getDataConsumersWithoutFlow(nodeId);
+    dataConsumers.forEach(consumerId => {
+      emit(consumerId, level);
+    });
+
     const outgoing = flowEdges.filter(edge => edge.source === nodeId);
     if (node.type === 'if_condition') {
       const trueTargets = outgoing.filter(edge => edge.sourceHandle === 'true_branch');
       const falseTargets = outgoing.filter(edge => edge.sourceHandle === 'false_branch');
       if (trueTargets.length || falseTargets.length) {
         nodeCodes.push(`${'    '.repeat(level)}if ${varNames[nodeId]}:`);
-        if (trueTargets.length) trueTargets.forEach(edge => emit(edge.target, level + 1));
-        else nodeCodes.push(`${'    '.repeat(level + 1)}pass`);
+        if (trueTargets.length) {
+          trueTargets.forEach(edge => emit(edge.target, level + 1));
+        } else {
+          nodeCodes.push(`${'    '.repeat(level + 1)}pass`);
+        }
         if (falseTargets.length) {
           nodeCodes.push(`${'    '.repeat(level)}else:`);
           falseTargets.forEach(edge => emit(edge.target, level + 1));
@@ -117,7 +156,19 @@ export function generateCode(nodes: PlutoNode[], edges: PlutoEdge[]): { code: st
     outgoing.forEach(edge => emit(edge.target, level));
   };
 
-  sorted.filter(node => !nodesWithFlowInput.has(node.id)).forEach(node => emit(node.id));
+  // First pass: Emit all standalone flow roots or nodes without flow inputs in topological order
+  sorted.forEach(node => {
+    if (!nodesWithFlowInput.has(node.id) && !emitted.has(node.id)) {
+      emit(node.id);
+    }
+  });
+
+  // Second pass: Catch any un-emitted nodes
+  sorted.forEach(node => {
+    if (!emitted.has(node.id)) {
+      emit(node.id);
+    }
+  });
   
   const importBlock = Array.from(imports).join('\n');
   code = `${importBlock}\n\n${nodeCodes.join('\n\n')}\n`;

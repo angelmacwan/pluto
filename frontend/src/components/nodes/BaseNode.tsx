@@ -107,6 +107,7 @@ export function BaseNode({ id, data }: { id: string; data: PlutoNodeData }) {
                   type="source"
                   position={Position.Right}
                   id={output.id}
+                  isConnectable
                   className={`pluto-node__handle${output.type === 'flow' ? ' pluto-node__handle--flow' : ''}`}
                   style={{ background: `var(--handle-${output.type}, var(--handle-any))` }}
                 />
