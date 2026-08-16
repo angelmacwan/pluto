@@ -21,23 +21,16 @@ export const nodeRegistry: Record<string, NodeTypeDefinition> = {
   // ─────────────────────────────────────────────
   variable: {
     type: 'variable', label: 'Variable', category: 'primitive',
-    description: 'Declare a variable or literal value',
+    description: 'Declare a named value using any valid Python expression',
     icon: 'Variable',
     inputs: [],
     outputs: [{ id: 'out', label: 'value', type: 'any' }],
     configSchema: [
-      { key: 'vartype', label: 'Type', type: 'select', options: ['string', 'number', 'bool', 'list', 'dict'], default: 'string' },
-      { key: 'value', label: 'Value', type: 'string', default: '' },
+      { key: 'name', label: 'Variable Name (optional)', type: 'string', default: '' },
+      { key: 'value', label: 'Value (Python expression)', type: 'string', default: 'None' },
     ],
-    defaultConfig: { vartype: 'string', value: '' },
-    generateCode: (node, _inputs, outputVar) => {
-      const { vartype, value } = node.data.config;
-      let val = value;
-      if (vartype === 'string') val = `"${value}"`;
-      else if (vartype === 'bool') val = value === 'true' || value === true ? 'True' : 'False';
-      else if (vartype === 'list' || vartype === 'dict') val = value || (vartype === 'list' ? '[]' : '{}');
-      return `${outputVar} = ${val}`;
-    },
+    defaultConfig: { name: '', value: 'None' },
+    generateCode: (node, _inputs, outputVar) => `${outputVar} = ${node.data.config.value || 'None'}`,
     imports: [], pipPackages: [],
   },
 
@@ -65,9 +58,9 @@ export const nodeRegistry: Record<string, NodeTypeDefinition> = {
       { id: 'value_b', label: 'value B', type: 'any' },
     ],
     outputs: [
-      { id: 'condition',    label: 'condition', type: 'bool' },
-      { id: 'true_branch',  label: 'value if true',  type: 'any' },
-      { id: 'false_branch', label: 'value if false', type: 'any' },
+      { id: 'condition',    label: 'output', type: 'bool' },
+      { id: 'true_branch',  label: 'true',   type: 'any' },
+      { id: 'false_branch', label: 'false',  type: 'any' },
     ],
     configSchema: [
       {
@@ -86,10 +79,13 @@ export const nodeRegistry: Record<string, NodeTypeDefinition> = {
       // 'not' is a unary operator — ignore value_b
       const cond = op === 'not' ? `not ${a}` : `${a} ${op} ${b}`;
       return [
-        `_cond_${outputVar} = ${cond}`,
-        `${outputVar}_condition = _cond_${outputVar}`,
-        `${outputVar}_true  = ${a} if _cond_${outputVar} else None`,
-        `${outputVar}_false = ${a} if not _cond_${outputVar} else None`,
+        `${outputVar}_condition = ${cond}`,
+        `if ${outputVar}_condition:`,
+        `    ${outputVar}_true_branch = ${a}`,
+        `    ${outputVar}_false_branch = None`,
+        `else:`,
+        `    ${outputVar}_true_branch = None`,
+        `    ${outputVar}_false_branch = ${a}`,
       ].join('\n');
     },
     imports: [], pipPackages: [],

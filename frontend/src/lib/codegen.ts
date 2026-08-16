@@ -38,6 +38,10 @@ export function topologicalSort(nodes: PlutoNode[], edges: PlutoEdge[]): PlutoNo
 }
 
 export function generateVariableName(node: PlutoNode, index: number): string {
+  if (node.type === 'variable') {
+    const name = String(node.data.config.name || '').trim();
+    if (name) return name;
+  }
   const base = (node.type || 'node').replace(/[^a-zA-Z0-9]/g, '_');
   return `${base}_${index}`;
 }
@@ -91,6 +95,18 @@ export function generateCode(nodes: PlutoNode[], edges: PlutoEdge[]): { code: st
 function validateGraph(nodes: PlutoNode[], edges: PlutoEdge[]): string | null {
   const nodesById = new Map(nodes.map(node => [node.id, node]));
   const occupiedInputs = new Set<string>();
+  const variableNames = new Set<string>();
+
+  for (const node of nodes) {
+    if (node.type !== 'variable') continue;
+    const name = String(node.data.config.name || '').trim();
+    if (!name) continue;
+    if (!/^[A-Za-z_][A-Za-z0-9_]*$/.test(name)) {
+      return `Variable names must be valid Python identifiers. “${name}” is not valid.`;
+    }
+    if (variableNames.has(name)) return `Variable name “${name}” is used more than once.`;
+    variableNames.add(name);
+  }
 
   for (const edge of edges) {
     const source = nodesById.get(edge.source);
