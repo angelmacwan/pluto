@@ -925,6 +925,306 @@ button {
   background: var(--surface-container-low);
 }
 
+/* ── Pluto Node ────────────────────────────────────────────────────────────── */
+.pluto-node {
+  position: relative;
+  min-width: 210px;
+  max-width: 280px;
+  background: var(--surface-container-lowest);
+  border: 1px solid var(--outline-variant);
+  border-radius: 12px;
+  box-shadow: 0 4px 24px rgba(18, 40, 60, 0.07), 0 1px 4px rgba(18, 40, 60, 0.05);
+  overflow: visible;
+  transition: box-shadow 0.18s ease, border-color 0.18s ease;
+}
+
+.pluto-node:hover {
+  box-shadow: 0 8px 32px rgba(18, 40, 60, 0.11), 0 2px 8px rgba(18, 40, 60, 0.06);
+  border-color: var(--outline);
+}
+
+/* Thin accent strip at top */
+.pluto-node__accent {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  border-radius: 12px 12px 0 0;
+  pointer-events: none;
+}
+
+/* ── Header ───────────────────────────────────────────────────────────────── */
+.pluto-node__header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 12px 8px;
+  border-bottom: 1px solid var(--outline-variant);
+  margin-top: 3px; /* space for accent strip */
+}
+
+.pluto-node__icon-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 6px;
+  flex-shrink: 0;
+}
+
+.pluto-node__title-group {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  min-width: 0;
+}
+
+.pluto-node__label {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--on-surface);
+  letter-spacing: -0.01em;
+  line-height: 1.2;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.pluto-node__category {
+  font-size: 0.65rem;
+  font-weight: 500;
+  color: var(--outline);
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  line-height: 1;
+}
+
+.pluto-node__status-wrap {
+  flex-shrink: 0;
+}
+
+.pluto-node__status-icon {
+  display: block;
+}
+
+.pluto-node__status--running {
+  color: hsl(212, 100%, 55%);
+  animation: spin 1s linear infinite;
+}
+
+.pluto-node__status--done {
+  color: hsl(142, 71%, 42%);
+}
+
+.pluto-node__status--error {
+  color: var(--error);
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ── Port Rows ────────────────────────────────────────────────────────────── */
+/*
+  Key insight: React Flow positions a Handle by its own offsetTop relative
+  to the node root. By wrapping each port in a row and letting the row
+  determine the vertical position, we get perfect alignment automatically —
+  the Handle's `top` defaults to 50% of the row via React Flow's own logic
+  when `position` is Left/Right and no `style.top` override is supplied.
+*/
+.pluto-node__ports {
+  display: flex;
+  padding: 6px 0;
+}
+
+.pluto-node__port-col {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  flex: 1;
+}
+
+.pluto-node__port-col--left {
+  align-items: flex-start;
+}
+
+.pluto-node__port-col--right {
+  align-items: flex-end;
+}
+
+/* Each port row is a flex container — the Handle is positioned
+   at the outer edge, the label sits beside it. React Flow reads
+   the row's rendered offsetTop + height/2 to place the handle. */
+.pluto-node__port-row {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 12px 3px 16px;
+  width: 100%;
+  min-height: 22px;
+}
+
+.pluto-node__port-row--right {
+  flex-direction: row-reverse;
+  padding: 3px 16px 3px 12px;
+}
+
+/* ── Handles ──────────────────────────────────────────────────────────────── */
+.pluto-node__handle.react-flow__handle {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  border: 2px solid var(--surface-container-lowest);
+  /* React Flow positions Left handles at left:-5px, Right at right:-5px */
+  /* We do NOT override top here — React Flow reads the row's midpoint */
+  transition: transform 0.12s ease, box-shadow 0.12s ease;
+}
+
+.pluto-node__handle.react-flow__handle:hover {
+  transform: scale(1.4);
+  box-shadow: 0 0 0 3px rgba(100, 100, 255, 0.18);
+}
+
+/* ── Port labels ──────────────────────────────────────────────────────────── */
+.pluto-node__port-label {
+  font-size: 0.7rem;
+  font-weight: 500;
+  color: var(--on-surface-variant);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 90px;
+  line-height: 1;
+}
+
+.pluto-node__port-label--left {
+  text-align: left;
+}
+
+.pluto-node__port-label--right {
+  text-align: right;
+}
+
+.pluto-node__port-optional {
+  margin-left: 2px;
+  color: var(--outline);
+  font-size: 0.65rem;
+}
+
+/* ── Config section ───────────────────────────────────────────────────────── */
+.pluto-node__config {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 8px 12px 10px;
+  border-top: 1px solid var(--outline-variant);
+}
+
+.pluto-node__field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.pluto-node__field-label {
+  font-size: 0.67rem;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  color: var(--outline);
+  line-height: 1;
+}
+
+.pluto-node__input,
+.pluto-node__select,
+.pluto-node__textarea {
+  width: 100%;
+  padding: 5px 8px;
+  border-radius: 6px;
+  border: 1px solid var(--outline-variant);
+  background: var(--surface-container-low);
+  color: var(--on-surface);
+  font-family: inherit;
+  font-size: 0.78rem;
+  outline: none;
+  transition: border-color 0.15s, box-shadow 0.15s;
+  line-height: 1.4;
+}
+
+.pluto-node__input:focus,
+.pluto-node__select:focus,
+.pluto-node__textarea:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 2px rgba(18, 40, 60, 0.1);
+}
+
+.pluto-node__textarea {
+  resize: vertical;
+  min-height: 54px;
+  font-family: 'JetBrains Mono', monospace;
+}
+
+.pluto-node__select {
+  cursor: pointer;
+  -webkit-appearance: none;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2374777d' stroke-width='2.5'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 7px center;
+  padding-right: 24px;
+}
+
+/* ── Toggle (bool field) ──────────────────────────────────────────────────── */
+.pluto-node__toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+}
+
+.pluto-node__toggle-input {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.pluto-node__toggle-track {
+  position: relative;
+  width: 30px;
+  height: 17px;
+  border-radius: 999px;
+  background: var(--outline-variant);
+  transition: background 0.18s;
+  flex-shrink: 0;
+}
+
+.pluto-node__toggle-input:checked + .pluto-node__toggle-track {
+  background: var(--primary);
+}
+
+.pluto-node__toggle-thumb {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 13px;
+  height: 13px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.18);
+  transition: transform 0.18s;
+}
+
+.pluto-node__toggle-input:checked ~ .pluto-node__toggle-track .pluto-node__toggle-thumb {
+  transform: translateX(13px);
+}
+
+
 /* ── Scrollbar ─────────────────────────────────────────────────────────────── */
 ::-webkit-scrollbar {
   width: 6px;
