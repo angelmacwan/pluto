@@ -1,5 +1,6 @@
 import type { PlutoNode, PlutoEdge } from '../types';
 import { nodeRegistry } from './nodeRegistry';
+import { useAppStore } from '../store/appStore';
 
 export function topologicalSort(nodes: PlutoNode[], edges: PlutoEdge[]): PlutoNode[] | null {
   const inDegree: Record<string, number> = {};
@@ -57,6 +58,7 @@ export function generateCode(nodes: PlutoNode[], edges: PlutoEdge[]): { code: st
   let code = '';
   const imports = new Set<string>();
   const pipPackages = new Set<string>();
+  const hoistedCustomNodeCodes = new Set<string>();
   
   const varNames: Record<string, string> = {};
   sorted.forEach((n, idx) => {
@@ -65,23 +67,42 @@ export function generateCode(nodes: PlutoNode[], edges: PlutoEdge[]): { code: st
   
   const nodeCodeById: Record<string, string> = {};
 
+  const { projects, currentProjectId } = useAppStore.getState();
+  const currentProject = projects.find(p => p.id === currentProjectId);
+
   sorted.forEach(node => {
-    const def = nodeRegistry[node.type || ''];
+    const def = getNodeDef(node.type || '');
     if (!def) return;
+    
+    if (node.type?.startsWith('custom_')) {
+      const customNode = currentProject?.customNodes?.find(n => n.id === node.type);
+      if (customNode) hoistedCustomNodeCodes.add(customNode.code);
+    }
     
     def.imports.forEach((i: string) => imports.add(i));
     def.pipPackages.forEach((p: string) => pipPackages.add(p));
     
-    const inputVars: Record<string, string> = {};
+    const inputVars: Record<string, any> = {};
     const incomingEdges = edges.filter(e => e.target === node.id && !isFlowEdge(e, nodes));
     
     incomingEdges.forEach(e => {
-      const sourceDef = nodeRegistry[nodes.find(n => n.id === e.source)?.type || ''];
+      const sourceNode = nodes.find(n => n.id === e.source);
+      const sourceDef = getNodeDef(sourceNode?.type || '');
       const sourceHandle = e.sourceHandle || sourceDef?.outputs[0]?.id;
-      const dataOutputs = sourceDef?.outputs.filter(handle => handle.type !== 'flow') || [];
-      inputVars[e.targetHandle!] = dataOutputs.length > 1
+      const dataOutputs = sourceDef?.outputs.filter((handle: any) => handle.type !== 'flow') || [];
+      const varName = dataOutputs.length > 1
         ? `${varNames[e.source]}_${sourceHandle}`
         : varNames[e.source];
+
+      const targetDef = getNodeDef(node.type || '');
+      const inputDef = targetDef?.inputs.find((i: any) => i.id === e.targetHandle);
+      
+      if (inputDef?.allowMultiple) {
+        if (!inputVars[e.targetHandle!]) inputVars[e.targetHandle!] = [];
+        inputVars[e.targetHandle!].push(varName);
+      } else {
+        inputVars[e.targetHandle!] = varName;
+      }
     });
     
     const nodeCode = def.generateCode(node, inputVars, varNames[node.id]);
@@ -171,15 +192,47 @@ export function generateCode(nodes: PlutoNode[], edges: PlutoEdge[]): { code: st
   });
   
   const importBlock = Array.from(imports).join('\n');
-  code = `${importBlock}\n\n${nodeCodes.join('\n\n')}\n`;
+  const customNodesBlock = Array.from(hoistedCustomNodeCodes).join('\n\n');
+  code = [importBlock, customNodesBlock, nodeCodes.join('\n\n')].filter(Boolean).join('\n\n') + '\n';
   
   return { code, requirements: Array.from(pipPackages), error: null };
 }
 
+function getNodeDef(type: string) {
+  const def = nodeRegistry[type];
+  if (def) return def;
+
+  if (type.startsWith('custom_')) {
+    const { projects, currentProjectId } = useAppStore.getState();
+    const currentProject = projects.find(p => p.id === currentProjectId);
+    const customNode = currentProject?.customNodes?.find(n => n.id === type);
+    if (customNode) {
+      return {
+        type: customNode.id,
+        label: customNode.label,
+        category: 'primitive',
+        description: customNode.description,
+        icon: 'Code2',
+        inputs: [{ id: 'flow_in', label: '', type: 'flow', optional: true }, ...customNode.inputs],
+        outputs: [customNode.output],
+        configSchema: [],
+        defaultConfig: {},
+        generateCode: (_n: any, ins: any, outputVar: string) => {
+          const args = customNode.inputs.map(i => ins[i.id] || 'None').join(', ');
+          return `${outputVar} = ${customNode.name}(${args})`;
+        },
+        imports: [],
+        pipPackages: []
+      } as any;
+    }
+  }
+  return null;
+}
+
 function isFlowEdge(edge: PlutoEdge, nodes: PlutoNode[]): boolean {
   const source = nodes.find(node => node.id === edge.source);
-  const def = source && nodeRegistry[source.type || ''];
-  return def?.outputs.some(handle => handle.id === edge.sourceHandle && handle.type === 'flow') || false;
+  const def = source && getNodeDef(source.type || '');
+  return def?.outputs.some((handle: any) => handle.id === edge.sourceHandle && handle.type === 'flow') || false;
 }
 
 function validateGraph(nodes: PlutoNode[], edges: PlutoEdge[]): string | null {
@@ -203,12 +256,12 @@ function validateGraph(nodes: PlutoNode[], edges: PlutoEdge[]): string | null {
     const target = nodesById.get(edge.target);
     if (!source || !target) return 'Graph contains a connection to a missing node.';
 
-    const sourceDef = nodeRegistry[source.type || ''];
-    const targetDef = nodeRegistry[target.type || ''];
+    const sourceDef = getNodeDef(source.type || '');
+    const targetDef = getNodeDef(target.type || '');
     const sourceHandle = edge.sourceHandle || sourceDef?.outputs[0]?.id;
     const targetHandle = edge.targetHandle || targetDef?.inputs[0]?.id;
-    const output = sourceDef?.outputs.find(handle => handle.id === sourceHandle);
-    const input = targetDef?.inputs.find(handle => handle.id === targetHandle);
+    const output = sourceDef?.outputs.find((handle: any) => handle.id === sourceHandle);
+    const input = targetDef?.inputs.find((handle: any) => handle.id === targetHandle);
 
     if (!output || !input) return `Invalid connection between “${source.data.label}” and “${target.data.label}”.`;
     if (output.type !== 'any' && input.type !== 'any' && output.type !== input.type) {
@@ -216,14 +269,16 @@ function validateGraph(nodes: PlutoNode[], edges: PlutoEdge[]): string | null {
     }
 
     const inputKey = `${target.id}:${targetHandle}`;
-    if (occupiedInputs.has(inputKey)) return `“${target.data.label}” has more than one connection to its ${input.label} input.`;
+    if (!input.allowMultiple && occupiedInputs.has(inputKey)) {
+      return `“${target.data.label}” has more than one connection to its ${input.label} input.`;
+    }
     occupiedInputs.add(inputKey);
   }
 
   for (const node of nodes) {
-    const def = nodeRegistry[node.type || ''];
+    const def = getNodeDef(node.type || '');
     if (!def) return `Unknown node type: ${node.type || 'missing type'}.`;
-    const missing = def.inputs.find(input => !input.optional && !occupiedInputs.has(`${node.id}:${input.id}`));
+    const missing = def.inputs.find((input: any) => !input.optional && !occupiedInputs.has(`${node.id}:${input.id}`));
     if (missing) return `Connect the required ${missing.label} input on “${node.data.label}”.`;
   }
 

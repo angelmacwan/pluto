@@ -35,6 +35,7 @@ export const useProjectStore = create<ProjectStore>((_set) => ({
       name,
       description: '',
       graphState,
+      customNodes: [],
       createdAt: Date.now(),
       updatedAt: Date.now(),
       userId

@@ -145,24 +145,7 @@ export const nodeRegistry: Record<string, NodeTypeDefinition> = {
     imports: [], pipPackages: [],
   },
 
-  custom_python: {
-    type: 'custom_python', label: 'Custom Python', category: 'primitive',
-    description: 'Write arbitrary Python code',
-    icon: 'Code2',
-    inputs: [{ id: 'input_var', label: 'input', type: 'any', optional: true }],
-    outputs: [{ id: 'output_var', label: 'output', type: 'any' }],
-    configSchema: [
-      { key: 'code', label: 'Python Code', type: 'code', default: '# Write your code here\noutput_var = input_var' },
-    ],
-    defaultConfig: { code: '# Write your code here\noutput_var = input_var' },
-    generateCode: (node, inputs, outputVar) => {
-      let code = node.data.config.code || '';
-      if (inputs['input_var']) code = code.replace(/\binput_var\b/g, inputs['input_var']);
-      code = code.replace(/\boutput_var\b/g, outputVar);
-      return code;
-    },
-    imports: [], pipPackages: [],
-  },
+
 
   file_read: {
     type: 'file_read', label: 'File Read', category: 'primitive',
@@ -1096,7 +1079,7 @@ export const nodeRegistry: Record<string, NodeTypeDefinition> = {
 // need to be conditionally triggered expose a flow input; If owns the branch
 // outputs rather than every node carrying a redundant flow-through output.
 const conditionalInputNodes = new Set([
-  'if_condition', 'print_debug', 'custom_python', 'file_read', 'file_write',
+  'if_condition', 'print_debug', 'file_read', 'file_write',
   'import_lib', 'api_fetch', 'model_trainer', 'training_loop', 'model_save',
   'model_load', 'model_infer', 'llm_call', 'memory_node', 'agent_loop',
   'structured_output', 'classification_report', 'confusion_matrix', 'roc_auc',

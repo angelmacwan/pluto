@@ -11,6 +11,7 @@ export interface HandleDef {
   label: string;
   type: HandleType;
   optional?: boolean;
+  allowMultiple?: boolean;
 }
 
 export interface ConfigField {
@@ -44,11 +45,22 @@ export interface GraphState {
   updatedAt: number;
 }
 
+export interface CustomNodeDef {
+  id: string;
+  name: string;
+  label: string;
+  description: string;
+  inputs: HandleDef[];
+  output: HandleDef;
+  code: string;
+}
+
 export interface Project {
   id: string;
   name: string;
   description: string;
   graphState: GraphState;
+  customNodes?: CustomNodeDef[];
   createdAt: number;
   updatedAt: number;
   userId: string;

@@ -4,6 +4,7 @@ import type { Connection } from '@xyflow/react';
 import { nanoid } from 'nanoid';
 import { produce } from 'immer';
 import { nodeRegistry } from '../lib/nodeRegistry';
+import { useAppStore } from './appStore';
 
 interface GraphStore {
   nodes: PlutoNode[];
@@ -54,7 +55,32 @@ export const useGraphStore = create<GraphStore>((set, get) => ({
   },
   
   addNode: (type, position) => {
-    const def = nodeRegistry[type];
+    let def = nodeRegistry[type];
+    
+    // Check if it's a custom node
+    if (!def && type.startsWith('custom_')) {
+      const { projects, currentProjectId } = useAppStore.getState();
+      const currentProject = projects.find(p => p.id === currentProjectId);
+      const customNode = currentProject?.customNodes?.find(n => n.id === type);
+      
+      if (customNode) {
+        def = {
+          type: customNode.id,
+          label: customNode.label,
+          category: 'primitive',
+          description: customNode.description,
+          icon: 'Code2',
+          inputs: [{ id: 'flow_in', label: '', type: 'flow', optional: true }, ...customNode.inputs],
+          outputs: [customNode.output],
+          configSchema: [],
+          defaultConfig: {},
+          generateCode: () => '', // Handled specially in codegen.ts
+          imports: [],
+          pipPackages: []
+        };
+      }
+    }
+
     if (!def) return;
     
     const newNode: PlutoNode = {
