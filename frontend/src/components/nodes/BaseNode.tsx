@@ -40,16 +40,13 @@ export function BaseNode({ id, data }: { id: string; data: PlutoNodeData }) {
 
   return (
     <div className="pluto-node">
-      {/* Accent strip */}
-      <div className="pluto-node__accent" style={{ background: accentColor }} />
-
       {/* Header */}
-      <div className="pluto-node__header">
+      <div className="pluto-node__header" style={{ background: accentColor }}>
         <div
           className="pluto-node__icon-wrap"
           style={{
-            color: accentColor,
-            background: `color-mix(in srgb, ${accentColor} 14%, transparent)`,
+            color: '#fff',
+            background: 'rgba(255, 255, 255, 0.18)',
           }}
         >
           <Icon size={13} />
@@ -163,7 +160,7 @@ export function BaseNode({ id, data }: { id: string; data: PlutoNodeData }) {
                 <label className="pluto-node__toggle">
                   <input
                     type="checkbox"
-                    checked={Boolean(data.config[field.key])}
+                    checked={data.config[field.key] === true || data.config[field.key] === 'true'}
                     onChange={e => updateNodeConfig(id, { [field.key]: e.target.checked })}
                     className="pluto-node__toggle-input"
                   />
@@ -171,6 +168,15 @@ export function BaseNode({ id, data }: { id: string; data: PlutoNodeData }) {
                     <span className="pluto-node__toggle-thumb" />
                   </span>
                 </label>
+              )}
+              {field.type === 'code' && (
+                <textarea
+                  value={(data.config[field.key] as string) ?? ''}
+                  onChange={e => updateNodeConfig(id, { [field.key]: e.target.value })}
+                  className="pluto-node__textarea font-mono"
+                  rows={7}
+                  spellCheck={false}
+                />
               )}
             </div>
           ))}

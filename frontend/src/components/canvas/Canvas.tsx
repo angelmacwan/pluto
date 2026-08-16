@@ -5,7 +5,9 @@ import {
   Controls, 
   MiniMap,
   useReactFlow,
-  ConnectionMode
+  ConnectionMode,
+  applyNodeChanges,
+  applyEdgeChanges,
 } from '@xyflow/react';
 import { useGraphStore } from '../../store/graphStore';
 import { nodeTypes } from '../nodes/NodeFactory';
@@ -44,17 +46,8 @@ export function Canvas() {
       <ReactFlow
         nodes={nodes}
         edges={edges}
-        onNodesChange={(chs) => setNodes((nds) => {
-            const next = [...nds];
-            chs.forEach(c => {
-                if (c.type === 'position' && c.position) {
-                    const n = next.find(n => n.id === c.id);
-                    if (n) n.position = c.position;
-                }
-            });
-            return next;
-        })}
-        onEdgesChange={() => {}} // simplified for brevity
+        onNodesChange={(changes) => setNodes(nodes => applyNodeChanges(changes, nodes))}
+        onEdgesChange={(changes) => useGraphStore.getState().setEdges(edges => applyEdgeChanges(changes, edges))}
         onConnect={onConnect}
         nodeTypes={nodeTypes}
         onDrop={onDrop}

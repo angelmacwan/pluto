@@ -11,6 +11,7 @@ export function topologicalSort(nodes: PlutoNode[], edges: PlutoEdge[]): PlutoNo
   });
   
   edges.forEach(e => {
+    if (!adjList[e.source] || !adjList[e.target]) return;
     adjList[e.source].push(e.target);
     inDegree[e.target] = (inDegree[e.target] || 0) + 1;
   });
@@ -42,6 +43,9 @@ export function generateVariableName(node: PlutoNode, index: number): string {
 }
 
 export function generateCode(nodes: PlutoNode[], edges: PlutoEdge[]): { code: string, requirements: string[], error: string | null } {
+  const validationError = validateGraph(nodes, edges);
+  if (validationError) return { code: '', requirements: [], error: validationError };
+
   const sorted = topologicalSort(nodes, edges);
   if (!sorted) return { code: '', requirements: [], error: 'Cycle detected in graph' };
   
@@ -67,7 +71,11 @@ export function generateCode(nodes: PlutoNode[], edges: PlutoEdge[]): { code: st
     const incomingEdges = edges.filter(e => e.target === node.id);
     
     incomingEdges.forEach(e => {
-      inputVars[e.targetHandle!] = varNames[e.source];
+      const sourceDef = nodeRegistry[nodes.find(n => n.id === e.source)?.type || ''];
+      const sourceHandle = e.sourceHandle || sourceDef?.outputs[0]?.id;
+      inputVars[e.targetHandle!] = sourceDef && sourceDef.outputs.length > 1
+        ? `${varNames[e.source]}_${sourceHandle}`
+        : varNames[e.source];
     });
     
     const nodeCode = def.generateCode(node, inputVars, varNames[node.id]);
@@ -78,4 +86,40 @@ export function generateCode(nodes: PlutoNode[], edges: PlutoEdge[]): { code: st
   code = `${importBlock}\n\n${nodeCodes.join('\n\n')}\n`;
   
   return { code, requirements: Array.from(pipPackages), error: null };
+}
+
+function validateGraph(nodes: PlutoNode[], edges: PlutoEdge[]): string | null {
+  const nodesById = new Map(nodes.map(node => [node.id, node]));
+  const occupiedInputs = new Set<string>();
+
+  for (const edge of edges) {
+    const source = nodesById.get(edge.source);
+    const target = nodesById.get(edge.target);
+    if (!source || !target) return 'Graph contains a connection to a missing node.';
+
+    const sourceDef = nodeRegistry[source.type || ''];
+    const targetDef = nodeRegistry[target.type || ''];
+    const sourceHandle = edge.sourceHandle || sourceDef?.outputs[0]?.id;
+    const targetHandle = edge.targetHandle || targetDef?.inputs[0]?.id;
+    const output = sourceDef?.outputs.find(handle => handle.id === sourceHandle);
+    const input = targetDef?.inputs.find(handle => handle.id === targetHandle);
+
+    if (!output || !input) return `Invalid connection between “${source.data.label}” and “${target.data.label}”.`;
+    if (output.type !== 'any' && input.type !== 'any' && output.type !== input.type) {
+      return `Cannot connect ${output.type} output to ${input.type} input on “${target.data.label}”.`;
+    }
+
+    const inputKey = `${target.id}:${targetHandle}`;
+    if (occupiedInputs.has(inputKey)) return `“${target.data.label}” has more than one connection to its ${input.label} input.`;
+    occupiedInputs.add(inputKey);
+  }
+
+  for (const node of nodes) {
+    const def = nodeRegistry[node.type || ''];
+    if (!def) return `Unknown node type: ${node.type || 'missing type'}.`;
+    const missing = def.inputs.find(input => !input.optional && !occupiedInputs.has(`${node.id}:${input.id}`));
+    if (missing) return `Connect the required ${missing.label} input on “${node.data.label}”.`;
+  }
+
+  return null;
 }

@@ -107,6 +107,19 @@ export const useGraphStore = create<GraphStore>((set, get) => ({
   },
   
   addEdge: (edge) => {
+    const source = get().nodes.find(node => node.id === edge.source);
+    const target = get().nodes.find(node => node.id === edge.target);
+    const sourceDef = source && nodeRegistry[source.type || ''];
+    const targetDef = target && nodeRegistry[target.type || ''];
+    const sourceHandle = edge.sourceHandle || sourceDef?.outputs[0]?.id;
+    const targetHandle = edge.targetHandle || targetDef?.inputs[0]?.id;
+    const output = sourceDef?.outputs.find(handle => handle.id === sourceHandle);
+    const input = targetDef?.inputs.find(handle => handle.id === targetHandle);
+
+    if (!source || !target || !output || !input) return;
+    if (output.type !== 'any' && input.type !== 'any' && output.type !== input.type) return;
+    if (get().edges.some(existing => existing.target === target.id && existing.targetHandle === targetHandle)) return;
+
     const newEdge: PlutoEdge = {
       id: nanoid(),
       source: edge.source!,

@@ -58,15 +58,16 @@ export const nodeRegistry: Record<string, NodeTypeDefinition> = {
 
   if_condition: {
     type: 'if_condition', label: 'If / Compare', category: 'primitive',
-    description: 'Compare two values with a chosen operator and branch on the result',
+    description: 'Compare two values and expose the boolean result plus a filtered value for each branch',
     icon: 'GitBranch',
     inputs: [
       { id: 'value_a', label: 'value A', type: 'any' },
       { id: 'value_b', label: 'value B', type: 'any' },
     ],
     outputs: [
-      { id: 'true_branch',  label: 'if true',  type: 'any' },
-      { id: 'false_branch', label: 'if false', type: 'any' },
+      { id: 'condition',    label: 'condition', type: 'bool' },
+      { id: 'true_branch',  label: 'value if true',  type: 'any' },
+      { id: 'false_branch', label: 'value if false', type: 'any' },
     ],
     configSchema: [
       {
@@ -86,6 +87,7 @@ export const nodeRegistry: Record<string, NodeTypeDefinition> = {
       const cond = op === 'not' ? `not ${a}` : `${a} ${op} ${b}`;
       return [
         `_cond_${outputVar} = ${cond}`,
+        `${outputVar}_condition = _cond_${outputVar}`,
         `${outputVar}_true  = ${a} if _cond_${outputVar} else None`,
         `${outputVar}_false = ${a} if not _cond_${outputVar} else None`,
       ].join('\n');
@@ -136,18 +138,22 @@ export const nodeRegistry: Record<string, NodeTypeDefinition> = {
 
 
   for_loop: {
-    type: 'for_loop', label: 'For Loop', category: 'primitive',
-    description: 'Iterate over a list',
+    type: 'for_loop', label: 'For Each', category: 'primitive',
+    description: 'Run a small Python body once per item and collect each result into a list',
     icon: 'Repeat',
     inputs: [{ id: 'iterable', label: 'iterable', type: 'list' }],
     outputs: [
-      { id: 'item', label: 'item', type: 'any' },
-      { id: 'index', label: 'index', type: 'number' },
+      { id: 'results', label: 'results', type: 'list' },
     ],
-    configSchema: [],
-    defaultConfig: {},
-    generateCode: (_node, inputs, outputVar) =>
-      `for ${outputVar}_index, ${outputVar}_item in enumerate(${inputs['iterable'] || '[]'}):\n    pass  # add downstream logic here`,
+    configSchema: [{ key: 'body', label: 'Body (use item, index, and result)', type: 'code', default: 'result = item' }],
+    defaultConfig: { body: 'result = item' },
+    generateCode: (node, inputs, outputVar) => {
+      const body = String(node.data.config.body || 'result = item')
+        .split('\n')
+        .map((line: string) => `    ${line}`)
+        .join('\n');
+      return [`${outputVar} = []`, `for index, item in enumerate(${inputs['iterable'] || '[]'}):`, body, `    ${outputVar}.append(result)`].join('\n');
+    },
     imports: [], pipPackages: [],
   },
 
@@ -708,7 +714,7 @@ export const nodeRegistry: Record<string, NodeTypeDefinition> = {
     description: 'PyTorch linear (fully connected) layer',
     icon: 'Minus',
     inputs: [],
-    outputs: [{ id: 'layer', label: 'layer', type: 'tensor' }],
+    outputs: [{ id: 'layer', label: 'layer', type: 'model' }],
     configSchema: [
       { key: 'in_features', label: 'In Features', type: 'number', default: 128 },
       { key: 'out_features', label: 'Out Features', type: 'number', default: 64 },
@@ -730,11 +736,11 @@ export const nodeRegistry: Record<string, NodeTypeDefinition> = {
     inputs: [],
     outputs: [{ id: 'model', label: 'model', type: 'model' }],
     configSchema: [
-      { key: 'layers_config', label: 'Layers (describe)', type: 'textarea', default: 'Linear(128, 64), ReLU(), Linear(64, 10)' },
+      { key: 'layers_config', label: 'One layer per line', type: 'textarea', default: 'Linear(128, 64)\nReLU()\nLinear(64, 10)' },
     ],
-    defaultConfig: { layers_config: 'Linear(128, 64), ReLU(), Linear(64, 10)' },
+    defaultConfig: { layers_config: 'Linear(128, 64)\nReLU()\nLinear(64, 10)' },
     generateCode: (node, _inputs, outputVar) =>
-      `${outputVar} = nn.Sequential(\n    nn.${(node.data.config.layers_config || 'Linear(128,10)').split(',').map((l: string) => `nn.${l.trim()}`).join(',\n    ')}\n)`,
+      `${outputVar} = nn.Sequential(\n    nn.${String(node.data.config.layers_config || 'Linear(128, 10)').split('\n').filter(Boolean).map((layer: string) => layer.trim()).join(',\n    nn.')}\n)`,
     imports: ['import torch', 'import torch.nn as nn'], pipPackages: ['torch'],
   },
 
@@ -794,15 +800,15 @@ export const nodeRegistry: Record<string, NodeTypeDefinition> = {
   },
 
   model_load: {
-    type: 'model_load', label: 'Model Load', category: 'dl',
-    description: 'Load a PyTorch model from disk',
+    type: 'model_load', label: 'TorchScript Model Load', category: 'dl',
+    description: 'Load a self-contained TorchScript model from disk',
     icon: 'FolderOpen',
     inputs: [],
     outputs: [{ id: 'model', label: 'model', type: 'model' }],
     configSchema: [{ key: 'filepath', label: 'File Path', type: 'string', default: 'model.pth' }],
     defaultConfig: { filepath: 'model.pth' },
     generateCode: (node, _inputs, outputVar) =>
-      `# Load your model class first, then:\n${outputVar}_state = torch.load("${node.data.config.filepath || 'model.pth'}")\n# ${outputVar}.load_state_dict(${outputVar}_state)`,
+      `${outputVar} = torch.jit.load("${node.data.config.filepath || 'model.pth'}", map_location="cpu")\n${outputVar}.eval()`,
     imports: ['import torch'], pipPackages: ['torch'],
   },
 

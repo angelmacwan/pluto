@@ -663,6 +663,7 @@ button {
 }
 
 .project-card {
+  position: relative;
   padding: 1.4rem;
   border-radius: 18px;
   background: var(--surface-container-lowest);
@@ -670,6 +671,73 @@ button {
   box-shadow: var(--shadow-card);
   cursor: pointer;
   transition: background 0.15s, box-shadow 0.15s, transform 0.15s;
+}
+
+.project-card-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.project-card-menu {
+  position: relative;
+  flex-shrink: 0;
+}
+
+.project-card-menu-trigger {
+  display: grid;
+  place-items: center;
+  width: 2rem;
+  height: 2rem;
+  margin: -0.45rem -0.45rem 0 0;
+  padding: 0;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--secondary);
+  cursor: pointer;
+}
+
+.project-card-menu-trigger:hover,
+.project-card-menu-trigger:focus-visible {
+  background: var(--surface-container-high);
+  color: var(--primary);
+}
+
+.project-card-menu-dropdown {
+  position: absolute;
+  z-index: 10;
+  top: calc(100% + 0.35rem);
+  right: -0.45rem;
+  min-width: 9rem;
+  padding: 0.3rem;
+  border: 1px solid rgba(18, 40, 60, 0.12);
+  border-radius: 10px;
+  background: var(--surface-container-lowest);
+  box-shadow: 0 12px 28px rgba(18, 40, 60, 0.16);
+}
+
+.project-card-menu-delete {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  gap: 0.55rem;
+  padding: 0.55rem 0.65rem;
+  border: 0;
+  border-radius: 7px;
+  background: transparent;
+  color: #c43d3d;
+  font: inherit;
+  font-size: 0.82rem;
+  font-weight: 600;
+  text-align: left;
+  cursor: pointer;
+}
+
+.project-card-menu-delete:hover,
+.project-card-menu-delete:focus-visible {
+  background: rgba(196, 61, 61, 0.1);
 }
 
 .project-card:hover {
@@ -886,11 +954,11 @@ button {
   width: 10px;
   height: 10px;
   border: 2px solid var(--surface-container-high);
-  transition: transform 0.1s ease;
+  transition: box-shadow 0.1s ease;
 }
 
 .react-flow__handle:hover {
-  transform: scale(1.25);
+  box-shadow: 0 0 0 2px rgba(100, 100, 255, 0.14);
 }
 
 .react-flow__panel {
@@ -943,25 +1011,14 @@ button {
   border-color: var(--outline);
 }
 
-/* Thin accent strip at top */
-.pluto-node__accent {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 3px;
-  border-radius: 12px 12px 0 0;
-  pointer-events: none;
-}
-
 /* ── Header ───────────────────────────────────────────────────────────────── */
 .pluto-node__header {
   display: flex;
   align-items: center;
   gap: 8px;
   padding: 10px 12px 8px;
-  border-bottom: 1px solid var(--outline-variant);
-  margin-top: 3px; /* space for accent strip */
+  border-radius: 11px 11px 0 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 .pluto-node__icon-wrap {
@@ -986,7 +1043,7 @@ button {
   font-family: 'Inter', sans-serif;
   font-size: 0.8rem;
   font-weight: 600;
-  color: var(--on-surface);
+  color: #fff;
   letter-spacing: -0.01em;
   line-height: 1.2;
   white-space: nowrap;
@@ -997,7 +1054,7 @@ button {
 .pluto-node__category {
   font-size: 0.65rem;
   font-weight: 500;
-  color: var(--outline);
+  color: rgba(255, 255, 255, 0.78);
   letter-spacing: 0.03em;
   text-transform: uppercase;
   line-height: 1;
@@ -1034,7 +1091,7 @@ button {
   border-radius: 4px;
   border: none;
   background: transparent;
-  color: var(--outline);
+  color: rgba(255, 255, 255, 0.8);
   cursor: pointer;
   padding: 0;
   opacity: 0;
@@ -1113,7 +1170,6 @@ button {
 }
 
 .pluto-node__handle.react-flow__handle:hover {
-  transform: scale(1.4);
   box-shadow: 0 0 0 3px rgba(100, 100, 255, 0.18);
 }
 
