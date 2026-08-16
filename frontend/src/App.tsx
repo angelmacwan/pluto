@@ -8,7 +8,7 @@ import { EditorPage } from './pages/EditorPage';
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const { user } = useAppStore();
-  if (user === undefined) return <div className="h-screen w-screen bg-[#0d0f13]" />; // Loading state
+  if (user === undefined) return <div style={{ height: '100vh', width: '100vw', background: 'var(--surface)' }} />;
   if (!user) return <Navigate to="/login" replace />;
   return <>{children}</>;
 }

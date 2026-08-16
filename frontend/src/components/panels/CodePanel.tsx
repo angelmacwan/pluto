@@ -8,36 +8,51 @@ export function CodePanel() {
 
   if (!isCodePanelOpen) return null;
 
+  const handleCopy = () => {
+    navigator.clipboard.writeText(generatedCode).catch(() => null);
+  };
+
+  const handleDownload = () => {
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(
+      new Blob([generatedCode], { type: 'text/plain' })
+    );
+    a.download = 'main.py';
+    a.click();
+  };
+
   return (
-    <div className="w-[500px] h-full bg-gray-900 border-l border-gray-800 flex flex-col animate-slide-in">
-      <div className="flex items-center justify-between p-3 border-b border-gray-800">
-        <span className="font-semibold text-sm text-gray-300">Generated Python</span>
-        <div className="flex gap-2">
-          <button className="p-1.5 text-gray-400 hover:text-white hover:bg-gray-800 rounded transition" title="Copy">
-            <Copy size={16} onClick={() => navigator.clipboard.writeText(generatedCode)} />
+    <div className="code-panel animate-slide-in">
+      <div className="code-panel-header">
+        <span className="code-panel-title">Generated Python</span>
+        <div className="code-panel-actions">
+          <button className="code-panel-btn" title="Copy" onClick={handleCopy}>
+            <Copy size={14} />
           </button>
-          <button className="p-1.5 text-gray-400 hover:text-white hover:bg-gray-800 rounded transition" title="Download">
-            <Download size={16} onClick={() => {
-                const a = document.createElement('a');
-                a.href = URL.createObjectURL(new Blob([generatedCode], {type: 'text/plain'}));
-                a.download = 'main.py';
-                a.click();
-            }} />
+          <button className="code-panel-btn" title="Download" onClick={handleDownload}>
+            <Download size={14} />
           </button>
         </div>
       </div>
+
       {codeError && (
-        <div className="bg-red-900/50 text-red-400 p-2 text-xs border-b border-red-900/50">
-          {codeError}
-        </div>
+        <div className="code-panel-error">{codeError}</div>
       )}
-      <div className="flex-1">
+
+      <div className="code-panel-editor">
         <Editor
           height="100%"
           defaultLanguage="python"
-          theme="vs-dark"
+          theme="vs"
           value={generatedCode}
-          options={{ readOnly: true, minimap: { enabled: false }, fontFamily: 'JetBrains Mono', fontSize: 13 }}
+          options={{
+            readOnly: true,
+            minimap: { enabled: false },
+            fontFamily: 'JetBrains Mono',
+            fontSize: 13,
+            lineNumbers: 'on',
+            scrollBeyondLastLine: false,
+          }}
         />
       </div>
     </div>
