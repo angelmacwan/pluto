@@ -1,5 +1,8 @@
 
 import { useAppStore } from '../../store/appStore';
+import { useGraphStore } from '../../store/graphStore';
+import { useProjectStore } from '../../store/projectStore';
+import { useToastStore } from './Toast';
 import { signOut } from '../auth/AuthProvider';
 import { Play, Save, Code, TerminalSquare, ArrowLeft } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
@@ -10,12 +13,37 @@ interface TopBarProps {
 }
 
 export function TopBar({ showBack = false }: TopBarProps) {
-  const { user } = useAppStore();
+  const { user, currentProjectId, projects } = useAppStore();
   const { bridgeConnected, isRunning, toggleCodePanel, toggleOutputPanel, isCodePanelOpen, isOutputPanelOpen } = useAppStore();
+  const { toGraphState } = useGraphStore();
+  const { saveProject } = useProjectStore();
+  const addToast = useToastStore((s) => s.addToast);
   const navigate = useNavigate();
 
   const [menuOpen, setMenuOpen] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
   const avatarRef = useRef<HTMLDivElement>(null);
+
+  const handleSave = async () => {
+    if (!user || !currentProjectId) return;
+    const currentProj = projects.find((p) => p.id === currentProjectId);
+    if (!currentProj) return;
+
+    setIsSaving(true);
+    try {
+      const updatedGraphState = toGraphState();
+      await saveProject({
+        ...currentProj,
+        graphState: updatedGraphState,
+        updatedAt: Date.now(),
+      });
+      addToast({ message: 'Pipeline saved successfully', type: 'success' });
+    } catch (err: any) {
+      addToast({ message: `Save failed: ${err.message}`, type: 'error' });
+    } finally {
+      setIsSaving(false);
+    }
+  };
 
   // Close on any click outside the avatar wrapper
   useEffect(() => {
@@ -75,9 +103,13 @@ export function TopBar({ showBack = false }: TopBarProps) {
               {isRunning ? 'Running…' : 'Run'}
             </button>
 
-            <button className="topbar-save-btn">
+            <button
+              className="topbar-save-btn"
+              onClick={handleSave}
+              disabled={isSaving}
+            >
               <Save size={13} />
-              Save
+              {isSaving ? 'Saving…' : 'Save'}
             </button>
 
             <div className="topbar-divider" />

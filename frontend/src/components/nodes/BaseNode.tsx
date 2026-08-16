@@ -1,6 +1,7 @@
 import { Handle, Position } from '@xyflow/react';
 import type { PlutoNodeData } from '../../types';
 import * as LucideIcons from 'lucide-react';
+import { X } from 'lucide-react';
 import { useGraphStore } from '../../store/graphStore';
 
 const categoryColorMap: Record<string, string> = {
@@ -25,6 +26,7 @@ const categoryLabelMap: Record<string, string> = {
 
 export function BaseNode({ id, data }: { id: string; data: PlutoNodeData }) {
   const updateNodeConfig = useGraphStore(s => s.updateNodeConfig);
+  const removeNode       = useGraphStore(s => s.removeNode);
 
   const iconName = (data.icon as string) || 'Code';
   const Icon = (LucideIcons as Record<string, any>)[iconName] || LucideIcons.Code;
@@ -66,6 +68,14 @@ export function BaseNode({ id, data }: { id: string; data: PlutoNodeData }) {
           {data.status === 'error' && (
             <LucideIcons.AlertCircle size={12} className="pluto-node__status-icon pluto-node__status--error" />
           )}
+          <button
+            className="pluto-node__delete-btn nodrag"
+            onClick={() => removeNode(id)}
+            title="Delete node"
+            aria-label="Delete node"
+          >
+            <X size={11} />
+          </button>
         </div>
       </div>
 

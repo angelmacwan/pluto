@@ -57,21 +57,83 @@ export const nodeRegistry: Record<string, NodeTypeDefinition> = {
   },
 
   if_condition: {
-    type: 'if_condition', label: 'If / Conditional', category: 'primitive',
-    description: 'Conditional expression',
+    type: 'if_condition', label: 'If / Compare', category: 'primitive',
+    description: 'Compare two values with a chosen operator and branch on the result',
     icon: 'GitBranch',
     inputs: [
-      { id: 'condition', label: 'condition', type: 'bool' },
-      { id: 'true_value', label: 'if true', type: 'any' },
-      { id: 'false_value', label: 'if false', type: 'any' },
+      { id: 'value_a', label: 'value A', type: 'any' },
+      { id: 'value_b', label: 'value B', type: 'any' },
     ],
-    outputs: [{ id: 'result', label: 'result', type: 'any' }],
-    configSchema: [],
-    defaultConfig: {},
-    generateCode: (_node, inputs, outputVar) =>
-      `${outputVar} = ${inputs['true_value'] || 'None'} if ${inputs['condition'] || 'True'} else ${inputs['false_value'] || 'None'}`,
+    outputs: [
+      { id: 'true_branch',  label: 'if true',  type: 'any' },
+      { id: 'false_branch', label: 'if false', type: 'any' },
+    ],
+    configSchema: [
+      {
+        key: 'operator',
+        label: 'Operator',
+        type: 'select',
+        options: ['==', '!=', '>', '<', '>=', '<=', 'is', 'is not', 'in', 'not in', 'not'],
+        default: '==',
+      },
+    ],
+    defaultConfig: { operator: '==' },
+    generateCode: (node, inputs, outputVar) => {
+      const op  = node.data.config.operator ?? '==';
+      const a   = inputs['value_a']  || 'None';
+      const b   = inputs['value_b']  || 'None';
+      // 'not' is a unary operator — ignore value_b
+      const cond = op === 'not' ? `not ${a}` : `${a} ${op} ${b}`;
+      return [
+        `_cond_${outputVar} = ${cond}`,
+        `${outputVar}_true  = ${a} if _cond_${outputVar} else None`,
+        `${outputVar}_false = ${a} if not _cond_${outputVar} else None`,
+      ].join('\n');
+    },
     imports: [], pipPackages: [],
   },
+
+  type_check: {
+    type: 'type_check', label: 'Type Check', category: 'primitive',
+    description: 'Check whether a value is an instance of a given type',
+    icon: 'Microscope',
+    inputs: [
+      { id: 'value', label: 'value', type: 'any' },
+    ],
+    outputs: [
+      { id: 'is_type',   label: 'if match',    type: 'any' },
+      { id: 'not_type',  label: 'if no match', type: 'any' },
+      { id: 'type_name', label: 'type name',   type: 'string' },
+    ],
+    configSchema: [
+      {
+        key: 'expected_type',
+        label: 'Expected Type',
+        type: 'select',
+        options: ['str', 'int', 'float', 'bool', 'list', 'dict', 'tuple', 'set', 'bytes', 'NoneType', 'any'],
+        default: 'str',
+      },
+    ],
+    defaultConfig: { expected_type: 'str' },
+    generateCode: (node, inputs, outputVar) => {
+      const v   = inputs['value'] || 'None';
+      const t   = node.data.config.expected_type ?? 'str';
+      const typeMap: Record<string, string> = {
+        str: 'str', int: 'int', float: 'float', bool: 'bool',
+        list: 'list', dict: 'dict', tuple: 'tuple', set: 'set',
+        bytes: 'bytes', NoneType: 'type(None)', any: 'object',
+      };
+      const pyType = typeMap[t] ?? t;
+      return [
+        `${outputVar}_type_name = type(${v}).__name__`,
+        `_match_${outputVar} = isinstance(${v}, ${pyType})`,
+        `${outputVar}_is_type  = ${v} if _match_${outputVar} else None`,
+        `${outputVar}_not_type = ${v} if not _match_${outputVar} else None`,
+      ].join('\n');
+    },
+    imports: [], pipPackages: [],
+  },
+
 
   for_loop: {
     type: 'for_loop', label: 'For Loop', category: 'primitive',

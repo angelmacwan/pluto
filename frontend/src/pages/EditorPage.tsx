@@ -1,3 +1,5 @@
+import { useEffect } from 'react';
+import { useParams } from 'react-router-dom';
 import { ReactFlowProvider } from '@xyflow/react';
 import { TopBar } from '../components/ui/TopBar';
 import { NodePalette } from '../components/sidebar/NodePalette';
@@ -9,12 +11,27 @@ import { useCodegen } from '../hooks/useCodegen';
 import { useKeyboardShortcuts } from '../hooks/useKeyboardShortcuts';
 import { useBridge } from '../hooks/useBridge';
 import { useAppStore } from '../store/appStore';
+import { useGraphStore } from '../store/graphStore';
 
 export function EditorPage() {
   useCodegen();
   useBridge();
 
-  const { isSidebarOpen, isCodePanelOpen, isOutputPanelOpen } = useAppStore();
+  const { projectId } = useParams<{ projectId: string }>();
+  const { isSidebarOpen, isCodePanelOpen, isOutputPanelOpen, projects, setCurrentProject } = useAppStore();
+  const { loadGraph } = useGraphStore();
+
+  useEffect(() => {
+    if (projectId) {
+      setCurrentProject(projectId);
+      const proj = projects.find((p) => p.id === projectId);
+      if (proj && proj.graphState) {
+        loadGraph(proj.graphState);
+      }
+    } else {
+      setCurrentProject(null);
+    }
+  }, [projectId, projects, loadGraph, setCurrentProject]);
 
   return (
     <div className="pluto-root">

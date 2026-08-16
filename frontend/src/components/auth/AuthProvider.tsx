@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useEffect } from 'react';
 import { useAppStore } from '../../store/appStore';
+import { useProjectStore } from '../../store/projectStore';
 import { auth } from '../../lib/firebase';
 import { onAuthStateChanged, GoogleAuthProvider, signInWithPopup, signOut as fbSignOut } from 'firebase/auth';
 
@@ -11,6 +12,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     const unsub = onAuthStateChanged(auth, (user) => {
       setUser(user);
+      if (user) {
+        useProjectStore.getState().loadUserProjects(user.uid);
+      }
     });
     return unsub;
   }, [setUser]);

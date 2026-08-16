@@ -1024,6 +1024,33 @@ button {
   color: var(--error);
 }
 
+/* ── Delete button ────────────────────────────────────────────────────────── */
+.pluto-node__delete-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  border-radius: 4px;
+  border: none;
+  background: transparent;
+  color: var(--outline);
+  cursor: pointer;
+  padding: 0;
+  opacity: 0;
+  transition: opacity 0.15s, background 0.15s, color 0.15s;
+  flex-shrink: 0;
+}
+
+.pluto-node:hover .pluto-node__delete-btn {
+  opacity: 1;
+}
+
+.pluto-node__delete-btn:hover {
+  background: rgba(186, 26, 26, 0.1);
+  color: var(--error);
+}
+
 @keyframes spin {
   to { transform: rotate(360deg); }
 }
