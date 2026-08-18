@@ -21,3 +21,7 @@
 - [ ] UI needs major overhall at some point, ill do that later
 
 - [ ] make this into a python package like jupyter, so no firebase is needed, everything is local
+
+- [ ] i am planning to split pluto into 2 services.
+    - 1 can be installed locally using pip and simply running the pluto server in python (like jupyter lab) the user can launch pluto and work on it, everything is local
+    - and a online hosted service with logins, project management, and some advance featues TBD
