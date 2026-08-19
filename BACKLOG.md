@@ -7,6 +7,8 @@
 
 - [x] need a landing page
 
+- [ ] i want a indicator that shows if there are unsaved changes, and when i hit the back button and changes are not saved, it prompts me to save or discard changes
+
 - [ ] update loops
     - the way unreal enging handles loops, where loops take in a loop body, condition, and completed
     - input will be a loop variable (list, object, etc), there will be a condition (exit condition if we pass in a normal input like number, but if its a string, or list etc then we just loop over everythign)
@@ -29,6 +31,4 @@
 
 - [ ] make this into a python package like jupyter, so no firebase is needed, everything is local
 
-- [ ] i am planning to split pluto into 2 services.
-    - 1 can be installed locally using pip and simply running the pluto server in python (like jupyter lab) the user can launch pluto and work on it, everything is local
-    - and a online hosted service with logins, project management, and some advance featues TBD
+- [ ] i am planning to remove firebase completly. This will be a python package that the user installs and simply runs it locally, the user can see their local files (only in the folder in which the pluto server is running). then they can create folders that live locally on their PC and easily manage projects / pipelines (like jupyter does). No more logings and stuff
