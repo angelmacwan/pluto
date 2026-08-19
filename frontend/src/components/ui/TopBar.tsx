@@ -1,10 +1,9 @@
-
 import { useAppStore } from '../../store/appStore';
 import { useGraphStore } from '../../store/graphStore';
 import { useProjectStore } from '../../store/projectStore';
 import { useToastStore } from './Toast';
 import { signOut } from '../auth/AuthProvider';
-import { Play, Save, Code, TerminalSquare, ArrowLeft } from 'lucide-react';
+import { Play, Save, Code, TerminalSquare, ArrowLeft, Pencil, User } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useEffect, useRef, useState } from 'react';
 
@@ -24,6 +23,50 @@ export function TopBar({ showBack = false }: TopBarProps) {
   const [isSaving, setIsSaving] = useState(false);
   const avatarRef = useRef<HTMLDivElement>(null);
 
+  // ── Project name editing ──────────────────────────────────────────────────
+  const currentProject = projects.find((p) => p.id === currentProjectId) ?? null;
+  const [isEditingName, setIsEditingName] = useState(false);
+  const [draftName, setDraftName] = useState('');
+  const nameInputRef = useRef<HTMLInputElement>(null);
+
+  // Keep draft in sync when the project changes (e.g. navigating to a different project)
+  useEffect(() => {
+    setIsEditingName(false);
+    setDraftName(currentProject?.name ?? '');
+  }, [currentProjectId, currentProject?.name]);
+
+  const startEditing = () => {
+    setDraftName(currentProject?.name ?? '');
+    setIsEditingName(true);
+    setTimeout(() => {
+      nameInputRef.current?.select();
+    }, 0);
+  };
+
+  const commitName = async () => {
+    const trimmed = draftName.trim();
+    if (!trimmed || !user || !currentProject) {
+      cancelEditing();
+      return;
+    }
+    if (trimmed === currentProject.name) {
+      setIsEditingName(false);
+      return;
+    }
+    setIsEditingName(false);
+    try {
+      await saveProject({ ...currentProject, name: trimmed, updatedAt: Date.now() });
+    } catch {
+      addToast({ message: 'Failed to rename project', type: 'error' });
+    }
+  };
+
+  const cancelEditing = () => {
+    setIsEditingName(false);
+    setDraftName(currentProject?.name ?? '');
+  };
+
+  // ── Graph save ────────────────────────────────────────────────────────────
   const handleSave = async () => {
     if (!user || !currentProjectId) return;
     const currentProj = projects.find((p) => p.id === currentProjectId);
@@ -45,7 +88,7 @@ export function TopBar({ showBack = false }: TopBarProps) {
     }
   };
 
-  // Close on any click outside the avatar wrapper
+  // Close avatar menu on outside click
   useEffect(() => {
     if (!menuOpen) return;
     const handleClickOutside = (e: MouseEvent) => {
@@ -59,12 +102,13 @@ export function TopBar({ showBack = false }: TopBarProps) {
 
   return (
     <div className="topbar">
+      {/* ── Left: brand + back ─────────────────────────────────────────────── */}
       <div className="topbar-brand">
         {showBack && (
           <button
             className="topbar-back-btn"
             title="Back to Pipelines"
-            onClick={() => navigate('/')}
+            onClick={() => navigate('/app')}
           >
             <ArrowLeft size={16} />
           </button>
@@ -73,6 +117,38 @@ export function TopBar({ showBack = false }: TopBarProps) {
         <span className="topbar-brand-name">Pluto</span>
       </div>
 
+      {/* ── Centre: editable project name (editor only) ─────────────────── */}
+      {showBack && currentProject && (
+        <div className="topbar-project-name-wrap">
+          {isEditingName ? (
+            <input
+              ref={nameInputRef}
+              className="topbar-project-name-input"
+              value={draftName}
+              onChange={(e) => setDraftName(e.target.value)}
+              onBlur={commitName}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') { e.preventDefault(); commitName(); }
+                if (e.key === 'Escape') cancelEditing();
+              }}
+              maxLength={64}
+              aria-label="Project name"
+              spellCheck={false}
+            />
+          ) : (
+            <button
+              className="topbar-project-name-btn"
+              onClick={startEditing}
+              title="Click to rename project"
+            >
+              <span className="topbar-project-name-text">{currentProject.name}</span>
+              <Pencil size={11} className="topbar-project-name-icon" />
+            </button>
+          )}
+        </div>
+      )}
+
+      {/* ── Right: actions ──────────────────────────────────────────────── */}
       <div className="topbar-actions">
         {showBack && (
           <>
@@ -118,14 +194,19 @@ export function TopBar({ showBack = false }: TopBarProps) {
 
         {user && (
           <div className="topbar-avatar-wrap" ref={avatarRef}>
-            <img
-              src={user.photoURL ?? `https://ui-avatars.com/api/?name=${user.email}`}
-              alt="Avatar"
-              className="topbar-avatar"
+            <button
+              className="topbar-avatar-btn"
               onClick={() => setMenuOpen((o) => !o)}
-            />
+              aria-label="Account menu"
+              title={user.email ?? 'Account'}
+            >
+              <User size={18} />
+            </button>
             {menuOpen && (
               <div className="topbar-avatar-menu">
+                {user.email && (
+                  <p className="topbar-avatar-email">{user.email}</p>
+                )}
                 <button
                   onClick={() => {
                     setMenuOpen(false);
