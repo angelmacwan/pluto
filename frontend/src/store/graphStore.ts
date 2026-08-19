@@ -67,7 +67,7 @@ export const useGraphStore = create<GraphStore>((set, get) => ({
         def = {
           type: customNode.id,
           label: customNode.label,
-          category: 'primitive',
+          category: 'custom' as any,
           description: customNode.description,
           icon: 'Code2',
           inputs: [{ id: 'flow_in', label: '', type: 'flow', optional: true }, ...customNode.inputs],
@@ -135,12 +135,16 @@ export const useGraphStore = create<GraphStore>((set, get) => ({
   addEdge: (edge) => {
     const source = get().nodes.find(node => node.id === edge.source);
     const target = get().nodes.find(node => node.id === edge.target);
-    const sourceDef = source && nodeRegistry[source.type || ''];
-    const targetDef = target && nodeRegistry[target.type || ''];
-    const sourceHandle = edge.sourceHandle || sourceDef?.outputs[0]?.id;
-    const targetHandle = edge.targetHandle || targetDef?.inputs[0]?.id;
-    const output = sourceDef?.outputs.find(handle => handle.id === sourceHandle);
-    const input = targetDef?.inputs.find(handle => handle.id === targetHandle);
+
+    // Resolve handle lists from the registry when available, otherwise fall
+    // back to the live node data (populated for custom nodes in addNode).
+    const sourceOutputs = nodeRegistry[source?.type || '']?.outputs ?? source?.data.outputs ?? [];
+    const targetInputs  = nodeRegistry[target?.type || '']?.inputs  ?? target?.data.inputs  ?? [];
+
+    const sourceHandle = edge.sourceHandle || sourceOutputs[0]?.id;
+    const targetHandle = edge.targetHandle || targetInputs[0]?.id;
+    const output = sourceOutputs.find((h: { id: string }) => h.id === sourceHandle);
+    const input  = targetInputs.find((h: { id: string }) => h.id === targetHandle);
 
     if (!source || !target || !output || !input) return;
     if (output.type !== 'any' && input.type !== 'any' && output.type !== input.type) return;

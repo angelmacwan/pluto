@@ -1,4 +1,4 @@
-import React, { useCallback, useRef, useState } from 'react';
+import React, { useCallback, useMemo, useRef, useState } from 'react';
 import { 
   ReactFlow, 
   Background, 
@@ -11,13 +11,28 @@ import {
 } from '@xyflow/react';
 import { Map } from 'lucide-react';
 import { useGraphStore } from '../../store/graphStore';
-import { nodeTypes } from '../nodes/NodeFactory';
+import { useAppStore } from '../../store/appStore';
+import { nodeTypes as registryNodeTypes } from '../nodes/NodeFactory';
+import { BaseNode } from '../nodes/BaseNode';
 
 export function Canvas() {
   const { nodes, edges, setNodes, addEdge, addNode } = useGraphStore();
+  const { currentProjectId, projects } = useAppStore();
   const reactFlowWrapper = useRef<HTMLDivElement>(null);
   const { screenToFlowPosition } = useReactFlow();
   const [isMiniMapVisible, setIsMiniMapVisible] = useState(true);
+
+  // Build a stable nodeTypes map that covers both registry nodes and any
+  // custom nodes saved to the current project. Without this, React Flow
+  // falls back to its default plain-white-box renderer for custom types.
+  const nodeTypes = useMemo(() => {
+    const currentProject = projects.find(p => p.id === currentProjectId);
+    const customEntries = (currentProject?.customNodes ?? []).reduce<Record<string, typeof BaseNode>>(
+      (acc, cn) => { acc[cn.id] = BaseNode; return acc; },
+      {}
+    );
+    return { ...registryNodeTypes, ...customEntries };
+  }, [currentProjectId, projects]);
 
   const onConnect = useCallback((connection: any) => addEdge(connection), [addEdge]);
 

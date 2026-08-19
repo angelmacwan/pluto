@@ -1,6 +1,6 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
-import { X, Sparkles, Braces } from 'lucide-react';
+import { X, Sparkles, Braces, Loader2 } from 'lucide-react';
 import { useAppStore } from '../../store/appStore';
 import { useProjectStore } from '../../store/projectStore';
 import type { CustomNodeDef, HandleDef } from '../../types';
@@ -98,141 +98,236 @@ export function CustomNodeModal({ onClose }: CustomNodeModalProps) {
   const [description, setDescription] = useState('');
   const [code, setCode] = useState('def custom_function(arg1):\n    return arg1');
   const [error, setError] = useState('');
+  const [isSaving, setIsSaving] = useState(false);
+
   const inferredFunction = inferFunctionDefinition(code);
   const hasReturnStatement = /^\s*return\b/m.test(code);
+  const isValid = Boolean(inferredFunction && hasReturnStatement);
 
   const { currentProjectId, projects } = useAppStore();
   const { saveProject } = useProjectStore();
 
+  const labelRef = useRef<HTMLInputElement>(null);
+
+  // Focus label input on mount
+  useEffect(() => {
+    const timeout = setTimeout(() => labelRef.current?.focus(), 80);
+    return () => clearTimeout(timeout);
+  }, []);
+
+  // Escape key closes the modal
+  useEffect(() => {
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose();
+    };
+    document.addEventListener('keydown', onKeyDown);
+    return () => document.removeEventListener('keydown', onKeyDown);
+  }, [onClose]);
+
   const handleSave = async () => {
-    if (!label.trim()) return setError('Label is required');
-    if (!inferredFunction || !/^\s*return\b/m.test(code)) return setError('Add a valid Python function definition with a return statement');
-    
+    setError('');
+    if (!label.trim()) {
+      setError('Node label is required.');
+      labelRef.current?.focus();
+      return;
+    }
+    if (!isValid) {
+      setError('Add a valid Python function definition with a return statement.');
+      return;
+    }
+
     const currentProject = projects.find(p => p.id === currentProjectId);
-    if (!currentProject) return setError('No active project found');
+    if (!currentProject) {
+      setError('No active project found.');
+      return;
+    }
 
     const newCustomNode: CustomNodeDef = {
       id: `custom_${nanoid()}`,
-      name: inferredFunction.name,
+      name: inferredFunction!.name,
       label: label.trim(),
       description: description.trim(),
-      inputs: inferredFunction.inputs,
-      output: inferredFunction.output,
-      code: code
+      inputs: inferredFunction!.inputs,
+      output: inferredFunction!.output,
+      code,
     };
 
     const updatedProject = {
       ...currentProject,
       customNodes: [...(currentProject.customNodes || []), newCustomNode],
-      updatedAt: Date.now()
+      updatedAt: Date.now(),
     };
 
+    setIsSaving(true);
     try {
       await saveProject(updatedProject);
       onClose();
     } catch (err) {
       console.error(err);
-      setError('Failed to save custom node to project');
+      setError('Failed to save custom node. Please try again.');
+    } finally {
+      setIsSaving(false);
     }
   };
 
   return createPortal(
-    <div className="custom-node-modal-backdrop" role="presentation">
-      <div className="w-full max-w-2xl max-h-[90vh] flex flex-col overflow-hidden transition-all" role="dialog" aria-modal="true" aria-labelledby="custom-node-modal-title" style={{ background: 'var(--surface-container-lowest)', borderRadius: '12px', boxShadow: '0 40px 40px -10px rgba(25, 28, 28, 0.06)' }}>
+    <div
+      className="custom-node-modal-backdrop"
+      role="presentation"
+      onClick={(e) => { if (e.target === e.currentTarget) onClose(); }}
+    >
+      <div
+        className="custom-node-modal-dialog"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="custom-node-modal-title"
+      >
+        {/* ── Header ─────────────────────────────────────────────── */}
         <div className="custom-node-modal-header">
           <div className="custom-node-modal-heading">
-            <span className="custom-node-modal-heading-icon"><Sparkles size={17} /></span>
+            <span className="custom-node-modal-heading-icon">
+              <Sparkles size={17} />
+            </span>
             <div>
               <p className="custom-node-modal-kicker">Node builder</p>
-              <h2 id="custom-node-modal-title" className="text-xl font-bold font-headline" style={{ color: 'var(--primary)', letterSpacing: '-0.04em' }}>Create Custom Node</h2>
-              <p className="custom-node-modal-subtitle">Define a reusable Python step for your workflow.</p>
+              <h2 id="custom-node-modal-title" className="custom-node-modal-title">
+                Create Custom Node
+              </h2>
+              <p className="custom-node-modal-subtitle">
+                Define a reusable Python step for your workflow.
+              </p>
             </div>
           </div>
-          <button onClick={onClose} aria-label="Close custom node dialog" className="custom-node-modal-close">
-            <X size={22} />
+          <button
+            onClick={onClose}
+            aria-label="Close custom node dialog"
+            className="custom-node-modal-close"
+          >
+            <X size={20} />
           </button>
         </div>
-        
-        <div className="custom-node-modal-scroll flex-1 overflow-y-auto p-6 space-y-6">
+
+        {/* ── Body ───────────────────────────────────────────────── */}
+        <div className="custom-node-modal-scroll">
+
+          {/* Error banner */}
           {error && (
-            <div className="px-4 py-3 text-sm rounded-xl border font-medium" style={{ background: 'var(--error-container)', color: 'var(--error)', borderColor: 'rgba(186,26,26,0.2)' }}>
+            <div className="custom-node-modal-error" role="alert">
               {error}
             </div>
           )}
 
-          <div className="custom-node-modal-identity grid grid-cols-1 gap-5">
-            <div>
-              <label className="block text-[0.88rem] font-semibold mb-1.5" style={{ color: 'var(--on-surface-variant)' }}>Node Label (UI)</label>
+          {/* Identity section: Label + Description */}
+          <div className="custom-node-modal-identity">
+            <div className="custom-node-modal-field">
+              <label htmlFor="cnm-label" className="custom-node-modal-field-label">
+                Node label <span className="custom-node-modal-field-required">*</span>
+              </label>
               <input
+                id="cnm-label"
+                ref={labelRef}
                 type="text"
-                className="w-full transition-all focus:outline-none"
-                style={{ 
-                  minHeight: '40px', padding: '0.55rem 0.75rem', borderRadius: '12px',
-                  border: '1px solid rgba(18, 40, 60, 0.12)', background: 'rgba(255, 255, 255, 0.92)', color: 'var(--on-surface)', fontSize: '0.88rem' 
-                }}
+                className="custom-node-modal-input"
                 value={label}
-                onChange={e => setLabel(e.target.value)}
+                onChange={e => { setLabel(e.target.value); if (error) setError(''); }}
                 placeholder="e.g. My Custom Fetch"
-                onFocus={(e) => { e.currentTarget.style.borderColor = 'rgba(18, 40, 60, 0.3)'; e.currentTarget.style.boxShadow = '0 0 0 4px rgba(18, 40, 60, 0.08)'; }}
-                onBlur={(e) => { e.currentTarget.style.borderColor = 'rgba(18, 40, 60, 0.12)'; e.currentTarget.style.boxShadow = 'none'; }}
+                autoComplete="off"
+              />
+            </div>
+
+            <div className="custom-node-modal-field">
+              <label htmlFor="cnm-description" className="custom-node-modal-field-label">
+                Description
+                <span className="custom-node-modal-field-optional">optional</span>
+              </label>
+              <input
+                id="cnm-description"
+                type="text"
+                className="custom-node-modal-input"
+                value={description}
+                onChange={e => setDescription(e.target.value)}
+                placeholder="What does this node do?"
+                autoComplete="off"
               />
             </div>
           </div>
 
-          <div>
-            <label className="block text-[0.88rem] font-semibold mb-1.5" style={{ color: 'var(--on-surface-variant)' }}>Description (optional)</label>
-            <input
-              type="text"
-              className="w-full transition-all focus:outline-none"
-              style={{ 
-                minHeight: '40px', padding: '0.55rem 0.75rem', borderRadius: '12px',
-                border: '1px solid rgba(18, 40, 60, 0.12)', background: 'rgba(255, 255, 255, 0.92)', color: 'var(--on-surface)', fontSize: '0.88rem' 
-              }}
-              value={description}
-              onChange={e => setDescription(e.target.value)}
-              placeholder="What does this node do?"
-              onFocus={(e) => { e.currentTarget.style.borderColor = 'rgba(18, 40, 60, 0.3)'; e.currentTarget.style.boxShadow = '0 0 0 4px rgba(18, 40, 60, 0.08)'; }}
-              onBlur={(e) => { e.currentTarget.style.borderColor = 'rgba(18, 40, 60, 0.12)'; e.currentTarget.style.boxShadow = 'none'; }}
-            />
-          </div>
-
-          <div>
+          {/* Python logic section */}
+          <div className="custom-node-modal-code-section">
             <div className="custom-node-modal-code-heading">
               <div>
-                <label className="block text-[0.88rem] font-semibold mb-1" style={{ color: 'var(--on-surface-variant)' }}>Python Logic</label>
-                <p className="text-[0.8rem] mb-2.5" style={{ color: 'var(--secondary)' }}>Define the function below. Its name, inputs, and output are inferred from this definition.</p>
+                <label htmlFor="cnm-code" className="custom-node-modal-field-label">
+                  Python logic
+                </label>
+                <p className="custom-node-modal-code-hint">
+                  The function name, inputs, and output type are inferred automatically.
+                </p>
               </div>
-              <span className="custom-node-modal-code-badge"><Braces size={13} /> Python</span>
+              <span className="custom-node-modal-code-badge">
+                <Braces size={12} />
+                Python
+              </span>
             </div>
+
             <textarea
-              className="custom-node-modal-code w-full h-44 p-4 font-mono transition-all focus:outline-none"
-              style={{ 
-                borderRadius: '12px', border: '1px solid rgba(18, 40, 60, 0.12)', 
-                background: 'rgba(255, 255, 255, 0.92)', color: 'var(--on-surface)', fontSize: '0.86rem', lineHeight: '1.6'
-              }}
+              id="cnm-code"
+              className="custom-node-modal-code"
               value={code}
               onChange={e => setCode(e.target.value)}
-              placeholder="def my_function(arg1):&#10;    return arg1 * 2"
-              onFocus={(e) => { e.currentTarget.style.borderColor = 'rgba(18, 40, 60, 0.3)'; e.currentTarget.style.boxShadow = '0 0 0 4px rgba(18, 40, 60, 0.08)'; }}
-              onBlur={(e) => { e.currentTarget.style.borderColor = 'rgba(18, 40, 60, 0.12)'; e.currentTarget.style.boxShadow = 'none'; }}
+              placeholder={'def my_function(arg1):\n    return arg1 * 2'}
+              spellCheck={false}
+              onKeyDown={e => {
+                // Allow Tab to insert 4 spaces instead of moving focus
+                if (e.key === 'Tab') {
+                  e.preventDefault();
+                  const el = e.currentTarget;
+                  const { selectionStart, selectionEnd } = el;
+                  const next = `${el.value.slice(0, selectionStart)}    ${el.value.slice(selectionEnd)}`;
+                  setCode(next);
+                  // Restore cursor after state update
+                  requestAnimationFrame(() => {
+                    el.selectionStart = selectionStart + 4;
+                    el.selectionEnd = selectionStart + 4;
+                  });
+                }
+              }}
             />
-            <div className={`custom-node-modal-signature ${inferredFunction && hasReturnStatement ? '' : 'is-invalid'}`}>
+
+            {/* Inferred signature preview */}
+            <div className={`custom-node-modal-signature${isValid ? '' : ' is-invalid'}`}>
               <span className="custom-node-modal-signature-label">Inferred interface</span>
               <code>
                 {inferredFunction
-                  ? `${inferredFunction.name}(${inferredFunction.inputs.map(input => input.id).join(', ')}) → ${inferredFunction.output.label}`
+                  ? `${inferredFunction.name}(${inferredFunction.inputs.map(i => i.id).join(', ')}) → ${inferredFunction.output.label}`
                   : 'Write a function definition to preview its interface'}
               </code>
             </div>
           </div>
+
         </div>
-        
-        <div className="custom-node-modal-footer px-6 py-5 border-t flex justify-end gap-3" style={{ background: 'var(--surface-container-low)', borderColor: 'var(--outline-variant)' }}>
-          <button onClick={onClose} className="custom-node-modal-cancel px-5 py-2.5 text-[0.88rem] font-bold rounded-lg transition-colors">
+
+        {/* ── Footer ─────────────────────────────────────────────── */}
+        <div className="custom-node-modal-footer">
+          <button
+            onClick={onClose}
+            className="custom-node-modal-cancel"
+            disabled={isSaving}
+          >
             Cancel
           </button>
-          <button onClick={handleSave} className="custom-node-modal-save px-5 py-2.5 text-[0.88rem] font-bold rounded-lg transition-all">
-            Save Custom Node
+          <button
+            onClick={handleSave}
+            className="custom-node-modal-save"
+            disabled={isSaving}
+          >
+            {isSaving ? (
+              <>
+                <Loader2 size={14} className="custom-node-modal-save-spinner" />
+                Saving…
+              </>
+            ) : (
+              'Save Node'
+            )}
           </button>
         </div>
       </div>

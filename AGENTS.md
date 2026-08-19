@@ -1,4 +1,4 @@
-# AGENTS.md — Pluto Agent Rules
+# AGENTS.md Pluto Agent Rules
 
 This file governs how AI agents (and contributors acting as agents) must behave when working in this repository.
 
@@ -20,7 +20,7 @@ This file governs how AI agents (and contributors acting as agents) must behave 
 
 ## 🐍 Python Rules
 
-### Environment Isolation — Always Use `.env`
+### Environment Isolation Always Use `.env`
 
 - Every Python script or module **must** load configuration from a `.env` file using `python-dotenv`.
 - **Never** hard-code secrets, API keys, file paths, or environment-specific values.
@@ -36,7 +36,7 @@ load_dotenv()
 - Use `pip` for dependency management and virtual environments where possible.
 - Keep a `requirements.txt` or `pyproject.toml` up to date for every Python component.
 
-### Code Quality — Ruff
+### Code Quality Ruff
 
 All Python code **must** pass [Ruff](https://docs.astral.sh/ruff/) linting and formatting before being committed.
 
@@ -59,7 +59,7 @@ ruff format .
 
 ## 🌐 Frontend (TypeScript / React) Rules
 
-### Code Quality — oxlint
+### Code Quality oxlint
 
 The frontend uses [oxlint](https://oxc.rs/docs/guide/usage/linter) for linting.
 
@@ -82,7 +82,7 @@ npx tsc --noEmit   # type-check without emitting files
 
 ## ✅ Verification
 
-When you need to verify that code works, use **builds and tests only** — never run a server.
+When you need to verify that code works, use **builds and tests only** never run a server.
 
 ### Frontend
 
@@ -136,11 +136,11 @@ pluto/
 
 ## 🔑 Secrets & Environment Variables
 
-| Location       | Rule                                                    |
-| -------------- | ------------------------------------------------------- |
-| `.env`         | Real values — **never commit**, already in `.gitignore` |
-| `.env.example` | Template with placeholder values — **always commit**    |
-| Source code    | **No hard-coded secrets, ever**                         |
+| Location       | Rule                                                  |
+| -------------- | ----------------------------------------------------- |
+| `.env`         | Real values **never commit**, already in `.gitignore` |
+| `.env.example` | Template with placeholder values **always commit**    |
+| Source code    | **No hard-coded secrets, ever**                       |
 
 ---
 

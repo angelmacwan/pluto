@@ -73,6 +73,7 @@
   --category-agent: hsl(38, 95%, 58%);
   --category-eval: hsl(188, 90%, 58%);
   --category-math: hsl(18, 90%, 62%);
+  --category-custom: hsl(328, 85%, 58%);
 
   --handle-any: #94a3b8;
   --handle-flow: #f8fafc;
@@ -533,38 +534,45 @@ button {
   animation: fadeIn 0.16s ease-out;
 }
 
-.custom-node-modal-backdrop > div {
-  width: min(100%, 672px);
-  max-height: min(90dvh, 760px);
+.custom-node-modal-dialog {
+  display: flex;
+  flex-direction: column;
+  width: min(100%, 660px);
+  max-height: min(90dvh, 740px);
+  background: var(--surface-container-lowest);
   border: 1px solid rgba(18, 40, 60, 0.1);
-  border-radius: 18px !important;
-  box-shadow: 0 24px 70px rgba(18, 40, 60, 0.2) !important;
+  border-radius: 20px;
+  box-shadow: 0 24px 70px rgba(18, 40, 60, 0.2);
+  overflow: hidden;
   animation: customNodeModalIn 0.2s ease-out;
 }
 
+/* ── Header ─────────────────────────────────────────────────────────────── */
 .custom-node-modal-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 1rem;
-  padding: 1.15rem 1.5rem;
+  padding: 1.25rem 1.5rem;
   border-bottom: 1px solid var(--outline-variant);
   background: linear-gradient(135deg, rgba(207, 229, 255, 0.34), rgba(255, 255, 255, 0.94) 62%);
+  flex-shrink: 0;
 }
 
 .custom-node-modal-heading {
   display: flex;
   align-items: flex-start;
-  gap: 0.8rem;
+  gap: 0.85rem;
 }
 
 .custom-node-modal-heading-icon {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 34px;
-  height: 34px;
-  margin-top: 0.15rem;
+  flex-shrink: 0;
+  width: 36px;
+  height: 36px;
+  margin-top: 0.1rem;
   border-radius: 10px;
   background: var(--primary);
   color: var(--on-primary);
@@ -572,28 +580,38 @@ button {
 }
 
 .custom-node-modal-kicker {
-  margin-bottom: 0.1rem;
+  margin-bottom: 0.15rem;
   color: var(--secondary);
-  font-size: 0.66rem;
+  font-size: 0.65rem;
   font-weight: 800;
   letter-spacing: 0.12em;
   line-height: 1;
   text-transform: uppercase;
 }
 
+.custom-node-modal-title {
+  font-family: 'Manrope', sans-serif;
+  font-size: 1.15rem;
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  color: var(--primary);
+  line-height: 1.2;
+}
+
 .custom-node-modal-subtitle {
-  margin-top: 0.18rem;
+  margin-top: 0.2rem;
   color: var(--secondary);
   font-size: 0.78rem;
+  line-height: 1.4;
 }
 
 .custom-node-modal-close {
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  flex-shrink: 0;
   width: 34px;
   height: 34px;
-  flex-shrink: 0;
   border-radius: 9px;
   color: var(--secondary);
   transition: background 0.15s, color 0.15s, transform 0.15s;
@@ -606,58 +624,105 @@ button {
   transform: rotate(4deg);
 }
 
-.custom-node-modal-close:focus-visible,
-.custom-node-modal-add-input:focus-visible,
-.custom-node-modal-remove-input:focus-visible,
-.custom-node-modal-cancel:focus-visible,
-.custom-node-modal-save:focus-visible {
+.custom-node-modal-close:focus-visible {
   outline: 3px solid rgba(18, 40, 60, 0.16);
   outline-offset: 2px;
 }
 
+/* ── Scrollable body ─────────────────────────────────────────────────────── */
 .custom-node-modal-scroll {
+  flex: 1;
+  overflow-y: auto;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
   background: #fbfcfc;
 }
 
-.custom-node-modal-scroll > div > label,
-.custom-node-modal-scroll .custom-node-modal-code-heading label,
-.custom-node-modal-inputs > div > label {
+/* ── Error banner ────────────────────────────────────────────────────────── */
+.custom-node-modal-error {
+  padding: 0.75rem 1rem;
+  border-radius: 10px;
+  border: 1px solid rgba(186, 26, 26, 0.2);
+  background: var(--error-container);
+  color: var(--error);
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+/* ── Identity card (Label + Description) ────────────────────────────────── */
+.custom-node-modal-identity {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  padding: 1.1rem;
+  border: 1px solid rgba(18, 40, 60, 0.08);
+  border-radius: 14px;
+  background: rgba(243, 244, 244, 0.55);
+}
+
+/* ── Form field ──────────────────────────────────────────────────────────── */
+.custom-node-modal-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.custom-node-modal-field-label {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--on-surface-variant);
   letter-spacing: 0.01em;
 }
 
-.custom-node-modal-identity {
-  padding: 1rem;
-  border: 1px solid rgba(18, 40, 60, 0.08);
-  border-radius: 14px;
-  background: rgba(243, 244, 244, 0.62);
-}
-
-.custom-node-modal-section-copy {
-  margin-top: 0.2rem;
-  color: var(--secondary);
-  font-size: 0.74rem;
-}
-
-.custom-node-modal-add-input {
-  border: 1px solid var(--primary-fixed-dim);
-  background: var(--primary-fixed);
-  color: var(--primary);
-}
-
-.custom-node-modal-add-input:hover {
-  background: #bdd8f2;
-  border-color: var(--primary);
-}
-
-.custom-node-modal-remove-input {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
+.custom-node-modal-field-required {
   color: var(--error);
+  font-size: 0.75rem;
+  line-height: 1;
 }
 
-.custom-node-modal-remove-input:hover {
-  background: rgba(186, 26, 26, 0.08);
+.custom-node-modal-field-optional {
+  font-size: 0.7rem;
+  font-weight: 500;
+  color: var(--outline);
+  background: var(--surface-container-high);
+  border-radius: 4px;
+  padding: 0.1rem 0.35rem;
+}
+
+/* ── Text inputs ─────────────────────────────────────────────────────────── */
+.custom-node-modal-input {
+  width: 100%;
+  min-height: 40px;
+  padding: 0.5rem 0.75rem;
+  border-radius: 10px;
+  border: 1px solid rgba(18, 40, 60, 0.14);
+  background: var(--surface-container-lowest);
+  color: var(--on-surface);
+  font-family: inherit;
+  font-size: 0.875rem;
+  outline: none;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+.custom-node-modal-input::placeholder {
+  color: var(--outline);
+}
+
+.custom-node-modal-input:focus {
+  border-color: rgba(18, 40, 60, 0.32);
+  box-shadow: 0 0 0 3px rgba(18, 40, 60, 0.08);
+}
+
+/* ── Code section ────────────────────────────────────────────────────────── */
+.custom-node-modal-code-section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
 }
 
 .custom-node-modal-code-heading {
@@ -667,13 +732,19 @@ button {
   gap: 1rem;
 }
 
+.custom-node-modal-code-hint {
+  margin-top: 0.2rem;
+  font-size: 0.78rem;
+  color: var(--secondary);
+  line-height: 1.4;
+}
+
 .custom-node-modal-code-badge {
   display: inline-flex;
   align-items: center;
   gap: 0.3rem;
   flex-shrink: 0;
-  margin-top: 0.1rem;
-  padding: 0.3rem 0.5rem;
+  padding: 0.3rem 0.55rem;
   border: 1px solid rgba(18, 40, 60, 0.1);
   border-radius: 7px;
   background: var(--surface-container-low);
@@ -681,45 +752,45 @@ button {
   font-family: 'JetBrains Mono', monospace;
   font-size: 0.68rem;
   font-weight: 700;
+  letter-spacing: 0.02em;
 }
 
 .custom-node-modal-code {
-  background: #f1f6fa !important;
-  border-color: rgba(18, 40, 60, 0.18) !important;
-  box-shadow: inset 0 1px 2px rgba(18, 40, 60, 0.04);
+  width: 100%;
+  height: 180px;
+  padding: 0.9rem 1rem;
+  border-radius: 12px;
+  border: 1px solid rgba(18, 40, 60, 0.14);
+  background: #f0f5f9;
+  color: var(--on-surface);
+  font-family: 'JetBrains Mono', 'Fira Code', monospace;
+  font-size: 0.84rem;
+  line-height: 1.65;
+  resize: vertical;
+  outline: none;
+  transition: border-color 0.15s, box-shadow 0.15s;
+  box-shadow: inset 0 1px 3px rgba(18, 40, 60, 0.04);
+}
+
+.custom-node-modal-code::placeholder {
+  color: var(--outline);
 }
 
 .custom-node-modal-code:focus {
-  box-shadow: 0 0 0 4px rgba(18, 40, 60, 0.08), inset 0 1px 2px rgba(18, 40, 60, 0.04) !important;
+  border-color: rgba(18, 40, 60, 0.3);
+  box-shadow: 0 0 0 3px rgba(18, 40, 60, 0.08), inset 0 1px 3px rgba(18, 40, 60, 0.04);
 }
 
+/* ── Signature preview ───────────────────────────────────────────────────── */
 .custom-node-modal-signature {
   display: flex;
   align-items: center;
   gap: 0.65rem;
-  margin-top: 0.55rem;
-  padding: 0.55rem 0.7rem;
+  padding: 0.55rem 0.8rem;
   border: 1px solid rgba(18, 40, 60, 0.1);
-  border-radius: 8px;
+  border-radius: 9px;
   background: var(--surface-container-low);
   color: var(--secondary);
-}
-
-.custom-node-modal-signature-label {
-  flex-shrink: 0;
-  color: var(--outline);
-  font-size: 0.68rem;
-  font-weight: 800;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-}
-
-.custom-node-modal-signature code {
-  overflow: hidden;
-  color: var(--primary);
-  font-size: 0.76rem;
-  text-overflow: ellipsis;
-  white-space: nowrap;
 }
 
 .custom-node-modal-signature.is-invalid {
@@ -727,92 +798,146 @@ button {
   background: rgba(255, 218, 214, 0.34);
 }
 
+.custom-node-modal-signature-label {
+  flex-shrink: 0;
+  color: var(--outline);
+  font-size: 0.65rem;
+  font-weight: 800;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+}
+
+.custom-node-modal-signature code {
+  overflow: hidden;
+  color: var(--primary);
+  font-size: 0.75rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 .custom-node-modal-signature.is-invalid code {
   color: var(--error);
 }
 
+/* ── Footer ──────────────────────────────────────────────────────────────── */
 .custom-node-modal-footer {
-  min-height: 76px;
-}
-
-.custom-node-modal-cancel,
-.custom-node-modal-save {
-  min-height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.65rem;
+  padding: 1rem 1.5rem;
+  border-top: 1px solid var(--outline-variant);
+  background: var(--surface-container-low);
+  flex-shrink: 0;
+  min-height: 68px;
 }
 
 .custom-node-modal-cancel {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 38px;
+  padding: 0 1.1rem;
+  border-radius: 9px;
+  font-size: 0.875rem;
+  font-weight: 600;
   color: var(--primary);
   background: transparent;
+  transition: background 0.15s;
 }
 
-.custom-node-modal-cancel:hover {
+.custom-node-modal-cancel:hover:not(:disabled) {
   background: rgba(18, 40, 60, 0.06);
 }
 
-.custom-node-modal-save {
-  background: var(--gradient-primary);
-  color: var(--on-primary);
-  box-shadow: 0 4px 14px rgba(18, 40, 60, 0.18);
+.custom-node-modal-cancel:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
 }
 
-.custom-node-modal-save:hover {
+.custom-node-modal-save {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  min-height: 38px;
+  padding: 0 1.25rem;
+  border-radius: 9px;
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: var(--on-primary);
+  background: var(--gradient-primary);
+  box-shadow: 0 4px 14px rgba(18, 40, 60, 0.18);
+  transition: box-shadow 0.15s, transform 0.15s, opacity 0.15s;
+}
+
+.custom-node-modal-save:hover:not(:disabled) {
   box-shadow: 0 7px 18px rgba(18, 40, 60, 0.24);
   transform: translateY(-1px);
 }
 
-.custom-node-modal-save:active {
+.custom-node-modal-save:active:not(:disabled) {
   transform: scale(0.98);
 }
 
-.custom-node-modal-backdrop input,
-.custom-node-modal-backdrop textarea {
-  outline-color: var(--primary);
+.custom-node-modal-save:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
 }
 
+.custom-node-modal-save-spinner {
+  animation: spin 0.9s linear infinite;
+}
+
+/* ── Focus outlines ──────────────────────────────────────────────────────── */
+.custom-node-modal-cancel:focus-visible,
+.custom-node-modal-save:focus-visible {
+  outline: 3px solid rgba(18, 40, 60, 0.16);
+  outline-offset: 2px;
+}
+
+/* ── Animations ──────────────────────────────────────────────────────────── */
 @keyframes customNodeModalIn {
-  from { opacity: 0; transform: translateY(8px) scale(0.985); }
-  to { opacity: 1; transform: translateY(0) scale(1); }
+  from { opacity: 0; transform: translateY(10px) scale(0.982); }
+  to   { opacity: 1; transform: translateY(0)    scale(1); }
 }
 
+/* ── Responsive ──────────────────────────────────────────────────────────── */
 @media (max-width: 640px) {
   .custom-node-modal-backdrop {
     padding: 0.75rem;
+    align-items: flex-end;
   }
 
-  .custom-node-modal-backdrop > div {
-    max-height: 94dvh;
-  }
-
-  .custom-node-modal-header,
-  .custom-node-modal-footer {
-    padding-left: 1rem;
-    padding-right: 1rem;
-  }
-
-  .custom-node-modal-scroll {
-    padding: 1rem !important;
+  .custom-node-modal-dialog {
+    max-height: 92dvh;
+    border-radius: 20px 20px 12px 12px;
   }
 
   .custom-node-modal-identity {
     grid-template-columns: 1fr;
   }
 
+  .custom-node-modal-header,
+  .custom-node-modal-footer {
+    padding-left: 1.1rem;
+    padding-right: 1.1rem;
+  }
+
+  .custom-node-modal-scroll {
+    padding: 1.1rem;
+  }
+
   .custom-node-modal-code-heading {
-    display: block;
-  }
-
-  .custom-node-modal-code-badge {
-    display: inline-flex;
-    margin-top: 0;
-    margin-bottom: 0.5rem;
-  }
-
-  .custom-node-modal-signature {
-    align-items: flex-start;
-    flex-direction: column;
-    gap: 0.25rem;
+    flex-direction: column-reverse;
+    gap: 0.4rem;
   }
 }
+
+
+
+
+
 
 /* ── Code Panel ────────────────────────────────────────────────────────────── */
 .code-panel {
@@ -1532,7 +1657,7 @@ button {
 /* ── Port Rows ────────────────────────────────────────────────────────────── */
 /*
   Key insight: React Flow positions a Handle by its own offsetTop relative
-  to the node root. By wrapping each port in a row and letting the row
+  to the node root. By wrapping each port in a row and letting the row 
   determine the vertical position, we get perfect alignment automatically —
   the Handle's `top` defaults to 50% of the row via React Flow's own logic
   when `position` is Left/Right and no `style.top` override is supplied.
@@ -1556,7 +1681,7 @@ button {
 .pluto-node__port-col--right {
   align-items: flex-end;
 }
-
+ 
 /* Each port row is a flex container — the Handle is positioned
    at the outer edge, the label sits beside it. React Flow reads
    the row's rendered offsetTop + height/2 to place the handle. */
@@ -1581,7 +1706,7 @@ button {
   height: 10px;
   border-radius: 50%;
   border: 2px solid var(--surface-container-lowest);
-  /* React Flow positions Left handles at left:-5px, Right at right:-5px */
+  /* React Flow positions Left ha dles at left:-5px, Right at right:-5px */
   /* We do NOT override top here — React Flow reads the row's midpoint */
   transition: transform 0.12s ease, box-shadow 0.12s ease;
 }
