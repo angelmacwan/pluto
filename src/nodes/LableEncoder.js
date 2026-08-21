@@ -1,30 +1,28 @@
-import './node.css';
-import React, { memo } from 'react';
-import { Handle, Position } from 'reactflow';
+import React, { memo, useEffect } from 'react';
+import BaseNode from './BaseNode';
+
+const getInitialState = () => ({
+    imports: 'from sklearn.preprocessing import LabelEncoder',
+    code: `le = LabelEncoder()
+y = le.fit_transform(y)
+print(f"Classes : {le.classes_}")`,
+});
 
 export default memo(({ data }) => {
+    const { updateNodeState = () => {} } = data;
 
-    data.imports = 'from sklearn.preprocessing import LabelEncoder';
-    data.code = `le = LabelEncoder()
-y = le.fit_transform(y)
-print(f"Classes : {le.classes_}")`;
+    useEffect(() => {
+        if (updateNodeState && Object.keys(data).length <= 1) {
+            updateNodeState(getInitialState());
+        }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     return (
-        <div className='customNode node-type-data-transform'>
-            <Handle
-                type="target"
-                position={Position.Left}
-            />
-
-            <div className='node-header'>Label Encoder</div>
-
-            <div className='node-body'>
-            </div>
-
-            <Handle
-                type="source"
-                position={Position.Right}
-            />
-        </div>
+        <BaseNode title="Label Encoder" typeClass="node-type-data-transform">
+            <p className="node-description">Encodes target labels y with values between 0 and n_classes-1.</p>
+        </BaseNode>
     );
 });
+
+export { getInitialState };

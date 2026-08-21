@@ -460,7 +460,10 @@ const MainApp = () => {
             key={nodeType}
             onClick={() => addNewNode(nodeType)}
           >
-            {nodeType}
+            {nodeType
+              // Insert space before uppercase letters for readability
+              .replace(/([A-Z])/g, ' $1')
+              .trim()}
           </button>
         ))}
       </div>

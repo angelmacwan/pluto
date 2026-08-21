@@ -1,29 +1,26 @@
-import './node.css';
-import React, { memo } from 'react';
-import { Handle, Position } from 'reactflow';
+import React, { memo, useEffect } from 'react';
+import BaseNode from './BaseNode';
 
+const getInitialState = () => ({
+    code: 'df = df.dropna()',
+    imports: '',
+});
 
 export default memo(({ data }) => {
+    const { updateNodeState = () => {} } = data;
 
-    data.code = 'df = df.dropna()';
+    useEffect(() => {
+        if (updateNodeState && Object.keys(data).length <= 1) {
+            updateNodeState(getInitialState());
+        }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     return (
-        <div className='customNode node-type-data-processor'>
-            <Handle
-                type="target"
-                position={Position.Left}
-            />
-
-            <div className='node-header'>Filter Nan</div>
-
-            <div className='node-body'>
-
-            </div>
-
-            <Handle
-                type="source"
-                position={Position.Right}
-            />
-        </div>
+        <BaseNode title="Filter NaN" typeClass="node-type-data-processor">
+            <p className="node-description">Drops all rows containing NaN values from the DataFrame.</p>
+        </BaseNode>
     );
 });
+
+export { getInitialState };

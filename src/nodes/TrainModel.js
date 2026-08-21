@@ -1,29 +1,27 @@
-import './node.css';
-import React, { memo } from 'react';
-import { Handle, Position } from 'reactflow';
+import React, { memo, useEffect } from 'react';
+import BaseNode from './BaseNode';
+
+const getInitialState = () => ({
+    code: `model.fit(X_train, y_train)
+y_pred = model.predict(X_test)`,
+    imports: '',
+});
 
 export default memo(({ data }) => {
+    const { updateNodeState = () => {} } = data;
 
-    data.code = `model.fit(X_train, y_train)
-y_pred = model.predict(X_test)`
+    useEffect(() => {
+        if (updateNodeState && Object.keys(data).length <= 1) {
+            updateNodeState(getInitialState());
+        }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     return (
-        <div className='customNode node-type-model'>
-            <Handle
-                type="target"
-                position={Position.Left}
-            />
-
-            <div className='node-header'>Train Model</div>
-
-            <div className='node-body'>
-
-            </div>
-
-            <Handle
-                type="source"
-                position={Position.Right}
-            />
-        </div>
+        <BaseNode title="Train Model" typeClass="node-type-model">
+            <p className="node-description">Fits the model and generates predictions.</p>
+        </BaseNode>
     );
 });
+
+export { getInitialState };

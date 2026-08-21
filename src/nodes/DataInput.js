@@ -5,7 +5,7 @@ import { Handle, Position } from 'reactflow';
 // Define initial state for this node type
 const getInitialState = () => ({
     fileType: 'CSV',
-    seperator: ',',
+    separator: ',',
     fileName: '',
     fileContent: '',
     targetColumn: '',
@@ -26,7 +26,7 @@ export default memo(({ data }) => {
     // Destructure values from data, falling back to initial state values
     const {
         fileType = 'CSV',
-        seperator = ',',
+        separator = ',',
         fileName = '',
         fileContent = '',
         targetColumn = '',
@@ -41,7 +41,7 @@ export default memo(({ data }) => {
             if (fileType === 'CSV' || fileType === 'TSV') {
                 const lines = fileContent.split('\n');
                 if (lines.length > 0) {
-                    headers = lines[0].split(seperator).map(h => h.trim());
+                    headers = lines[0].split(separator).map(h => h.trim());
                 }
             } else if (fileType === 'JSON') {
                 try {
@@ -55,7 +55,7 @@ export default memo(({ data }) => {
             }
             setColumns(headers);
         }
-    }, [fileContent, fileType, seperator]);
+    }, [fileContent, fileType, separator]);
 
     const updateState = (updates) => {
         const newState = {
@@ -66,7 +66,7 @@ export default memo(({ data }) => {
         // Generate code using the updated values
         newState.imports = 'import pandas as pd';
         newState.code = `target_column = '${newState.targetColumn}'
-df = pd.read_csv("${newState.fileName}", sep="${newState.seperator}")
+df = pd.read_csv("${newState.fileName}", sep="${newState.separator}")
 X = df.drop(columns=[target_column])
 y = df[target_column]`
 
@@ -77,15 +77,15 @@ y = df[target_column]`
         const newFileType = e.target.value;
         updateState({
             fileType: newFileType,
-            seperator: newFileType === 'CSV' ? ',' :
+            separator: newFileType === 'CSV' ? ',' :
                 newFileType === 'TSV' ? '\t' : undefined,
             targetColumn: ''
         });
     };
 
-    const handleseperatorChange = (e) => {
+    const handleSeparatorChange = (e) => {
         updateState({
-            seperator: e.target.value,
+            separator: e.target.value,
             targetColumn: ''
         });
     };
@@ -140,8 +140,8 @@ y = df[target_column]`
                         <label>
                             Separator:
                             <select
-                                value={seperator}
-                                onChange={handleseperatorChange}
+                                value={separator}
+                                onChange={handleSeparatorChange}
                             >
                                 <option value=",">Comma (,)</option>
                                 <option value="\t">Tab (\t)</option>

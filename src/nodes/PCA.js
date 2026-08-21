@@ -12,7 +12,7 @@ import numpy as np`,
 pca = PCA(n_components=2, 
     whiten=False,
     svd_solver='auto',
-    random_state=42)
+    random_state=RANDOM_SEED)
 
 X = pca.fit_transform(X)
 explained_variance_ratio = pca.explained_variance_ratio_
@@ -21,6 +21,7 @@ cumulative_variance_ratio = np.cumsum(explained_variance_ratio)
 print(f"Explained variance ratio: {explained_variance_ratio}")
 print(f"Cumulative explained variance ratio: {cumulative_variance_ratio}")`,
 });
+
 
 export default memo(({ data }) => {
     // Initialize state when component mounts if it's empty

@@ -3,8 +3,17 @@ PURGED
 
 ### TODO
 
--   🟨 Improve code generation
 -   🟨 Make a dropdown to quickly select new nodes when a handle is dragged
+
+### ✅ Recently Completed Improvements
+
+-   ✅ Removed duplicate React Flow package dependencies (`react-flow-renderer`, `@xyflow/react`)
+-   ✅ Fixed broken default test in `App.test.js`
+-   ✅ Fixed `separator` typo throughout `DataInput.js`
+-   ✅ Added `.gitignore` rules for large data files (`*.csv`, `*.xlsx`, etc.) and Jupyter notebooks
+-   ✅ Created shared `BaseNode` component to eliminate boilerplate in all node files
+-   ✅ Refactored static nodes (`TrainModel`, `LabelEncoder`, `ClassificationReport`, `RemoveNa`) to use `BaseNode` and `useEffect` instead of direct `data` mutation
+-   ✅ Improved sidebar button labels with human-readable spacing (e.g. "Random Forest" instead of "RandomForest")
 
 
 ## ✅ **AI Pipeline Builder – Node Checklist**
