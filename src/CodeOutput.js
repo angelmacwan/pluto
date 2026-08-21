@@ -6,42 +6,23 @@ import './CodeOutput.css';
 import "prismjs/themes/prism-tomorrow.css";
 
 import { generateAiCode } from './AiCodeGenerator';
+import { generateGraphCode } from './graphCodegen';
 
-const CodeOutput = memo(({ data, useAi }) => {
+const CodeOutput = memo(({ data, edges = [], useAi }) => {
     const [finalCode, setFinalCode] = useState("");
     const [codeOutput, setcodeOutput] = useState("");
     const [buttonIsDisabled, setbuttonIsDisabled] = useState(false);
     const [viewOutput, setViewOutput] = useState(false);
 
     useEffect(() => {
-        const generateNormalCode = () => {
-
-            function onlyUnique(value, index, self) {
-                return self.indexOf(value) === index;
-            }
-
-
-            const flatData = data.flat(Infinity);
-
-            let code = [];
-            let imports = []
-            for (let node of flatData) {
-                code.push(node.data.code);
-                imports.push(node.data.imports);
-            }
-
-            const importsOutput = imports.filter(x => x !== '').filter(onlyUnique).join('\n');
-            const codeOutput = code.join('\n\n');
-
-            return `${importsOutput.trim()}\n\n${codeOutput.trim()}`;
-        };
+        const generateNormalCode = () => generateGraphCode(data || [], edges).code;
 
         if (!useAi) {
             setFinalCode(generateNormalCode());
         } else {
             setFinalCode('# AI Generated Code');
         }
-    }, [data, useAi]);
+    }, [data, edges, useAi]);
 
     const handleCopy = async () => {
         try {

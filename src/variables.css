@@ -10,6 +10,11 @@
     --node-output-color: pink;
     --node-cv-color: #fcd24a;
     --node-transform-color: #995bfd;
+    --node-variable-color: #00d2d3;
+    --node-control-color: #ff9f43;
+    --node-function-color: #ee5253;
+    --node-primitive-color: #10ac84;
+    --node-io-color: #5f27cd;
 
     --primary: #4a91fc;
 }

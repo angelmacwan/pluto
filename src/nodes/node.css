@@ -29,8 +29,70 @@ textarea {
 
 .node-header {
     border-radius: 6px 6px 0 0;
-    padding: 6px 24px;
+    padding: 6px 32px 6px 24px;
     border-bottom: 1px solid gray;
+    position: relative;
+}
+
+/* All legacy nodes share this header, so they receive the same delete control
+   without having to duplicate event handlers in every node component. */
+.customNode .node-header::after {
+    content: '×';
+    position: absolute;
+    right: 9px;
+    top: 2px;
+    font-size: 20px;
+    font-weight: 700;
+    line-height: 24px;
+    opacity: 0;
+    color: #4b5563;
+    transition: opacity 120ms ease, color 120ms ease;
+}
+
+.customNode:hover .node-header::after {
+    opacity: 1;
+}
+
+.customNode .node-header:hover::after {
+    color: #b91c1c;
+}
+
+.reference-node .node-header::after {
+    display: none;
+}
+
+.node-delete-button {
+    position: absolute;
+    right: 8px;
+    top: 2px;
+    border: 0;
+    background: transparent;
+    color: #4b5563;
+    font-size: 20px;
+    font-weight: 700;
+    line-height: 24px;
+    padding: 0 3px;
+    cursor: pointer;
+    opacity: 0;
+}
+
+.reference-node:hover .node-delete-button {
+    opacity: 1;
+}
+
+.node-delete-button:hover {
+    color: #b91c1c;
+}
+
+.node-port-label {
+    font-size: 0.72em;
+    color: #4b5563;
+    min-height: 24px;
+    line-height: 24px;
+}
+
+.node-port-label-right {
+    text-align: right;
 }
 
 .node-body {
@@ -60,6 +122,26 @@ textarea {
 
 .node-type-data-transform>.node-header {
     background-color: var(--node-transform-color);
+}
+
+.node-type-variable>.node-header {
+    background-color: var(--node-variable-color);
+}
+
+.node-type-control>.node-header {
+    background-color: var(--node-control-color);
+}
+
+.node-type-function>.node-header {
+    background-color: var(--node-function-color);
+}
+
+.node-type-primitive>.node-header {
+    background-color: var(--node-primitive-color);
+}
+
+.node-type-io>.node-header {
+    background-color: var(--node-io-color);
 }
 
 .react-flow__handle {

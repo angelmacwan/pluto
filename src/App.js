@@ -36,6 +36,18 @@ import MissingValueImputer from './nodes/MissingValueImputer';
 import OneHotEncoder from './nodes/OneHotEncoder';
 import DuplicateRemover from './nodes/DuplicateRemover';
 
+// PROGRAMMING / LOGIC NODES
+import ListNode from './nodes/ListNode';
+import DictNode from './nodes/DictNode';
+import MathOp from './nodes/MathOp';
+import Comparison from './nodes/Comparison';
+import WhileLoop from './nodes/WhileLoop';
+import FunctionDef from './nodes/FunctionDef';
+import FunctionCall from './nodes/FunctionCall';
+import InputNode from './nodes/InputNode';
+import CommentNode from './nodes/CommentNode';
+import ReferenceNode from './nodes/ReferenceNode';
+
 
 
 // list of node types
@@ -71,6 +83,25 @@ const nodeTypes = {
   // OUTPUT
   ClassificationReport: ClassificationReport,
 
+  // PROGRAMMING & LOGIC
+  Variable: (props) => <ReferenceNode {...props} nodeKind="Variable" />,
+  List: ListNode,
+  Dictionary: DictNode,
+  MathOperation: MathOp,
+  Comparison: Comparison,
+  TypeCheck: (props) => <ReferenceNode {...props} nodeKind="TypeCheck" />,
+  IfCondition: (props) => <ReferenceNode {...props} nodeKind="IfCondition" />,
+  ForLoop: (props) => <ReferenceNode {...props} nodeKind="ForLoop" />,
+  WhileLoop: WhileLoop,
+  FunctionDef: FunctionDef,
+  FunctionCall: FunctionCall,
+  Print: (props) => <ReferenceNode {...props} nodeKind="Print" />,
+  Input: InputNode,
+  FileRead: (props) => <ReferenceNode {...props} nodeKind="FileRead" />,
+  FileWrite: (props) => <ReferenceNode {...props} nodeKind="FileWrite" />,
+  ImportLib: (props) => <ReferenceNode {...props} nodeKind="ImportLib" />,
+  Comment: CommentNode,
+
   // CUSTOM
   CustomCode: CustomCode,
 };
@@ -100,6 +131,25 @@ const nodeTypeClass = {
   LableEncoder: 'node-type-data-transform',
   OneHotEncoder: 'node-type-data-transform',
   DuplicateRemover: 'node-type-data-processor',
+
+  // PROGRAMMING & LOGIC
+  Variable: 'node-type-variable',
+  List: 'node-type-variable',
+  Dictionary: 'node-type-variable',
+  MathOperation: 'node-type-primitive',
+  Comparison: 'node-type-primitive',
+  TypeCheck: 'node-type-primitive',
+  IfCondition: 'node-type-control',
+  ForLoop: 'node-type-control',
+  WhileLoop: 'node-type-control',
+  FunctionDef: 'node-type-function',
+  FunctionCall: 'node-type-function',
+  Print: 'node-type-output',
+  Input: 'node-type-primitive',
+  FileRead: 'node-type-io',
+  FileWrite: 'node-type-io',
+  ImportLib: 'node-type-primitive',
+  Comment: 'node-type-custom',
 };
 
 
@@ -194,6 +244,20 @@ const MainApp = () => {
     );
   }, [setNodes]);
 
+  const removeNode = useCallback((nodeId) => {
+    setNodes(currentNodes => currentNodes.filter(node => node.id !== nodeId));
+    setEdges(currentEdges => currentEdges.filter(edge => edge.source !== nodeId && edge.target !== nodeId));
+  }, [setNodes, setEdges]);
+
+  const onNodeClick = useCallback((event, node) => {
+    const header = event.target.closest?.('.node-header');
+    // The header's hover affordance reserves the last 24px for deletion.
+    if (header && !header.closest('.reference-node') && event.clientX >= header.getBoundingClientRect().right - 28) {
+      event.stopPropagation();
+      removeNode(node.id);
+    }
+  }, [removeNode]);
+
   // Update selection change with proper dependencies
   const onSelectionChange = useCallback(
     ({ nodes, edges }) => {
@@ -212,7 +276,10 @@ const MainApp = () => {
 
   useEffect(() => {
     const handleKeyDown = (event) => {
-      if (event.key === 'Delete') {
+      const target = event.target;
+      if (target instanceof HTMLInputElement || target instanceof HTMLTextAreaElement || target instanceof HTMLSelectElement) return;
+      if (event.key === 'Delete' || event.key === 'Backspace') {
+        event.preventDefault();
         if (selectedEdges.length > 0) {
           const selectedEdgeIds = selectedEdges.map(edge => edge.id);
           setEdges(edges => edges.filter(edge => !selectedEdgeIds.includes(edge.id)));
@@ -248,7 +315,8 @@ const MainApp = () => {
       id,
       type: nodeType,
       data: {
-        updateNodeState: (newData) => updateNodeState(id, newData)
+        updateNodeState: (newData) => updateNodeState(id, newData),
+        removeNode
       },
       position: newNodePosition,
     };
@@ -357,7 +425,8 @@ const MainApp = () => {
             ...node,
             data: {
               ...node.data,
-              updateNodeState: (newData) => updateNodeState(node.id, newData)
+              updateNodeState: (newData) => updateNodeState(node.id, newData),
+              removeNode
             }
           }));
 
@@ -489,7 +558,7 @@ const MainApp = () => {
         </div>
 
         <div className='code-output-display-block' style={{ width: '600px' }} >
-          <CodeOutput useAi={useAi} data={getFlowOrder()} />
+          <CodeOutput useAi={useAi} data={nodes} edges={edges} />
         </div>
       </div>
 
@@ -503,6 +572,7 @@ const MainApp = () => {
           onEdgesChange={onEdgesChange}
           onConnect={onConnect}
           onSelectionChange={onSelectionChange}
+          onNodeClick={onNodeClick}
           selectionMode={SelectionMode.Full}
           selectionOnDrag={true}
           selectionKeyCode={null}
