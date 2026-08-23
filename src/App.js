@@ -13,6 +13,7 @@ import 'reactflow/dist/style.css';
 import Info from './Info';
 import CodeOutput from './CodeOutput';
 import FileManager from './FileManager';
+import { generateGraphCode } from './graphCodegen';
 
 import DataInput from './nodes/DataInput';
 import ApiFetch from './nodes/ApiFetch';
@@ -227,6 +228,12 @@ const IconFileDoc = ({ size = 14 }) => (
   </svg>
 );
 
+const IconPlay = ({ size = 14 }) => (
+  <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} fill="currentColor" viewBox="0 0 16 16">
+    <path d="m11.596 8.697-6.363 3.692c-.54.313-1.233-.066-1.233-.697V4.308c0-.63.692-1.01 1.233-.696l6.363 3.692a.802.802 0 0 1 0 1.393z"/>
+  </svg>
+);
+
 
 // ── Main App ────────────────────────────────────────────────────────
 
@@ -243,8 +250,41 @@ const MainApp = () => {
   const [fileBrowserVisible, setFileBrowserVisible] = useState(false);
   const [currentFilePath, setCurrentFilePath] = useState(null);
 
+  const [terminalVisible, setTerminalVisible] = useState(false);
+  const [terminalOutput, setTerminalOutput] = useState("");
+  const [isRunning, setIsRunning] = useState(false);
+
   const FILE_PANEL_WIDTH = 260;
   const CODE_PANEL_WIDTH = 580;
+
+  const handleRunCode = async () => {
+    const current_url = window.location.href;
+    if (current_url.includes("angelmacwan.github.io")) {
+        alert("THIS FEATURE IS ONLY AVAILABLE ON LOCAL INSTALLATION");
+        return;
+    }
+    setTerminalVisible(true);
+    setIsRunning(true);
+    setTerminalOutput("Running...\n");
+
+    const code = generateGraphCode(nodes, edges).code;
+
+    try {
+        const res = await fetch('/run_code', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ data: code }),
+        });
+
+        const response = await res.json();
+        setTerminalOutput(response.error || response.output || '');
+    } catch (error) {
+        console.error(error);
+        setTerminalOutput("SOMETHING WENT WRONG");
+    } finally {
+        setIsRunning(false);
+    }
+  };
 
   // Detect whether running inside the Python server
   useEffect(() => {
@@ -355,7 +395,7 @@ const MainApp = () => {
 
   // ── Serialization ──────────────────────────────────────────────
 
-  const buildFlowData = () => ({
+  const buildFlowData = useCallback(() => ({
     nodes: nodes.map(node => {
       const data = { ...node.data };
       delete data.updateNodeState;
@@ -370,7 +410,7 @@ const MainApp = () => {
       targetHandle: edge.targetHandle ?? null,
       type: edge.type, data: edge.data,
     })),
-  });
+  }), [nodes, edges]);
 
   // Recover sourceHandle / targetHandle from the ReactFlow auto-generated edge id
   // for files saved before these fields were persisted explicitly.
@@ -428,14 +468,22 @@ const MainApp = () => {
 
   // ── Save / Load ────────────────────────────────────────────────
 
-  const saveToServer = async (path) => {
+  const saveToServer = useCallback(async (path) => {
     await fetch(`/api/files/${path}`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ content: buildFlowData() }),
     });
     setCurrentFilePath(path);
-  };
+  }, [buildFlowData]);
+
+  useEffect(() => {
+    if (!serverAvailable || !currentFilePath) return;
+    const handler = setTimeout(() => {
+      saveToServer(currentFilePath).catch(err => console.error("Autosave failed:", err));
+    }, 1500);
+    return () => clearTimeout(handler);
+  }, [nodes, edges, serverAvailable, currentFilePath, saveToServer]);
 
   const handleSave = useCallback(async () => {
     if (serverAvailable) {
@@ -625,6 +673,20 @@ const MainApp = () => {
           <span className="tooltiptext">Save (Cmd/Ctrl+S)</span>
         </button>
 
+        {/* Run */}
+        {isRunning ? (
+          <button className="topbar-btn topbar-btn-primary tooltip" style={{ opacity: 0.7, cursor: 'not-allowed' }} disabled>
+            <IconPlay size={14} />
+            <span>Running...</span>
+          </button>
+        ) : (
+          <button className="topbar-btn topbar-btn-primary tooltip" onClick={handleRunCode} style={{ backgroundColor: 'var(--color-success)', borderColor: 'var(--color-success)' }}>
+            <IconPlay size={14} />
+            <span>Run</span>
+            <span className="tooltiptext">Run Code</span>
+          </button>
+        )}
+
         {/* Code output toggle */}
         <button
           className={`topbar-btn tooltip ${codeOutputVisible ? 'active' : ''}`}
@@ -735,6 +797,36 @@ const MainApp = () => {
         </div>
       </div>
 
+
+      {/* ── BOTTOM TERMINAL PANEL ───────────────────────────────── */}
+      <div style={{
+          position: 'fixed',
+          bottom: 0,
+          left: canvasLeftOffset + 220,
+          right: codeOutputVisible ? `${CODE_PANEL_WIDTH}px` : 0,
+          height: '250px',
+          backgroundColor: '#1e1e2e',
+          borderTop: '1px solid var(--surface-3)',
+          zIndex: 55,
+          display: 'flex',
+          flexDirection: 'column',
+          transform: terminalVisible ? 'translateY(0)' : 'translateY(100%)',
+          transition: 'transform 0.25s cubic-bezier(0.4, 0, 0.2, 1), left 0.25s cubic-bezier(0.4, 0, 0.2, 1), right 0.25s cubic-bezier(0.4, 0, 0.2, 1)',
+          boxShadow: '0 -2px 10px rgba(0,0,0,0.1)'
+      }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', padding: '8px 12px', backgroundColor: '#181825', borderBottom: '1px solid rgba(255,255,255,0.07)' }}>
+            <span style={{ fontSize: '0.7rem', fontWeight: 700, letterSpacing: '0.07em', color: '#6c7086', textTransform: 'uppercase' }}>Terminal Output</span>
+            <button 
+              onClick={() => setTerminalVisible(false)}
+              style={{ background: 'transparent', border: 'none', color: '#cdd6f4', cursor: 'pointer', fontSize: '1rem', lineHeight: 1 }}
+            >
+              ✕
+            </button>
+          </div>
+          <div style={{ padding: '12px', flex: 1, overflowY: 'auto', color: '#cdd6f4', fontFamily: 'monospace', fontSize: '0.85rem', whiteSpace: 'pre-wrap' }}>
+            {terminalOutput || '(no output)'}
+          </div>
+      </div>
 
       {/* ── REACT FLOW CANVAS ───────────────────────────────────── */}
       <div
