@@ -1,125 +1,170 @@
-.info-details>* {
-    padding: 0;
-    margin: 0;
-}
+/* ── Welcome / Info Modal ─────────────────────────────────────────── */
 
 .info-container {
     position: fixed;
-    background: rgba(0, 0, 0, 0.2);
+    inset: 0;
+    background: rgba(23, 43, 77, 0.45);
     height: 100vh;
     width: 100%;
-    z-index: 7;
+    z-index: 300;
     display: flex;
     justify-content: center;
     align-items: center;
+    backdrop-filter: blur(4px);
 }
 
 .info-details {
-    max-width: 500px;
-    color: white;
-    background: rgba(0, 0, 0, 0.4);
-    padding: 2rem;
-    border-radius: 8px;
-    backdrop-filter: blur(20px);
-    animation: zoomInDown 0.8s ease-in-out;
-    border-top: 1px solid rgba(255, 255, 255, 0.2);
-    border-left: 1px solid rgba(255, 255, 255, 0.2);
+    max-width: 480px;
+    width: 90%;
+    background: #ffffff;
+    padding: 32px 36px;
+    border-radius: 12px;
+    box-shadow: 0 20px 60px rgba(23, 43, 77, 0.25);
+    animation: modalIn 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+    border: 1px solid #dfe1e6;
 }
 
-.info-details>h1 {
-    color: rgb(107, 192, 241);
+.info-details > * { margin: 0; }
+
+/* Header / logo row */
+.info-details > h1 {
+    color: #172b4d;
     display: flex;
     align-items: center;
+    gap: 12px;
+    margin-bottom: 6px;
+    font-size: 1.5rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+}
+
+.info-details > h1 > img {
+    height: 40px;
+    width: 40px;
+    object-fit: contain;
+}
+
+/* Tagline */
+.info-details > h3 {
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: #5e6c84;
+    margin-bottom: 16px;
+}
+
+/* Body text */
+.info-details > p {
+    font-size: 0.88rem;
+    color: #5e6c84;
+    line-height: 1.7;
+    margin-bottom: 24px;
+    border-left: 3px solid #deebff;
+    padding-left: 12px;
+    background: #f4f5f7;
+    border-radius: 0 4px 4px 0;
+    padding: 10px 12px;
+}
+
+/* Dismiss hint */
+.info-dismiss-hint {
+    text-align: center;
+    font-size: 0.75rem;
+    color: #97a0af;
     margin-bottom: 20px;
 }
 
-.info-details>h1>img {
-    max-height: 70px;
-    margin-right: 20px;
-}
-
+/* Footer links */
 .info-footer {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    padding-top: 16px;
+    border-top: 1px solid #ebecf0;
+    margin-top: 16px;
 }
 
-.info-details>.info-footer>span {
-    font-size: 0.8rem;
-    color: rgb(107, 192, 241);
+.info-details > .info-footer > span {
+    font-size: 0.72rem;
+    color: #97a0af;
+    line-height: 1.5;
 }
 
-.info-details>.info-footer>button,
-.info-details>.info-footer>a {
+.info-details > .info-footer > a {
     text-decoration: none;
-    color: black;
-    border: none;
+    color: #0052cc;
+    border: 1px solid #0052cc;
     cursor: pointer;
-    margin-top: 12px;
-    padding: 8px;
-    border-radius: 8px;
-    background-color: rgb(107, 192, 241);
+    padding: 5px 12px;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    font-weight: 500;
+    background: transparent;
+    transition: background 0.12s, color 0.12s;
 }
 
-@keyframes zoomInDown {
-    from {
-        opacity: 0;
-        -webkit-transform: scale3d(0.1, 0.1, 0.1) translate3d(0, -1000px, 0);
-        transform: scale3d(0.1, 0.1, 0.1) translate3d(0, -1000px, 0);
-        -webkit-animation-timing-function: cubic-bezier(0.55, 0.055, 0.675, 0.19);
-        animation-timing-function: cubic-bezier(0.55, 0.055, 0.675, 0.19);
-    }
-
-    60% {
-        opacity: 1;
-        -webkit-transform: scale3d(0.475, 0.475, 0.475) translate3d(0, 60px, 0);
-        transform: scale3d(0.475, 0.475, 0.475) translate3d(0, 60px, 0);
-        -webkit-animation-timing-function: cubic-bezier(0.175, 0.885, 0.32, 1);
-        animation-timing-function: cubic-bezier(0.175, 0.885, 0.32, 1);
-    }
+.info-details > .info-footer > a:hover {
+    background: #0052cc;
+    color: #ffffff;
 }
 
-@keyframes popup {
-    from {
-        transform: scaleX(20);
-        opacity: 0;
-    }
+/* Get Started button */
+.info-start-btn {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    background: #0052cc;
+    color: #ffffff;
+    border: none;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.15s;
+    margin-bottom: 12px;
+    text-align: center;
+}
 
+.info-start-btn:hover {
+    background: #0065ff;
+}
+
+/* Animations */
+@keyframes modalIn {
+    from {
+        opacity: 0;
+        transform: scale(0.92) translateY(12px);
+    }
     to {
-        transform: scale(1);
         opacity: 1;
+        transform: scale(1) translateY(0);
     }
 }
 
-/* Tooltip container */
-.tooltip {
-    position: relative;
-    display: inline-block;
-    border-bottom: 1px dotted black;
-}
+/* ── Tooltip ─────────────────────────────────────────────────────── */
 
-/* Tooltip text */
+.tooltip { position: relative; }
+
 .tooltip .tooltiptext {
     visibility: hidden;
-    background-color: black;
+    opacity: 0;
+    background: #172b4d;
     color: #fff;
     text-align: center;
-    padding: 5px 0;
-    border-radius: 6px;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 0.72rem;
     position: absolute;
-    z-index: 1;
-    top: 110%;
+    z-index: 400;
+    top: calc(100% + 6px);
     left: 50%;
-    width: 100px;
-    margin-left: -50px;
+    transform: translateX(-50%);
+    white-space: nowrap;
+    pointer-events: none;
+    transition: opacity 0.12s;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
 }
 
-.tooltiptext {
-    padding: 12px;
-}
-
-
-/* Show the tooltip text when you mouse over the tooltip container */
 .tooltip:hover .tooltiptext {
     visibility: visible;
+    opacity: 1;
 }

@@ -1,20 +1,73 @@
 :root {
-    --canvas-color: #292D3F;
-    --node-data-color: #61fa82;
-    --node-processor-color: #4a91fc;
-    --node-model-color: rgb(231, 90, 113);
-    --node-generic-color: #fff;
-    --node-handle-color: orange;
-    --node-handle-stroke: white;
-    --node-connection-stroke: white;
-    --node-output-color: pink;
-    --node-cv-color: #fcd24a;
-    --node-transform-color: #995bfd;
-    --node-variable-color: #00d2d3;
-    --node-control-color: #ff9f43;
-    --node-function-color: #ee5253;
-    --node-primitive-color: #10ac84;
-    --node-io-color: #5f27cd;
+    /* ── Canvas ──────────────────────────────── */
+    --canvas-color: #f0f2f5;
+    --canvas-dot-color: #c8cdd8;
 
-    --primary: #4a91fc;
+    /* ── Brand ───────────────────────────────── */
+    --brand-primary:    #0052cc;   /* Atlassian blue */
+    --brand-primary-hover: #0065ff;
+    --brand-secondary:  #172b4d;
+
+    /* ── Surface ─────────────────────────────── */
+    --surface-0:        #ffffff;   /* cards / nodes */
+    --surface-1:        #f4f5f7;   /* app bg / sidebar */
+    --surface-2:        #ebecf0;   /* hover states */
+    --surface-3:        #dfe1e6;   /* borders / dividers */
+
+    /* ── Text ────────────────────────────────── */
+    --text-primary:     #172b4d;
+    --text-secondary:   #5e6c84;
+    --text-subtle:      #97a0af;
+    --text-inverse:     #ffffff;
+
+    /* ── Semantic ────────────────────────────── */
+    --color-success:    #36b37e;
+    --color-warning:    #ff991f;
+    --color-danger:     #de350b;
+    --color-info:       #0065ff;
+
+    /* ── TopBar ──────────────────────────────── */
+    --topbar-bg:        #ffffff;
+    --topbar-border:    #dfe1e6;
+    --topbar-height:    48px;
+
+    /* ── Sidebar ─────────────────────────────── */
+    --sidebar-bg:       #f4f5f7;
+    --sidebar-border:   #dfe1e6;
+    --sidebar-width:    220px;
+
+    /* ── Node colours ────────────────────────── */
+    --node-bg:              #ffffff;
+    --node-border:          #dfe1e6;
+    --node-shadow:          0 1px 4px rgba(23,43,77,0.12);
+
+    --node-data-color:      #e3fcef;   /* green tint */
+    --node-data-accent:     #36b37e;
+    --node-processor-color: #deebff;   /* blue tint */
+    --node-processor-accent: #0052cc;
+    --node-model-color:     #ffebe6;   /* red tint */
+    --node-model-accent:    #de350b;
+    --node-generic-color:   #f4f5f7;
+    --node-handle-color:    #0052cc;
+    --node-handle-stroke:   #ffffff;
+    --node-connection-stroke: #0052cc;
+    --node-output-color:    #fff0b3;
+    --node-output-accent:   #ff991f;
+    --node-cv-color:        #fffae6;
+    --node-cv-accent:       #ffc400;
+    --node-transform-color: #f3e6ff;
+    --node-transform-accent: #6554c0;
+    --node-variable-color:  #e6fcff;
+    --node-variable-accent: #00b8d9;
+    --node-control-color:   #fff3e0;
+    --node-control-accent:  #ff991f;
+    --node-function-color:  #ffebe6;
+    --node-function-accent: #de350b;
+    --node-primitive-color: #e3fcef;
+    --node-primitive-accent: #36b37e;
+    --node-io-color:        #ede8fe;
+    --node-io-accent:       #6554c0;
+
+    /* ── Primary alias (used by scrollbar) ───── */
+    --primary: #0052cc;
 }

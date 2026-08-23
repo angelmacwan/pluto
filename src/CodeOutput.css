@@ -1,36 +1,71 @@
+/* ── Code Output Panel ────────────────────────────────────────────── */
+
 .code-block-output {
-    height: 100vh;
-    background-color: rgb(40, 44, 52);
+    height: calc(100vh - var(--topbar-height));
+    background: #1e1e2e;
+    display: flex;
+    flex-direction: column;
+}
+
+.code-block-toolbar {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 12px;
+    background: #181825;
+    border-bottom: 1px solid rgba(255,255,255,0.07);
+    flex-shrink: 0;
+}
+
+.code-block-toolbar-title {
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    color: #6c7086;
+    flex: 1;
 }
 
 .code-block {
-    height: 94vh;
+    flex: 1;
     overflow: auto;
     margin: 0;
 }
 
 .code-block-btn {
-    border: none;
+    border: 1px solid rgba(255,255,255,0.12);
     cursor: pointer;
-    margin: 4px;
-    padding: 8px;
-    border-radius: 8px;
-    background-color: rgba(0, 0, 0, 0.6);
-    color: white;
-    transition: .2s;
+    padding: 4px 10px;
+    height: 28px;
+    border-radius: 4px;
+    background: rgba(255,255,255,0.07);
+    color: #cdd6f4;
+    font-size: 0.78rem;
+    font-weight: 500;
+    transition: background 0.12s, border-color 0.12s;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    white-space: nowrap;
 }
 
 .code-block-btn:hover {
-    background-color: var(--node-processor-color);
+    background: rgba(255,255,255,0.14);
+    border-color: rgba(255,255,255,0.25);
 }
 
 .code-block-btn-disabled {
-    border: none;
-    margin: 4px;
-    padding: 8px;
-    border-radius: 8px;
-    background-color: gray;
-    color: white;
+    border: 1px solid rgba(255,255,255,0.06);
+    padding: 4px 10px;
+    height: 28px;
+    border-radius: 4px;
+    background: rgba(255,255,255,0.04);
+    color: #45475a;
+    font-size: 0.78rem;
+    cursor: not-allowed;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
 }
 
 .code-loader {
@@ -39,22 +74,14 @@
     background-position: center;
     background-repeat: no-repeat;
     background-size: 30%;
-    height: 100vh;
+    height: 100%;
     width: 100%;
     z-index: 9;
     animation: blink_fade 2s linear 0s infinite;
 }
 
 @keyframes blink_fade {
-    from {
-        opacity: 1;
-    }
-
-    50% {
-        opacity: 0.3;
-    }
-
-    to {
-        opacity: 1;
-    }
+    from { opacity: 1; }
+    50%  { opacity: 0.3; }
+    to   { opacity: 1; }
 }

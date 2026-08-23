@@ -1,0 +1,19 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.backends.legacy:build"
+
+[project]
+name = "pluto-lab"
+version = "0.1.0"
+description = "Visual ML pipeline builder — Jupyter-style local server"
+requires-python = ">=3.9"
+dependencies = [
+    "flask>=3.0",
+    "flask-cors>=4.0",
+]
+
+[project.scripts]
+pluto = "server.__main__:main"
+
+[tool.setuptools.packages.find]
+include = ["server*"]

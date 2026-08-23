@@ -5,24 +5,17 @@ import { atomOneDark } from 'react-syntax-highlighter/dist/esm/styles/hljs';
 import './CodeOutput.css';
 import "prismjs/themes/prism-tomorrow.css";
 
-import { generateAiCode } from './AiCodeGenerator';
 import { generateGraphCode } from './graphCodegen';
 
-const CodeOutput = memo(({ data, edges = [], useAi }) => {
+const CodeOutput = memo(({ data, edges = [] }) => {
     const [finalCode, setFinalCode] = useState("");
     const [codeOutput, setcodeOutput] = useState("");
-    const [buttonIsDisabled, setbuttonIsDisabled] = useState(false);
     const [viewOutput, setViewOutput] = useState(false);
+    const [running, setRunning] = useState(false);
 
     useEffect(() => {
-        const generateNormalCode = () => generateGraphCode(data || [], edges).code;
-
-        if (!useAi) {
-            setFinalCode(generateNormalCode());
-        } else {
-            setFinalCode('# AI Generated Code');
-        }
-    }, [data, edges, useAi]);
+        setFinalCode(generateGraphCode(data || [], edges).code);
+    }, [data, edges]);
 
     const handleCopy = async () => {
         try {
@@ -32,100 +25,83 @@ const CodeOutput = memo(({ data, edges = [], useAi }) => {
         }
     };
 
-    const getAiCode = async (data) => {
-        setbuttonIsDisabled(true)
-        try {
-            const generatedCode = await generateAiCode(data);
-            setFinalCode('# AI Generated Code\n' + generatedCode.replaceAll("```", "").replace("python", ""));
-            setbuttonIsDisabled(false)
-        } catch (err) {
-            console.error('Failed to generate AI code:', err);
-            setbuttonIsDisabled(false)
-        }
-    };
-
     const runCode = async () => {
         const current_url = window.location.href;
         if (current_url.includes("angelmacwan.github.io")) {
             alert("THIS FEATURE IS ONLY AVAILABLE ON LOCAL INSTALLATION");
             return;
         }
+        setRunning(true);
         try {
-            const res = await fetch('http://127.0.0.1:5000/run_code', {
+            const res = await fetch('/run_code', {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
+                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ data: finalCode }),
             });
 
             const response = await res.json();
-
-            if (response.error) {
-                setcodeOutput(response.error);
-                return;
-            }
-
-            setcodeOutput(response.output);
+            setcodeOutput(response.error || response.output || '');
+            setViewOutput(true);
         } catch (error) {
             console.error(error);
             setcodeOutput("SOMETHING WENT WRONG");
+            setViewOutput(true);
+        } finally {
+            setRunning(false);
         }
-    }
+    };
 
     return (
         <div className="code-block-output">
-            <div className="code-body">
-                {buttonIsDisabled && (
-                    <div className="code-loader"></div>
-                )}
+            {/* Toolbar */}
+            <div className="code-block-toolbar">
+                <span className="code-block-toolbar-title">
+                    {viewOutput ? 'Output' : 'Generated Python'}
+                </span>
 
-                {!viewOutput && (
-                    <SyntaxHighlighter
-                        className="code-block"
-                        language="python"
-                        style={atomOneDark}
-                        showLineNumbers={true}
-                    >
-                        {finalCode}
-                    </SyntaxHighlighter>
-                )}
-                {viewOutput && (
-                    <div className="code-block">
-                        <SyntaxHighlighter
-                            className="code-block"
-                            language="bash"
-                            style={atomOneDark}
-                            showLineNumbers={true}
-                        >
-                            {codeOutput}
-                        </SyntaxHighlighter>
-                    </div>
-                )}
+                <button className='code-block-btn' onClick={handleCopy} title="Copy code">
+                    Copy
+                </button>
 
+                <button
+                    className='code-block-btn'
+                    onClick={() => setViewOutput(!viewOutput)}
+                    title="Toggle output view"
+                >
+                    {viewOutput ? 'Code' : 'Output'}
+                </button>
+
+                {running ? (
+                    <span className='code-block-btn-disabled'>Running…</span>
+                ) : (
+                    <button className='code-block-btn' onClick={runCode} title="Run code">
+                        ▶ Run
+                    </button>
+                )}
             </div>
 
-            {/* BUTTONS */}
-
-            <button className='code-block-btn' onClick={handleCopy}>
-                Copy
-            </button>
-
-            <button className='code-block-btn' onClick={() => setViewOutput(!viewOutput)}>
-                View Output
-            </button>
-
-            <button className='code-block-btn' onClick={runCode}>
-                Run
-            </button>
-
-            {useAi && (
-                <button
-                    disabled={buttonIsDisabled}
-                    className={buttonIsDisabled ? 'code-block-btn-disabled' : 'code-block-btn'}
-                    onClick={() => getAiCode(data)}>
-                    Generate AI Code
-                </button>
+            {/* Code / Output display */}
+            {!viewOutput && (
+                <SyntaxHighlighter
+                    className="code-block"
+                    language="python"
+                    style={atomOneDark}
+                    showLineNumbers={true}
+                    customStyle={{ margin: 0, height: '100%', fontSize: '0.78rem' }}
+                >
+                    {finalCode}
+                </SyntaxHighlighter>
+            )}
+            {viewOutput && (
+                <SyntaxHighlighter
+                    className="code-block"
+                    language="bash"
+                    style={atomOneDark}
+                    showLineNumbers={false}
+                    customStyle={{ margin: 0, height: '100%', fontSize: '0.78rem' }}
+                >
+                    {codeOutput || '(no output)'}
+                </SyntaxHighlighter>
             )}
         </div>
     );

@@ -1,21 +1,40 @@
 @import '../variables.css';
 
+/* ── Base node card ──────────────────────────────────────────────── */
+
 .customNode {
-    background-color: lightgray;
-    border-radius: 6px;
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.3);
+    background: var(--node-bg);
+    border: 1px solid var(--node-border);
+    border-radius: 8px;
+    box-shadow: var(--node-shadow);
+    min-width: 160px;
 }
+
+/* ── Inputs, selects, textareas inside nodes ─────────────────────── */
 
 input[type="number"],
 input[type="text"],
 select,
 textarea {
-    border: none;
-    background: white;
+    border: 1px solid #dfe1e6;
+    background: #f4f5f7;
     width: 100%;
-    padding: 4px;
+    padding: 4px 7px;
     border-radius: 4px;
-    font-family: monospace;
+    font-family: 'JetBrains Mono', 'Fira Code', Menlo, monospace;
+    font-size: 0.8rem;
+    color: #172b4d;
+    outline: none;
+    transition: border-color 0.12s, box-shadow 0.12s;
+}
+
+input[type="number"]:focus,
+input[type="text"]:focus,
+select:focus,
+textarea:focus {
+    border-color: #0052cc;
+    box-shadow: 0 0 0 2px rgba(0, 82, 204, 0.12);
+    background: #ffffff;
 }
 
 textarea {
@@ -23,29 +42,29 @@ textarea {
     min-height: 60px;
 }
 
-.input-range-number {
-    /* width: 2rem; */
-}
+/* ── Node header ─────────────────────────────────────────────────── */
 
 .node-header {
-    border-radius: 6px 6px 0 0;
-    padding: 6px 32px 6px 24px;
-    border-bottom: 1px solid gray;
+    border-radius: 7px 7px 0 0;
+    padding: 6px 32px 6px 10px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.07);
     position: relative;
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.01em;
 }
 
-/* All legacy nodes share this header, so they receive the same delete control
-   without having to duplicate event handlers in every node component. */
+/* Delete × affordance */
 .customNode .node-header::after {
     content: '×';
     position: absolute;
     right: 9px;
     top: 2px;
-    font-size: 20px;
+    font-size: 18px;
     font-weight: 700;
     line-height: 24px;
     opacity: 0;
-    color: #4b5563;
+    color: rgba(0, 0, 0, 0.35);
     transition: opacity 120ms ease, color 120ms ease;
 }
 
@@ -54,103 +73,128 @@ textarea {
 }
 
 .customNode .node-header:hover::after {
-    color: #b91c1c;
+    color: #de350b;
 }
 
-.reference-node .node-header::after {
-    display: none;
-}
+.reference-node .node-header::after { display: none; }
 
+/* Reference-node delete button */
 .node-delete-button {
     position: absolute;
     right: 8px;
     top: 2px;
     border: 0;
     background: transparent;
-    color: #4b5563;
-    font-size: 20px;
+    color: rgba(0, 0, 0, 0.35);
+    font-size: 18px;
     font-weight: 700;
     line-height: 24px;
     padding: 0 3px;
     cursor: pointer;
     opacity: 0;
+    transition: opacity 120ms, color 120ms;
 }
 
-.reference-node:hover .node-delete-button {
-    opacity: 1;
-}
+.reference-node:hover .node-delete-button { opacity: 1; }
 
-.node-delete-button:hover {
-    color: #b91c1c;
-}
+.node-delete-button:hover { color: #de350b; }
+
+/* ── Node port labels ────────────────────────────────────────────── */
 
 .node-port-label {
-    font-size: 0.72em;
-    color: #4b5563;
-    min-height: 24px;
-    line-height: 24px;
+    font-size: 0.68rem;
+    color: #5e6c84;
+    min-height: 22px;
+    line-height: 22px;
 }
 
-.node-port-label-right {
-    text-align: right;
-}
+.node-port-label-right { text-align: right; }
+
+/* ── Node body ───────────────────────────────────────────────────── */
 
 .node-body {
-    border-radius: 0 0 6px 6px;
-    padding: 6px 24px;
+    border-radius: 0 0 7px 7px;
+    padding: 8px 10px;
+    background: var(--node-bg);
 }
 
-.node-type-data-loader>.node-header {
-    background-color: var(--node-data-color);
+/* ── Header colours per node type ───────────────────────────────── */
+
+.node-type-data-loader > .node-header {
+    background: var(--node-data-color);
+    color: #1b6640;
 }
 
-.node-type-model>.node-header {
-    background-color: var(--node-model-color);
+.node-type-model > .node-header {
+    background: var(--node-model-color);
+    color: #8b2500;
 }
 
-.node-type-data-processor>.node-header {
-    background-color: var(--node-processor-color);
+.node-type-data-processor > .node-header {
+    background: var(--node-processor-color);
+    color: #0747a6;
 }
 
-.node-type-output>.node-header {
-    background-color: var(--node-output-color);
+.node-type-output > .node-header {
+    background: var(--node-output-color);
+    color: #974f0c;
 }
 
-.node-type-cv>.node-header {
-    background-color: var(--node-cv-color);
+.node-type-cv > .node-header {
+    background: var(--node-cv-color);
+    color: #5e4a03;
 }
 
-.node-type-data-transform>.node-header {
-    background-color: var(--node-transform-color);
+.node-type-data-transform > .node-header {
+    background: var(--node-transform-color);
+    color: #403294;
 }
 
-.node-type-variable>.node-header {
-    background-color: var(--node-variable-color);
+.node-type-variable > .node-header {
+    background: var(--node-variable-color);
+    color: #006b81;
 }
 
-.node-type-control>.node-header {
-    background-color: var(--node-control-color);
+.node-type-control > .node-header {
+    background: var(--node-control-color);
+    color: #974f0c;
 }
 
-.node-type-function>.node-header {
-    background-color: var(--node-function-color);
+.node-type-function > .node-header {
+    background: var(--node-function-color);
+    color: #8b2500;
 }
 
-.node-type-primitive>.node-header {
-    background-color: var(--node-primitive-color);
+.node-type-primitive > .node-header {
+    background: var(--node-primitive-color);
+    color: #1b6640;
 }
 
-.node-type-io>.node-header {
-    background-color: var(--node-io-color);
+.node-type-io > .node-header {
+    background: var(--node-io-color);
+    color: #403294;
 }
+
+.node-type-custom > .node-header {
+    background: #f4f5f7;
+    color: #5e6c84;
+}
+
+/* ── Handles ─────────────────────────────────────────────────────── */
 
 .react-flow__handle {
     background-color: var(--node-handle-color);
-    width: 16px;
-    height: 16px;
-    border: 2px solid var(--node-handle-stroke);
-    border-radius: 12px;
+    width: 12px;
+    height: 12px;
+    border: 2px solid #ffffff;
+    border-radius: 50%;
+    box-shadow: 0 0 0 1px var(--node-handle-color);
 }
+
+.react-flow__handle-right { right: -6px; }
+.react-flow__handle-left  { left: -6px; }
+
+/* ── Edge path ───────────────────────────────────────────────────── */
 
 .react-flow__edge-path {
     stroke: var(--node-connection-stroke);
@@ -158,30 +202,20 @@ textarea {
     fill: none;
 }
 
-.react-flow__handle-right {
-    right: -8px;
-}
-
-.react-flow__handle-left {
-    left: -8px;
-}
+/* ── Misc ─────────────────────────────────────────────────────────── */
 
 .node-description {
-    font-size: 0.78em;
-    color: #555;
+    font-size: 0.74rem;
+    color: #5e6c84;
     margin: 4px 0 0 0;
-    font-style: italic;
-}
-
-.node-type-custom > .node-header {
-    background-color: var(--node-custom-color, #888);
 }
 
 .error-message {
-    color: #ff4444;
-    font-size: 0.8em;
+    color: #de350b;
+    font-size: 0.75rem;
     margin-top: 4px;
-    padding: 4px;
-    background-color: rgba(255, 68, 68, 0.1);
+    padding: 4px 6px;
+    background: #ffebe6;
     border-radius: 4px;
+    border-left: 2px solid #de350b;
 }

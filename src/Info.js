@@ -1,30 +1,33 @@
-import "./Info.css"
+import "./Info.css";
 
-export default function Info() {
+export default function Info({ onClose }) {
     return (
-        <div className="info-container">
-            <div className='info-details'>
+        <div className="info-container" onClick={onClose}>
+            <div className='info-details' onClick={e => e.stopPropagation()}>
                 <h1>
                     <img src="logo.png" alt="Pluto" />
-                    <span> Pluto </span>
+                    <span>Pluto</span>
                 </h1>
 
-                <h3>Simplify Your ML Workflows</h3>
+                <h3>Visual ML Pipeline Builder</h3>
 
                 <p>
-                    node-based app for building machine learning workflows.
-                    Design pipelines and generate Python code using AI.
-                    Perfect for exploring ideas, experimenting, or tackling challenges. Turn imagination
-                    into reality, one node at a time! 🚀
+                    Build machine learning workflows visually using a node-based canvas.
+                    Connect data loaders, processors, models and outputs to design pipelines
+                    and generate Python code — no boilerplate needed.
                 </p>
 
+                <p className="info-dismiss-hint">Click anywhere outside this card to dismiss</p>
 
+                <button className="info-start-btn" onClick={onClose}>
+                    Get Started →
+                </button>
 
                 <div className='info-footer'>
                     <a href="https://angelmacwan.github.io"
                         rel='noreferrer'
                         target='_blank'>
-                        Find Me
+                        About
                     </a>
 
                     <a href="mailto:angel.macwan@proton.me"
@@ -34,10 +37,9 @@ export default function Info() {
                     </a>
 
                     <span>
-                        Release: Alpha <br />
+                        Release: Alpha<br />
                         Version 1
                     </span>
-
                 </div>
             </div>
         </div>

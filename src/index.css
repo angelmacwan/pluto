@@ -1,182 +1,414 @@
 @import './variables.css';
 
+/* ── Base ─────────────────────────────────────────────────────────── */
+
+*, *::before, *::after { box-sizing: border-box; }
+
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Inter',
+    'Roboto', 'Helvetica Neue', Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background: var(--surface-1);
+  color: var(--text-primary);
 }
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+  font-family: 'JetBrains Mono', 'Fira Code', source-code-pro, Menlo, Monaco,
+    Consolas, 'Courier New', monospace;
 }
 
+/* ── Top Bar ──────────────────────────────────────────────────────── */
+
 .TopBar {
-  background: none;
+  background: var(--topbar-bg);
+  border-bottom: 1px solid var(--topbar-border);
   width: 100%;
+  height: var(--topbar-height);
   position: fixed;
   top: 0;
   left: 0;
-  z-index: 99;
+  z-index: 100;
   display: flex;
-  justify-content: center;
-  padding: 8px;
+  align-items: center;
+  padding: 0 12px;
+  gap: 4px;
+  box-shadow: 0 1px 0 var(--topbar-border);
 }
 
-.TopBar>button {
-  margin: 0 4px;
-  border: none;
+/* Brand / logo section */
+.TopBar-brand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-right: 12px;
+  text-decoration: none;
+  color: inherit;
+}
+
+.TopBar-brand-logo {
+  width: 26px;
+  height: 26px;
+  object-fit: contain;
+}
+
+.TopBar-brand-name {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--brand-secondary);
+  letter-spacing: -0.01em;
+}
+
+/* Divider between brand and actions */
+.TopBar-divider {
+  width: 1px;
+  height: 20px;
+  background: var(--surface-3);
+  margin: 0 8px;
+}
+
+/* File breadcrumb in topbar */
+.TopBar-file-crumb {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+  padding: 0 8px;
+  flex: 1;
+  min-width: 0;
+}
+
+.TopBar-file-crumb svg {
+  flex-shrink: 0;
+  color: var(--text-subtle);
+}
+
+.TopBar-file-name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+/* TopBar button shared style */
+.TopBar > button,
+.topbar-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 32px;
+  padding: 0 10px;
+  border: 1px solid transparent;
+  border-radius: 4px;
   cursor: pointer;
-  background-color: rgba(0, 0, 0, 0.6);
-  padding: 10px;
-  color: white;
-  border-radius: 6px;
-  transition: .2s;
+  font-size: 0.82rem;
+  font-weight: 500;
+  white-space: nowrap;
+  transition: background 0.12s, border-color 0.12s, color 0.12s;
+  background: transparent;
+  color: var(--text-secondary);
 }
 
-.TopBar>button:hover {
-  background-color: var(--node-processor-color);
-  padding: 8px 20px;
+.TopBar > button:hover,
+.topbar-btn:hover {
+  background: var(--surface-2);
+  color: var(--text-primary);
+  border-color: var(--surface-3);
 }
+
+.TopBar > button.active,
+.topbar-btn.active {
+  background: var(--brand-primary);
+  color: #ffffff;
+  border-color: var(--brand-primary);
+}
+
+.TopBar > button.active:hover,
+.topbar-btn.active:hover {
+  background: var(--brand-primary-hover);
+  border-color: var(--brand-primary-hover);
+}
+
+/* Primary save button */
+.topbar-btn-primary {
+  background: var(--brand-primary) !important;
+  color: #ffffff !important;
+  border-color: var(--brand-primary) !important;
+}
+
+.topbar-btn-primary:hover {
+  background: var(--brand-primary-hover) !important;
+  border-color: var(--brand-primary-hover) !important;
+}
+
+/* Spacer */
+.TopBar-spacer { flex: 1; }
+
+
+/* ── Canvas ───────────────────────────────────────────────────────── */
 
 .ReactFlowContainer {
   background-color: var(--canvas-color);
   height: 100vh;
   width: 100%;
+  padding-top: var(--topbar-height);
 }
 
-
-/* the one on the left */
-/* SEARCH BAR */
-.search-bar {
-  padding: 6px 0;
-}
-
-.search-bar>input {
-  height: 100%;
-  width: 100%;
-  font-size: 1rem;
-  border: none;
+/* Override ReactFlow controls for light mode */
+.react-flow__controls {
+  box-shadow: 0 1px 4px rgba(0,0,0,0.12);
   border-radius: 6px;
-  outline: none;
-  padding: 8px 10px;
+  overflow: hidden;
 }
+
+.react-flow__controls-button {
+  background: var(--surface-0) !important;
+  border-bottom: 1px solid var(--surface-3) !important;
+  color: var(--text-secondary) !important;
+}
+
+.react-flow__controls-button:hover {
+  background: var(--surface-2) !important;
+}
+
+.react-flow__background {
+  background: var(--canvas-color);
+}
+
+/* ── Left Sidebar ─────────────────────────────────────────────────── */
 
 .SideBar {
   position: fixed;
-  left: 10px;
-  top: 50px;
-  display: grid;
-  background: none;
-  background: rgba(255, 255, 255, 0.3);
-  padding: 8px;
-  width: 12rem;
-  max-height: 85%;
+  left: 0;
+  top: var(--topbar-height);
+  width: var(--sidebar-width);
+  height: calc(100vh - var(--topbar-height));
+  background: var(--sidebar-bg);
+  border-right: 1px solid var(--sidebar-border);
+  display: flex;
+  flex-direction: column;
+  z-index: 50;
+  overflow: hidden;
+}
+
+.SideBar-header {
+  padding: 12px 12px 8px;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--text-subtle);
+  border-bottom: 1px solid var(--surface-3);
+  flex-shrink: 0;
+}
+
+/* Search inside sidebar */
+.search-bar {
+  padding: 8px 10px;
+  flex-shrink: 0;
+  border-bottom: 1px solid var(--surface-3);
+}
+
+.search-bar > input {
+  width: 100%;
+  height: 30px;
+  font-size: 0.82rem;
+  border: 1px solid var(--surface-3);
+  border-radius: 4px;
+  outline: none;
+  padding: 0 8px 0 28px;
+  background: var(--surface-0) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='13' height='13' fill='%2397a0af' viewBox='0 0 16 16'%3E%3Cpath d='M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.099zm-5.242 1.156a5.5 5.5 0 1 1 0-11 5.5 5.5 0 0 1 0 11'/%3E%3C/svg%3E") no-repeat 8px center;
+  color: var(--text-primary);
+  transition: border-color 0.15s;
+}
+
+.search-bar > input:focus {
+  border-color: var(--brand-primary);
+  box-shadow: 0 0 0 2px rgba(0, 82, 204, 0.12);
+}
+
+.search-bar > input::placeholder { color: var(--text-subtle); }
+
+/* Scrollable node list */
+.btn-list {
   overflow-y: auto;
-  border-radius: 6px;
-  z-index: 5;
+  flex: 1;
+  padding: 6px 8px 12px;
 }
 
-.SideBar>button {
+/* Section group label */
+.sidebar-group-label {
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-subtle);
+  padding: 10px 4px 4px;
+  margin-top: 4px;
+}
+
+/* Node buttons */
+.SideBar > .btn-list > button,
+.node-btn {
+  display: flex;
+  align-items: center;
+  width: 100%;
   cursor: pointer;
-  padding: 4px 8px;
-  border-radius: 6px;
-  margin: 2px;
-  font-size: 1rem;
-  transition: .12s;
-  animation-timing-function: linear;
-  border: 2px solid rgba(0, 0, 0, 0);
+  padding: 5px 8px;
+  border-radius: 4px;
+  margin: 1px 0;
+  font-size: 0.8rem;
+  font-weight: 500;
+  transition: all 0.1s;
+  border: 1px solid transparent;
+  background: transparent;
+  color: var(--text-primary);
+  text-align: left;
+  gap: 8px;
 }
 
-.SideBar>button:hover {
-  border: 2px solid white;
+.SideBar > .btn-list > button:hover,
+.node-btn:hover {
+  background: var(--surface-0);
+  border-color: var(--surface-3);
+  color: var(--text-primary);
 }
 
-.SideBar>.node-type-data-transform {
-  background: var(--node-transform-color);
+/* Color-coded dot per node category */
+.SideBar > .btn-list > button::before,
+.node-btn::before {
+  content: '';
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
 }
 
-.SideBar>.node-type-input {
-  background: var(--node-data-color);
-}
+.node-type-input::before        { background: var(--node-data-accent); }
+.node-type-data-processor::before { background: var(--node-processor-accent); }
+.node-type-data-transform::before { background: var(--node-transform-accent); }
+.node-type-model::before        { background: var(--node-model-accent); }
+.node-type-output::before       { background: var(--node-output-accent); }
+.node-type-cv::before           { background: var(--node-cv-accent); }
+.node-type-variable::before     { background: var(--node-variable-accent); }
+.node-type-control::before      { background: var(--node-control-accent); }
+.node-type-function::before     { background: var(--node-function-accent); }
+.node-type-primitive::before    { background: var(--node-primitive-accent); }
+.node-type-io::before           { background: var(--node-io-accent); }
+.node-type-custom::before       { background: var(--text-subtle); }
 
-.SideBar>.node-type-data-processor {
-  background: var(--node-processor-color);
-}
 
-.SideBar>.node-type-model {
-  background: var(--node-model-color);
-}
+/* ── Code Output Panel (right side) ──────────────────────────────── */
 
-.SideBar>.node-type-output {
-  background: var(--node-output-color);
-}
-
-.SideBar>.node-type-cv {
-  background: var(--node-cv-color);
-}
-
-/* CODE BLOCK */
 .code-output-container {
   display: flex;
-  z-index: 3;
+  z-index: 60;
   position: fixed;
-  height: 100vh;
-  transition: 0.4s;
+  top: var(--topbar-height);
+  right: 0;
+  height: calc(100vh - var(--topbar-height));
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* DISPLAY CODE BTN */
+.code-output-container.hidden {
+  transform: translateX(100%);
+}
+
+/* Toggle tab */
 .floating-button-container {
-  padding: 50px 4px;
+  display: flex;
+  align-items: center;
+  padding: 0;
 }
 
-.floating-button-container>.floating-button {
-  height: 100%;
-  border: none;
+.floating-button-container > .floating-button {
+  width: 20px;
+  height: 64px;
+  border: 1px solid var(--surface-3);
+  border-right: none;
   outline: none;
-  background: rgba(0, 0, 0, 0.3);
-  color: white;
-  border-radius: 6px;
+  background: var(--surface-0);
+  color: var(--text-secondary);
+  border-radius: 6px 0 0 6px;
   cursor: pointer;
-  transition: 0.2s;
-  padding: 4px;
+  transition: background 0.15s, color 0.15s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: -2px 0 8px rgba(0,0,0,0.06);
 }
 
-.floating-button-container>.floating-button:hover {
-  background: rgba(0, 0, 0, 0.5);
-  padding: 0 8px;
+.floating-button-container > .floating-button:hover {
+  background: var(--surface-2);
+  color: var(--text-primary);
 }
 
-/* OTHER THINGS */
-/* Chrome, Safari, Edge, Opera */
+.code-output-display-block {
+  background: var(--surface-0);
+  border-left: 1px solid var(--surface-3);
+  box-shadow: -4px 0 16px rgba(0,0,0,0.08);
+  overflow: hidden;
+}
+
+
+/* ── Form elements (inside nodes) ────────────────────────────────── */
+
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
   -webkit-appearance: none;
   margin: 0;
 }
 
-/* Firefox */
-input[type=number] {
-  -moz-appearance: textfield;
-}
+input[type=number] { -moz-appearance: textfield; }
 
-/* Width of the scrollbar */
-::-webkit-scrollbar {
-  width: 8px;
-}
 
-/* Track of the scrollbar */
+/* ── Scrollbar ────────────────────────────────────────────────────── */
+
+::-webkit-scrollbar { width: 6px; height: 6px; }
+
 ::-webkit-scrollbar-track {
-  background: #f1f1f122;
-  border-radius: 12px;
-  width: 10px;
+  background: transparent;
+  border-radius: 8px;
 }
 
-/* Handle of the scrollbar */
 ::-webkit-scrollbar-thumb {
-  background: var(--primary);
-  border-radius: 12px;
+  background: var(--surface-3);
+  border-radius: 8px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-subtle);
+}
+
+
+/* ── Tooltip (used in TopBar buttons) ────────────────────────────── */
+
+.tooltip { position: relative; }
+
+.tooltip .tooltiptext {
+  visibility: hidden;
+  opacity: 0;
+  background: var(--brand-secondary);
+  color: #fff;
+  text-align: center;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 0.72rem;
+  position: absolute;
+  z-index: 200;
+  top: calc(100% + 6px);
+  left: 50%;
+  transform: translateX(-50%);
+  white-space: nowrap;
+  pointer-events: none;
+  transition: opacity 0.12s;
+}
+
+.tooltip:hover .tooltiptext {
+  visibility: visible;
+  opacity: 1;
 }

@@ -33,3 +33,11 @@ yarn-error.log*
 *.parquet
 *.xlsx
 *.xls
+
+# Pluto workspace (user flows — not committed)
+/workspace/*
+!/workspace/.gitkeep
+
+# Python cache
+__pycache__/
+*.pyc
