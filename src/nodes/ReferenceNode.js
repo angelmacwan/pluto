@@ -38,15 +38,16 @@ const ReferenceNode = memo(({ id, data, nodeKind }) => {
         ))}
         {definition.fields.map(field => (
           <div className="input-group" key={field.key}>
-            <label>{field.label}
+            <label>
+              <span>{field.label}</span>
               {field.type === 'select' ? (
                 <select value={config[field.key] ?? field.default} onChange={event => updateConfig(field.key, event.target.value)}>
                   {field.options.map(option => <option key={option} value={option}>{option}</option>)}
                 </select>
               ) : field.type === 'textarea' ? (
-                <textarea rows="3" value={config[field.key] ?? field.default} onChange={event => updateConfig(field.key, event.target.value)} />
+                <textarea rows="3" placeholder={field.placeholder} value={config[field.key] ?? field.default} onChange={event => updateConfig(field.key, event.target.value)} />
               ) : (
-                <input type="text" value={config[field.key] ?? field.default} onChange={event => updateConfig(field.key, event.target.value)} />
+                <input type="text" placeholder={field.placeholder} value={config[field.key] ?? field.default} onChange={event => updateConfig(field.key, event.target.value)} />
               )}
             </label>
           </div>

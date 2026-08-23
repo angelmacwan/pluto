@@ -171,10 +171,82 @@ PURGED
 
 ---
 
-## start the react app in dev server
+## Getting Started
 
-```
+### 1. Development Server (React Dev Mode)
+
+Run the frontend in development mode with hot-reloading:
+
+```bash
+# Install dependencies
 npm install
+
+# Start development server
 npm start
 ```
+
+Runs the app in development mode at [http://localhost:3000](http://localhost:3000).
+
+---
+
+### 2. Building the Application
+
+Create an optimized production build of the React app:
+
+```bash
+npm run build
+```
+
+This compiles and bundles static assets into the `build/` directory.
+
+---
+
+### 3. Serving with Python
+
+#### Option A: Built-in Pluto Server (Recommended - UI + Backend Execution)
+
+The included Python backend serves the static build while also enabling file management APIs and Python code execution nodes:
+
+```bash
+# 1. Install Python dependencies
+pip install -r requirements.txt
+
+# 2. Build the frontend (if not already built)
+npm run build
+
+# 3. Launch the Pluto server
+python -m server
+```
+
+The server starts at [http://localhost:8765](http://localhost:8765) and automatically opens in your default browser.
+
+**Configuration Options:**
+
+- **Custom Port:**
+  ```bash
+  PLUTO_PORT=9000 python -m server
+  ```
+- **Custom Workspace Directory:**
+  ```bash
+  PLUTO_WORKSPACE=/path/to/custom/workspace python -m server
+  ```
+
+#### Option B: Standalone Static HTTP Server (UI Only)
+
+If you only need to serve the built static web app without backend API and code execution capabilities:
+
+```bash
+# Python 3
+python3 -m http.server 8000 --directory build
+```
+
+Or navigate to the build directory directly:
+
+```bash
+cd build
+python3 -m http.server 8000
+```
+
+Access the UI at [http://localhost:8000](http://localhost:8000).
+
 

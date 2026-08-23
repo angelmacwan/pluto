@@ -5,8 +5,8 @@ export const referenceDefinitions = {
   Variable: {
     title: 'Variable', typeClass: 'node-type-variable', inputs: [], outputs: [{ id: 'out', label: 'value' }],
     fields: [
-      { key: 'name', label: 'Variable Name (optional)', type: 'text', default: '' },
-      { key: 'value', label: 'Value (Python expression)', type: 'text', default: 'None' },
+      { key: 'name', label: 'Variable Name', type: 'text', default: '', placeholder: 'optional' },
+      { key: 'value', label: 'Value', type: 'text', default: 'None', placeholder: 'Python expression' },
     ],
     variableName: (config, fallback) => String(config.name || '').trim() || fallback,
     generate: (config, _inputs, output) => `${output} = ${config.value || 'None'}`,
