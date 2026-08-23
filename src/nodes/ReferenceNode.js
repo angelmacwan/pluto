@@ -18,21 +18,53 @@ const ReferenceNode = memo(({ id, data, nodeKind }) => {
 
   return (
     <div className={`customNode ${definition.typeClass} reference-node`}>
-      {definition.inputs.map(input => <Handle key={input.id} id={input.id} type="target" position={Position.Left} style={{ top: `${40 + definition.inputs.indexOf(input) * 24}px` }} />)}
       <div className="node-header">
         {definition.title}
         <button className="node-delete-button nodrag" onClick={(event) => { event.stopPropagation(); data.removeNode?.(id); }} aria-label="Delete node" title="Delete node">×</button>
       </div>
       <div className="node-body">
-        {definition.inputs.map(input => <div className="node-port-label node-port-label-left" key={input.id}>{input.label}{input.optional ? ' (optional)' : ''}</div>)}
-        {definition.fields.map(field => <div className="input-group" key={field.key}>
-          <label>{field.label}
-            {field.type === 'select' ? <select value={config[field.key] ?? field.default} onChange={event => updateConfig(field.key, event.target.value)}>{field.options.map(option => <option key={option} value={option}>{option}</option>)}</select> : field.type === 'textarea' ? <textarea rows="3" value={config[field.key] ?? field.default} onChange={event => updateConfig(field.key, event.target.value)} /> : <input type="text" value={config[field.key] ?? field.default} onChange={event => updateConfig(field.key, event.target.value)} />}
-          </label>
-        </div>)}
-        {definition.outputs.map(output => <div className="node-port-label node-port-label-right" key={output.id}>{output.label}</div>)}
+        {definition.inputs.map(input => (
+          <div className="node-port-row node-port-row-left" key={input.id}>
+            <Handle
+              id={input.id}
+              type="target"
+              position={Position.Left}
+              style={{ position: 'absolute', left: '-16px', top: '50%', transform: 'translateY(-50%)' }}
+            />
+            <span className="node-port-label">
+              {input.label}{input.optional ? ' (optional)' : ''}
+            </span>
+          </div>
+        ))}
+        {definition.fields.map(field => (
+          <div className="input-group" key={field.key}>
+            <label>{field.label}
+              {field.type === 'select' ? (
+                <select value={config[field.key] ?? field.default} onChange={event => updateConfig(field.key, event.target.value)}>
+                  {field.options.map(option => <option key={option} value={option}>{option}</option>)}
+                </select>
+              ) : field.type === 'textarea' ? (
+                <textarea rows="3" value={config[field.key] ?? field.default} onChange={event => updateConfig(field.key, event.target.value)} />
+              ) : (
+                <input type="text" value={config[field.key] ?? field.default} onChange={event => updateConfig(field.key, event.target.value)} />
+              )}
+            </label>
+          </div>
+        ))}
+        {definition.outputs.map(output => (
+          <div className="node-port-row node-port-row-right" key={output.id}>
+            <span className="node-port-label">
+              {output.label}
+            </span>
+            <Handle
+              id={output.id}
+              type="source"
+              position={Position.Right}
+              style={{ position: 'absolute', right: '-16px', top: '50%', transform: 'translateY(-50%)' }}
+            />
+          </div>
+        ))}
       </div>
-      {definition.outputs.map(output => <Handle key={output.id} id={output.id} type="source" position={Position.Right} style={{ top: `${40 + definition.outputs.indexOf(output) * 24}px` }} />)}
     </div>
   );
 });

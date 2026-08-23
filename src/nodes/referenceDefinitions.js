@@ -19,7 +19,7 @@ export const referenceDefinitions = {
   IfCondition: {
     title: 'If / Compare', typeClass: 'node-type-control',
     inputs: [{ id: 'value_a', label: 'value A' }, { id: 'value_b', label: 'value B' }],
-    outputs: [{ id: 'condition', label: 'output' }, { id: 'true_branch', label: 'true', flow: true }, { id: 'false_branch', label: 'false', flow: true }],
+    outputs: [{ id: 'true_branch', label: 'true', flow: true }, { id: 'false_branch', label: 'false', flow: true }],
     fields: [{ key: 'operator', label: 'Operator', type: 'select', options: ['==', '!=', '>', '<', '>=', '<=', 'is', 'is not', 'in', 'not in', 'not'], default: '==' }],
     generate: (config, inputs) => {
       const op = config.operator || '==';

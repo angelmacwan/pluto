@@ -99,16 +99,42 @@ textarea {
 
 .node-delete-button:hover { color: #de350b; }
 
-/* ── Node port labels ────────────────────────────────────────────── */
+/* ── Node port rows & labels ─────────────────────────────────────── */
+
+.node-port-row {
+    position: relative;
+    display: flex;
+    align-items: center;
+    min-height: 22px;
+}
+
+.node-port-row-left {
+    justify-content: flex-start;
+}
+
+.node-port-row-right {
+    justify-content: flex-end;
+}
 
 .node-port-label {
     font-size: 0.68rem;
     color: #5e6c84;
-    min-height: 22px;
     line-height: 22px;
 }
 
 .node-port-label-right { text-align: right; }
+
+.node-port-row-left .react-flow__handle-left {
+    left: -16px;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.node-port-row-right .react-flow__handle-right {
+    right: -16px;
+    top: 50%;
+    transform: translateY(-50%);
+}
 
 /* ── Node body ───────────────────────────────────────────────────── */
 
