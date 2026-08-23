@@ -43,7 +43,6 @@ import ListNode from './nodes/ListNode';
 import DictNode from './nodes/DictNode';
 import MathOp from './nodes/MathOp';
 import Comparison from './nodes/Comparison';
-import WhileLoop from './nodes/WhileLoop';
 import FunctionDef from './nodes/FunctionDef';
 import FunctionCall from './nodes/FunctionCall';
 import InputNode from './nodes/InputNode';
@@ -94,7 +93,7 @@ const nodeTypes = {
   TypeCheck: (props) => <ReferenceNode {...props} nodeKind="TypeCheck" />,
   IfCondition: (props) => <ReferenceNode {...props} nodeKind="IfCondition" />,
   ForLoop: (props) => <ReferenceNode {...props} nodeKind="ForLoop" />,
-  WhileLoop: WhileLoop,
+  WhileLoop: (props) => <ReferenceNode {...props} nodeKind="WhileLoop" />,
   FunctionDef: FunctionDef,
   FunctionCall: FunctionCall,
   Print: (props) => <ReferenceNode {...props} nodeKind="Print" />,
@@ -244,7 +243,7 @@ const MainApp = () => {
   const [selectedEdges, setSelectedEdges] = useState([]);
   const [selectedNodes, setSelectedNodes] = useState([]);
   const [codeOutputVisible, setCodeOutputVisible] = useState(false);
-  const [displayInfo, setDisplayInfo] = useState(true);
+  const [displayInfo, setDisplayInfo] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [serverAvailable, setServerAvailable] = useState(false);
   const [fileBrowserVisible, setFileBrowserVisible] = useState(false);

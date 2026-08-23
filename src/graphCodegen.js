@@ -70,8 +70,24 @@ export function generateGraphCode(nodes, edges) {
         output.push(`${'    '.repeat(level)}else:`);
         falseEdges.forEach(edge => emit(edge.target, level + 1));
       }
+    } else if (node.type === 'ForLoop' || node.type === 'WhileLoop') {
+      const bodyEdges = flowEdges.filter(edge => edge.source === nodeId && edge.sourceHandle === 'body');
+      const doneEdges = flowEdges.filter(edge => edge.source === nodeId && edge.sourceHandle === 'done');
+      if (bodyEdges.length) {
+        bodyEdges.forEach(edge => emit(edge.target, level + 1));
+      } else {
+        output.push(`${'    '.repeat(level + 1)}pass`);
+      }
+      if (doneEdges.length) {
+        doneEdges.forEach(edge => emit(edge.target, level));
+      }
     } else {
       flowEdges.filter(edge => edge.source === nodeId).forEach(edge => emit(edge.target, level));
+      edges.filter(edge => edge.source === nodeId && !isFlowEdge(edge)).forEach(edge => {
+        if (!flowTargets.has(edge.target)) {
+          emit(edge.target, level);
+        }
+      });
     }
   };
   ordered.forEach(node => { if (!flowTargets.has(node.id)) emit(node.id); });

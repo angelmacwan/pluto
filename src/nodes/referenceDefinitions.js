@@ -41,9 +41,36 @@ export const referenceDefinitions = {
     },
   },
   ForLoop: {
-    title: 'For Each', typeClass: 'node-type-control', inputs: [{ id: 'iterable', label: 'iterable' }], outputs: [{ id: 'results', label: 'results' }],
-    fields: [{ key: 'body', label: 'Body (use item, index, and result)', type: 'textarea', default: 'result = item' }],
-    generate: (config, inputs, output) => `${output} = []\nfor index, item in enumerate(${inputs.iterable || '[]'}):\n${String(config.body || 'result = item').split('\n').map(line => `    ${line}`).join('\n')}\n    ${output}.append(result)`,
+    title: 'For Loop', typeClass: 'node-type-control',
+    inputs: [{ id: 'iterable', label: 'iterable', optional: true }],
+    outputs: [
+      { id: 'body', label: 'body', flow: true },
+      { id: 'done', label: 'done', flow: true },
+    ],
+    fields: [
+      { key: 'variable', label: 'Loop Variable', type: 'text', default: 'item', placeholder: 'e.g. item, i' },
+      { key: 'iterable', label: 'Iterable / Range', type: 'text', default: 'range(5)', placeholder: 'e.g. range(5), my_list' },
+    ],
+    generate: (config, inputs) => {
+      const iter = inputs.iterable || config.iterable || 'range(5)';
+      const item = config.variable || 'item';
+      return `for ${item} in ${iter}:`;
+    },
+  },
+  WhileLoop: {
+    title: 'While Loop', typeClass: 'node-type-control',
+    inputs: [{ id: 'condition', label: 'condition', optional: true }],
+    outputs: [
+      { id: 'body', label: 'body', flow: true },
+      { id: 'done', label: 'done', flow: true },
+    ],
+    fields: [
+      { key: 'condition', label: 'Condition', type: 'text', default: 'True', placeholder: 'e.g. count > 0' },
+    ],
+    generate: (config, inputs) => {
+      const cond = inputs.condition || config.condition || 'True';
+      return `while ${cond}:`;
+    },
   },
   FileRead: {
     title: 'File Read', typeClass: 'node-type-io', inputs: [], outputs: [{ id: 'content', label: 'content' }],
