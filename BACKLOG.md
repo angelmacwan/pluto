@@ -1,12 +1,9 @@
 # OPEN
 
-- [x] update AGENTS.md file with instructions and rules
-- [x] remove the AI code generator (the one that uses LLMs and call the gemini API for this)
-- [ ] Update UI to be more professional
-
-# NOT AVAILABLE FOR WORK
-
-- [x] need a python service that hosts this (like jupyter where the user just runs python -m jupyter and that starts a server)
-- [x] from the server python, user should be able to manage folders and files
-- [ ] easy file management (right now when a user saves a flow that gets downloaded, then the user have to upload it to work on it, DONT WANT THIS, should be more like jupyter lab)
-- [ ]
+- [ ] Some nodes are too wide, i wanna figure out a way to shrink them
+- [ ] connectors in IF statement are not in the right place.
+- [ ] loops should have input for loop body, the body connected there becomes the loop body for that loop so the user dosnt have to type the logic manually
+- [ ] Move the run buttom from code panel to the nav bar
+- [ ] code output should be shown in a output panel that spawns at the bottom on the screen (like terminal in vscode that pops up from the bottom)
+- [x] the graph / pipeline for some nodes are not saved properly. For example if / compare node. In pipelien i connected the true connector to one block and false to another, then i re opened the pipeline, this connection was changed so that the output node of the if block was connected to both if and else blocks
+      find all such cases and fix all nodes so this dosnt happen

@@ -366,9 +366,44 @@ const MainApp = () => {
     }),
     edges: edges.map(edge => ({
       id: edge.id, source: edge.source, target: edge.target,
+      sourceHandle: edge.sourceHandle ?? null,
+      targetHandle: edge.targetHandle ?? null,
       type: edge.type, data: edge.data,
     })),
   });
+
+  // Recover sourceHandle / targetHandle from the ReactFlow auto-generated edge id
+  // for files saved before these fields were persisted explicitly.
+  // ReactFlow id format: "reactflow__edge-{source}{sourceHandle}-{target}{targetHandle}"
+  const migrateEdge = (edge, nodes) => {
+    if (edge.sourceHandle !== undefined && edge.targetHandle !== undefined) return edge;
+    let { sourceHandle = null, targetHandle = null } = edge;
+    const prefix = 'reactflow__edge-';
+    if (edge.id?.startsWith(prefix)) {
+      const body = edge.id.slice(prefix.length);
+      const srcNode = nodes.find(n => n.id === edge.source);
+      const tgtNode = nodes.find(n => n.id === edge.target);
+      if (srcNode && tgtNode) {
+        // The body is "{sourceId}{sourceHandle}-{targetId}{targetHandle}"
+        // Find where the "-{targetId}" separator starts
+        const targetSep = `-${edge.target}`;
+        const sepIdx = body.lastIndexOf(targetSep);
+        if (sepIdx !== -1) {
+          const sourceSegment = body.slice(0, sepIdx);
+          const targetSegment = body.slice(sepIdx + 1); // skip the leading "-"
+          if (!sourceHandle && sourceSegment.startsWith(edge.source)) {
+            const extracted = sourceSegment.slice(edge.source.length) || null;
+            if (extracted) sourceHandle = extracted;
+          }
+          if (!targetHandle && targetSegment.startsWith(edge.target)) {
+            const extracted = targetSegment.slice(edge.target.length) || null;
+            if (extracted) targetHandle = extracted;
+          }
+        }
+      }
+    }
+    return { ...edge, sourceHandle: sourceHandle || null, targetHandle: targetHandle || null };
+  };
 
   const restoreFlow = useCallback((data, filePath = null) => {
     if (!data.nodes || !Array.isArray(data.nodes) ||
@@ -387,7 +422,7 @@ const MainApp = () => {
         removeNode,
       },
     })));
-    setEdges(data.edges.map(edge => ({ ...edge, data: edge.data || {} })));
+    setEdges(data.edges.map(edge => ({ ...migrateEdge(edge, data.nodes), data: edge.data || {} })));
     if (filePath !== null) setCurrentFilePath(filePath);
   }, [setNodes, setEdges, updateNodeState, removeNode]);
 
